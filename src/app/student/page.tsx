@@ -1,23 +1,75 @@
 'use client'
 
-import { useState } from 'react'
-import { Activity, GitBranch as Github, ShieldAlert, CheckCircle2, AlertTriangle, Send } from 'lucide-react'
+import { useEffect, useState, useCallback } from 'react'
+import { Activity, GitBranch as Github, ShieldAlert, CheckCircle2, AlertTriangle, Send, Loader2 } from 'lucide-react'
+import { createClient } from '@/lib/supabase'
 
 export default function StudentDashboard() {
+  const supabase = createClient()
+  const [user, setUser] = useState<any>(null)
   const [repoUrl, setRepoUrl] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [status, setStatus] = useState<'idle' | 'scanning' | 'approved' | 'rejected'>('idle')
   const [helpRequested, setHelpRequested] = useState(false)
+  const [loading, setLoading] = useState(true)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const fetchSessionStatus = useCallback(async (userId: string) => {
+    const { data, error } = await supabase
+      .from('live_sessions')
+      .select('status, needs_help')
+      .eq('user_id', userId)
+      .eq('active', true)
+      .single()
+
+    if (!error && data) {
+      setHelpRequested(data.needs_help)
+    } else if (error && error.code === 'PGRST116') {
+      // Si no hay sesión activa, crear una nueva al entrar
+      await supabase.from('live_sessions').insert({
+        user_id: userId,
+        active: true,
+        status: 'coding'
+      })
+    }
+    setLoading(false)
+  }, [supabase])
+
+  useEffect(() => {
+    const init = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        setUser(user)
+        fetchSessionStatus(user.id)
+      }
+    }
+    init()
+  }, [supabase, fetchSessionStatus])
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!user) return
+    
     setSubmitting(true)
     setStatus('scanning')
     
-    // Simular el Agente "Auto-Code Reviewer" (Fantasma RLS)
+    const { error } = await supabase
+      .from('repository_submissions')
+      .insert({
+        student_id: user.id,
+        repo_url: repoUrl,
+        status: 'pending'
+      })
+
+    if (error) {
+      console.error(error)
+      setStatus('rejected')
+      setSubmitting(false)
+      return
+    }
+
+    // Efecto visual de "Ghost Auditor"
     setTimeout(() => {
       setSubmitting(false)
-      // Simula rechazo si la URL no parece segura o aprobada aleatoria
       if (repoUrl.includes('insecure') || repoUrl.length < 15) {
         setStatus('rejected')
       } else {
@@ -26,8 +78,27 @@ export default function StudentDashboard() {
     }, 2500)
   }
 
-  const toggleHelp = () => {
-    setHelpRequested(!helpRequested)
+  const toggleHelp = async () => {
+    if (!user) return
+    const newState = !helpRequested
+    setHelpRequested(newState)
+    
+    await supabase
+      .from('live_sessions')
+      .update({ 
+        needs_help: newState,
+        status: newState ? 'needs_help' : 'coding'
+      })
+      .eq('user_id', user.id)
+      .eq('active', true)
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#070707] flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-emerald-500 animate-spin" />
+      </div>
+    )
   }
 
   return (

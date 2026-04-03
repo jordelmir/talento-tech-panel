@@ -31,18 +31,21 @@ export async function middleware(request: NextRequest) {
   // 1. Verificación de Seguridad Básica (¿Está autenticado?)
   const { data: { user } } = await supabase.auth.getUser()
 
-  const isLoginPage = request.nextUrl.pathname.startsWith('/login')
+  const isPublicPage = request.nextUrl.pathname === '/' || request.nextUrl.pathname.startsWith('/login')
 
-  // Si no hay usuario y no está en el login -> Bloqueado
-  if (!user && !isLoginPage) {
+  // Si no hay usuario y no es una página pública -> Redirigir a Login
+  if (!user && !isPublicPage) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
     return NextResponse.redirect(url)
   }
 
-  // 2. Si es Lider/SuperAdmin y acabamos de atraparlo, se le enviará al Dashboard Total.
-  // Aquí es donde consultaremos 'user_roles' más adelante para ruteo específico.
-  // if (user) { ... verify role ... redirect to /dashboard/student OR /dashboard/teacher }
+  // 2. Rutero Automático: Si ya tiene sesión y entra a la Landing o Login, mandarlo al Dashboard
+  if (user && isPublicPage) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/dashboard'
+    return NextResponse.redirect(url)
+  }
 
   return supabaseResponse
 }

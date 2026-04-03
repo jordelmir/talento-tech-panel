@@ -16,13 +16,65 @@ type StudentTelemetry = {
 }
 
 export default function TeacherPulseDashboard() {
-  const [telemetry, setTelemetry] = useState<StudentTelemetry[]>([
-    // Datos simulados de alta fidelidad para el layout
-    { id: '1', name: 'Ana Sofía V.', github_user: 'anasofia_dev', role: 'university', last_commit_mins_ago: 5, status: 'optimal' },
-    { id: '2', name: 'Carlos Díaz', github_user: 'carlos_cloud', role: 'university', last_commit_mins_ago: 55, status: 'critical' },
-    { id: '3', name: 'María Paz R.', github_user: 'maria_code', role: 'college', last_commit_mins_ago: 2, status: 'optimal', paired_with: 'Carlos Díaz' },
-    { id: '4', name: 'Esteban Q.', github_user: 'estebanqu_tech', role: 'school', last_commit_mins_ago: 25, status: 'warning' },
-  ])
+  const supabase = createClient()
+  const [telemetry, setTelemetry] = useState<StudentTelemetry[]>([])
+  const [loading, setLoading] = useState(true)
+
+  const fetchTelemetry = useCallback(async () => {
+    const { data, error } = await supabase
+      .from('live_sessions')
+      .select(`
+        id,
+        status,
+        last_commit_at,
+        profiles (
+          full_name,
+          github_username
+        ),
+        paired_with:profiles!live_sessions_paired_with_id_fkey (
+          full_name
+        )
+      `)
+      .eq('active', true)
+
+    if (!error && data) {
+      const now = new Date()
+      const mapped: StudentTelemetry[] = data.map((session: any) => {
+        const lastCommit = session.last_commit_at ? new Date(session.last_commit_at) : null
+        const diffMins = lastCommit ? Math.floor((now.getTime() - lastCommit.getTime()) / 60000) : 999
+        
+        let status: 'optimal' | 'warning' | 'critical' = 'optimal'
+        if (session.status === 'needs_help' || diffMins > 45) status = 'critical'
+        else if (diffMins > 20) status = 'warning'
+
+        return {
+          id: session.id,
+          name: session.profiles?.full_name || 'Estudiante',
+          github_user: session.profiles?.github_username || 'unknown',
+          role: 'university', // Placeholder hasta unir con instituciones
+          last_commit_mins_ago: diffMins,
+          status,
+          paired_with: session.paired_with?.full_name
+        }
+      })
+      setTelemetry(mapped)
+      setLoading(false)
+    }
+  }, [supabase])
+
+  useEffect(() => {
+    fetchTelemetry()
+    const interval = setInterval(fetchTelemetry, 5000)
+    return () => clearInterval(interval)
+  }, [fetchTelemetry])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#050505] flex items-center justify-center">
+        <Activity className="w-12 h-12 text-cyan-400 animate-pulse" />
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-[#050505] text-slate-300 font-sans p-8 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]">
