@@ -10,7 +10,7 @@ import {
   ShieldCheck, 
   Globe, 
   Users,
-  CodeXml,
+  Code2,
   ChevronRight
 } from 'lucide-react'
 
@@ -117,7 +117,7 @@ export default function LandingPage() {
           {/* Card 4 */}
           <div className="md:col-span-2 bg-emerald-500 p-8 rounded-[2rem] text-black">
             <div className="flex justify-between items-start mb-8">
-              <CodeXml className="w-12 h-12" strokeWidth={2.5} />
+            <Code2 className="w-12 h-12" strokeWidth={2.5} />
               <div className="bg-black/20 px-4 py-1.5 rounded-full font-bold text-xs uppercase tracking-widest">Estrategia B2G</div>
             </div>
             <h3 className="text-4xl font-black tracking-tighter mb-4 leading-none">ZERO-COST INFRASTRUCTURE.</h3>
