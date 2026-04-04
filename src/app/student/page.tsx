@@ -1,17 +1,24 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { Activity, GitBranch as Github, ShieldAlert, CheckCircle2, AlertTriangle, Send, Loader2 } from 'lucide-react'
+import { Activity, GitBranch as Github, ShieldAlert, CheckCircle2, AlertTriangle, Send, Loader2, LogOut } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
+import { useRouter } from 'next/navigation'
 
 export default function StudentDashboard() {
   const supabase = createClient()
   const [user, setUser] = useState<any>(null)
   const [repoUrl, setRepoUrl] = useState('')
   const [submitting, setSubmitting] = useState(false)
-  const [status, setStatus] = useState<'idle' | 'scanning' | 'approved' | 'rejected'>('idle')
+  const [status, setStatus] = useState<'idle' | 'scanning' | 'approved' | 'rejected' | 'auto_failed_security'>('idle')
   const [helpRequested, setHelpRequested] = useState(false)
   const [loading, setLoading] = useState(true)
+  const router = useRouter()
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut()
+    router.push('/')
+  }
 
   const fetchSessionStatus = useCallback(async (userId: string) => {
     const { data, error } = await supabase
@@ -57,6 +64,7 @@ export default function StudentDashboard() {
       .insert({
         student_id: user.id,
         repo_url: repoUrl,
+        module_name: '0', // Asociado por ID al primer módulo del curriculum
         status: 'pending'
       })
 
@@ -67,15 +75,28 @@ export default function StudentDashboard() {
       return
     }
 
-    // Efecto visual de "Ghost Auditor"
-    setTimeout(() => {
-      setSubmitting(false)
-      if (repoUrl.includes('insecure') || repoUrl.length < 15) {
-        setStatus('rejected')
-      } else {
-        setStatus('approved')
+    // Real-time update check
+    const checkStatus = async () => {
+      const { data, error } = await supabase
+        .from('repository_submissions')
+        .select('status, ai_feedback')
+        .eq('student_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single();
+      
+      if (!error && data) {
+        if (data.status !== 'pending') {
+          setStatus(data.status as any);
+          setSubmitting(false);
+        } else {
+          // Si sigue pendiente, volver a chequear en 5s
+          setTimeout(checkStatus, 5000);
+        }
       }
-    }, 2500)
+    };
+    
+    checkStatus();
   }
 
   const toggleHelp = async () => {
@@ -119,14 +140,22 @@ export default function StudentDashboard() {
         <div className="mt-6 md:mt-0 flex gap-4">
           <button 
             onClick={toggleHelp}
-            className={`px-6 py-2.5 rounded-xl font-bold uppercase text-xs tracking-wider border transition-all flex items-center gap-2 ${
+            className={`px-4 py-2.5 rounded-xl font-bold uppercase text-xs tracking-wider border transition-all flex items-center gap-2 ${
               helpRequested 
                 ? 'bg-rose-500/10 border-rose-500 text-rose-400 shadow-[0_0_20px_rgba(244,63,94,0.3)] animate-pulse' 
                 : 'bg-slate-900 border-slate-700 text-slate-400 hover:text-white hover:border-slate-500'
             }`}
           >
             {helpRequested ? <AlertTriangle className="w-4 h-4"/> : <Activity className="w-4 h-4"/>}
-            {helpRequested ? 'SOS Emitido (Swarm Buscando)' : 'Solicitar Soporte IA'}
+            {helpRequested ? 'SOS Emitido' : 'Soporte IA'}
+          </button>
+          
+          <button
+            onClick={handleSignOut}
+            className="px-4 py-2.5 rounded-xl font-bold uppercase text-xs tracking-wider border bg-slate-900 border-slate-700 text-slate-400 hover:text-white hover:border-slate-500 hover:bg-slate-800 transition-all flex items-center gap-2"
+          >
+            <LogOut className="w-4 h-4" />
+            Cerrar Sesión
           </button>
         </div>
       </header>
@@ -201,8 +230,9 @@ export default function StudentDashboard() {
                   </h3>
                   <p className="text-sm opacity-80 leading-relaxed font-mono">
                     {status === 'scanning' ? 'Clonando repositorio de manera efímera. Evaluando variables de entorno y RLS en tu esquema supabase...' :
-                     status === 'approved' ? '[SYSTEM_OK] Códigos limpios. Políticas RLS estrictas. El profesor ha sido notificado para evaluar enviar tu app al Muro Génesis.' :
-                     '[CRITICAL ALERT] Se detectaron credenciales en el código fuente o carencia de ROW LEVEL SECURITY. Corrige, haz git push, y vuelve a someter.'}
+                     status === 'approved' ? '[SYSTEM_OK] Códigos limpios. Políticas RLS estrictas. El profesor ha sido notificado.' :
+                     status === 'auto_failed_security' ? 'Falla crítica detectada por IA. Revisa tus secretos en GitHub.' :
+                     '[CRITICAL ALERT] Se detectaron credenciales en el código fuente o carencia de ROW LEVEL SECURITY.'}
                   </p>
                 </div>
               </div>

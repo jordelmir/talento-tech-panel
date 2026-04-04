@@ -32,8 +32,8 @@ export default function LandingPage() {
         </div>
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
           <Link href="/genesis" className="hover:text-emerald-400 transition-colors">Muro Génesis</Link>
-          <a href="#" className="hover:text-emerald-400 transition-colors">Arquitectura</a>
-          <a href="#" className="hover:text-emerald-400 transition-colors">Documentación</a>
+          <Link href="/curriculum" className="hover:text-emerald-400 transition-colors">Módulos</Link>
+          <Link href="/docs" className="hover:text-emerald-400 transition-colors">Documentación</Link>
         </div>
         <Link 
           href="/login" 
@@ -134,8 +134,8 @@ export default function LandingPage() {
             <Activity className="w-5 h-5 text-emerald-500" />
             <span className="font-bold text-lg">Talento Tech 2026</span>
           </div>
-          <div className="text-gray-500 text-sm font-mono tracking-widest">
-            MADE FOR COLOMBIA • ENGINEERED BY ORCHESTRATION
+          <div className="text-gray-500 text-sm font-mono tracking-widest text-center md:text-right">
+            MADE FOR COLOMBIA • ENGINEERED BY Jorge David Del Valle Miranda
           </div>
         </div>
       </footer>

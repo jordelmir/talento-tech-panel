@@ -2,7 +2,7 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 // Módulo Core del Arquitecto: Enrutamiento Semántico y Seguridad Fronteriza
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
   })
@@ -33,7 +33,11 @@ export async function middleware(request: NextRequest) {
 
   const isPublicPage = request.nextUrl.pathname === '/' || 
                        request.nextUrl.pathname.startsWith('/login') ||
-                       request.nextUrl.pathname.startsWith('/auth/callback')
+                       request.nextUrl.pathname.startsWith('/genesis') ||
+                       request.nextUrl.pathname.startsWith('/curriculum') ||
+                       request.nextUrl.pathname.startsWith('/docs') ||
+                       request.nextUrl.pathname.startsWith('/auth/callback') ||
+                       request.nextUrl.pathname.startsWith('/api/webhooks')
 
   // Si no hay usuario y no es una página pública -> Redirigir a Login
   if (!user && !isPublicPage) {

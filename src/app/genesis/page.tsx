@@ -1,6 +1,7 @@
 'use client'
 
-import { Activity, Trophy, ExternalLink, Code2, Users2, ShieldCheck, MapPin } from 'lucide-react'
+import Link from 'next/link'
+import { Activity, Trophy, ExternalLink, Code2, Users2, ShieldCheck, MapPin, ArrowLeft } from 'lucide-react'
 
 // Dummy Data
 const eliteProjects = [
@@ -44,8 +45,25 @@ export default function MuroGenesis() {
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[400px] bg-gradient-to-b from-cyan-900/20 to-transparent blur-3xl pointer-events-none"></div>
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-fuchsia-900/10 rounded-full blur-[120px] pointer-events-none"></div>
 
-      <div className="max-w-7xl mx-auto px-6 py-16 relative z-10">
+      <div className="max-w-7xl mx-auto px-6 py-8 relative z-10">
         
+        {/* Top Nav */}
+        <div className="flex justify-between items-center mb-12">
+          <Link href="/" className="flex items-center gap-2 group">
+            <div className="bg-cyan-500 p-1.5 rounded-lg group-hover:rotate-12 transition-transform">
+              <Activity className="w-5 h-5 text-black" strokeWidth={3} />
+            </div>
+            <span className="font-bold text-xl tracking-tight hidden sm:block">Talento Tech</span>
+          </Link>
+          <Link
+            href="/"
+            className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Volver al Inicio
+          </Link>
+        </div>
+
         {/* Header Hero */}
         <div className="text-center mb-20 space-y-4">
           <div className="inline-flex items-center justify-center p-2 bg-slate-900 border border-slate-800 rounded-2xl mb-4 shadow-[0_0_30px_rgba(6,182,212,0.15)]">

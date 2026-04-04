@@ -62,12 +62,14 @@ Deno.serve(async (req) => {
 
             // Si hay un commit nuevo, actualizamos
             if (!currentLastCommit || lastCommitDate > currentLastCommit) {
+              console.log(`[Pulse] New activity detected for ${repoPath}. Updating session...`);
               updates.push(
                 supabaseClient
                   .from('live_sessions')
                   .update({ 
                     last_commit_at: lastCommitDate.toISOString(),
-                    status: 'coding' // Reseteamos el estado si hay actividad
+                    status: 'coding', // Reseteamos el estado si hay actividad
+                    needs_help: false // Si comitea, asumimos que superó el bloqueo
                   })
                   .eq('id', session.id)
               )

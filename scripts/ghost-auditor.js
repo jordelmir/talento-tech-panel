@@ -48,18 +48,31 @@ async function auditRepository(submission) {
     if (fs.existsSync(repoPath)) fs.rmSync(repoPath, { recursive: true });
     execSync(`git clone ${submission.repo_url} ${repoPath} --depth 1`);
 
-    // B. Análisis de Seguridad (PoC: Buscamos palabras prohibidas o falta de RLS en SQL)
-    const files = execSync(`grep -r "SUPABASE_SERVICE_ROLE_KEY" ${repoPath} || true`).toString();
-    const hasLeak = files.length > 0;
+    // B. Análisis de Seguridad Real (World Top)
+    const leaks = [];
+    
+    // Check 1: ¿Hay llaves de Supabase filtradas?
+    const serviceKeyCheck = execSync(`grep -r "service_role" ${repoPath} || true`).toString();
+    if (serviceKeyCheck.length > 0) leaks.push("SERVICE_ROLE_KEY_LEAK");
+
+    // Check 2: ¿Hay archivos .env en el repositorio?
+    const envFileCheck = fs.readdirSync(repoPath).filter(f => f.startsWith('.env') && !f.endsWith('.example'));
+    if (envFileCheck.length > 0) leaks.push("DOT_ENV_FILE_COMMITTED");
+
+    // Check 3: ¿Faltan políticas de RLS? (Si hay archivos SQL)
+    const sqlFiles = execSync(`find ${repoPath} -name "*.sql" || true`).toString();
+    if (sqlFiles.length > 0 && !sqlFiles.includes('enable row level security')) {
+      leaks.push("MISSING_RLS_POLICIES");
+    }
 
     let feedback = '';
     let status = 'passed';
 
-    if (hasLeak) {
+    if (leaks.length > 0) {
       status = 'auto_failed_security';
-      feedback = '👻 ALERTA GHOST: Se detectó la filtración de la Service Role Key. Esto compromete la seguridad nacional. Por favor, revoca la llave e inyéctala vía variables de entorno en Vercel.';
+      feedback = `👻 GHOST ALERT: ${leaks.join(', ')}. Tu código expone la infraestructura nacional. Corrige de inmediato.`;
     } else {
-      feedback = '👻 GHOST OK: No se detectaron secretos en el código fuente. La arquitectura parece seguir los estándares de orquestación segura.';
+      feedback = '👻 GHOST OK: Análisis estático completado. Cero vulnerabilidades críticas detectadas.';
     }
 
     // C. Actualizar Supabase

@@ -1,7 +1,8 @@
 'use client'
 
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
-import { Activity, ArrowRight, GitBranch as Github } from 'lucide-react'
+import { Activity, ArrowRight, ArrowLeft, GitBranch as Github } from 'lucide-react'
 import { useState } from 'react'
 
 export default function Login() {
@@ -22,8 +23,20 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+    <div className="min-h-screen bg-[#0A0A0A] flex flex-col pt-8 pb-12 sm:px-6 lg:px-8 font-sans">
+      
+      {/* Top Nav */}
+      <div className="w-full max-w-7xl mx-auto mb-12 flex justify-start pl-4 sm:pl-0">
+        <Link
+          href="/"
+          className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors group"
+        >
+          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+          Volver al Inicio
+        </Link>
+      </div>
+
+      <div className="sm:mx-auto sm:w-full sm:max-w-md flex-1 flex flex-col justify-center">
         <div className="flex justify-center flex-col items-center">
           <Activity className="text-emerald-500 w-16 h-16" />
           <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
