@@ -23,6 +23,11 @@ const performanceData = [
 export default function ProfesoresDashboard() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
+
+  React.useEffect(() => {
+    setIsMounted(true)
+  }, [])
   const [searchQuery, setSearchQuery] = useState('')
 
   const handleLogout = async () => {
@@ -118,17 +123,21 @@ export default function ProfesoresDashboard() {
                 Evolución Bi-Semanal del Cohorte
               </h2>
             </div>
-            <div className="h-[300px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={performanceData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                  <XAxis dataKey="week" fontSize={12} stroke="#64748b" tickLine={false} axisLine={false} />
-                  <YAxis fontSize={12} stroke="#64748b" tickLine={false} axisLine={false} />
-                  <Tooltip contentStyle={{ borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} />
-                  <Line type="monotone" dataKey="avg" name="Nota Promedio" stroke="#c026d3" strokeWidth={4} dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
-                  <Line type="monotone" dataKey="participation" name="% Participación" stroke="#10b981" strokeWidth={3} strokeDasharray="5 5" dot={false} />
-                </LineChart>
-              </ResponsiveContainer>
+            <div className="h-[300px] w-full flex items-center justify-center">
+              {!isMounted ? (
+                <div className="text-slate-400 font-mono text-xs animate-pulse">SYNCING_COHORTE_DATA...</div>
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={performanceData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                    <XAxis dataKey="week" fontSize={12} stroke="#64748b" tickLine={false} axisLine={false} />
+                    <YAxis fontSize={12} stroke="#64748b" tickLine={false} axisLine={false} />
+                    <Tooltip contentStyle={{ borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} />
+                    <Line type="monotone" dataKey="avg" name="Nota Promedio" stroke="#c026d3" strokeWidth={4} dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
+                    <Line type="monotone" dataKey="participation" name="% Participación" stroke="#10b981" strokeWidth={3} strokeDasharray="5 5" dot={false} />
+                  </LineChart>
+                </ResponsiveContainer>
+              )}
             </div>
           </div>
 

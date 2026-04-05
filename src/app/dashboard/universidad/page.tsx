@@ -34,6 +34,11 @@ const healthData = [
 export default function UniversidadDashboard() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
+
+  React.useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   const handleLogout = async () => {
     setLoading(true)
@@ -111,16 +116,20 @@ export default function UniversidadDashboard() {
             <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
               <Zap className="w-4 h-4 text-amber-500" /> Competencias Core
             </h3>
-            <div className="flex-1 w-full relative min-h-[220px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarData}>
-                  <PolarGrid stroke="rgba(255,255,255,0.1)" />
-                  <PolarAngleAxis dataKey="subject" tick={{ fill: '#94a3b8', fontSize: 10, fontFamily: 'monospace' }} />
-                  <PolarRadiusAxis angle={30} domain={[0, 150]} tick={false} axisLine={false} />
-                  <Tooltip contentStyle={{ backgroundColor: '#020617', borderColor: 'rgba(255,255,255,0.1)' }} />
-                  <Radar name="Score" dataKey="A" stroke="#a855f7" fill="#a855f7" fillOpacity={0.3} strokeWidth={2} />
-                </RadarChart>
-              </ResponsiveContainer>
+            <div className="flex-1 w-full relative min-h-[220px] flex items-center justify-center">
+              {!isMounted ? (
+                <div className="text-slate-500 font-mono text-[10px] animate-pulse">BOOTING_RADAR_CORES...</div>
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarData}>
+                    <PolarGrid stroke="rgba(255,255,255,0.1)" />
+                    <PolarAngleAxis dataKey="subject" tick={{ fill: '#94a3b8', fontSize: 10, fontFamily: 'monospace' }} />
+                    <PolarRadiusAxis angle={30} domain={[0, 150]} tick={false} axisLine={false} />
+                    <Tooltip contentStyle={{ backgroundColor: '#020617', borderColor: 'rgba(255,255,255,0.1)' }} />
+                    <Radar name="Score" dataKey="A" stroke="#a855f7" fill="#a855f7" fillOpacity={0.3} strokeWidth={2} />
+                  </RadarChart>
+                </ResponsiveContainer>
+              )}
             </div>
           </div>
         </div>
@@ -163,27 +172,31 @@ export default function UniversidadDashboard() {
               <span className="text-[10px] bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded border border-blue-500/20">LIVE DATA 24H</span>
             </div>
             
-            <div className="h-[250px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={healthData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="colorPRs" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
-                    </linearGradient>
-                    <linearGradient id="colorBugs" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#ef4444" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
-                  <XAxis dataKey="time" fontSize={10} stroke="#64748b" tickLine={false} axisLine={false} />
-                  <YAxis fontSize={10} stroke="#64748b" tickLine={false} axisLine={false} />
-                  <Tooltip contentStyle={{ backgroundColor: '#020617', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px' }} itemStyle={{ fontSize: '12px' }} />
-                  <Area type="monotone" dataKey="prs" name="Pull Requests" stroke="#3b82f6" strokeWidth={2} fillOpacity={1} fill="url(#colorPRs)" />
-                  <Area type="step" dataKey="bugs" name="Bugs Reportados" stroke="#ef4444" strokeWidth={2} fillOpacity={1} fill="url(#colorBugs)" />
-                </AreaChart>
-              </ResponsiveContainer>
+            <div className="h-[250px] w-full flex items-center justify-center">
+              {!isMounted ? (
+                <div className="text-slate-500 font-mono text-[10px] animate-pulse">CALCULATING_DIFFS...</div>
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={healthData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
+                    <defs>
+                      <linearGradient id="colorPRs" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
+                        <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                      </linearGradient>
+                      <linearGradient id="colorBugs" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#ef4444" stopOpacity={0.3}/>
+                        <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
+                    <XAxis dataKey="time" fontSize={10} stroke="#64748b" tickLine={false} axisLine={false} />
+                    <YAxis fontSize={10} stroke="#64748b" tickLine={false} axisLine={false} />
+                    <Tooltip contentStyle={{ backgroundColor: '#020617', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px' }} itemStyle={{ fontSize: '12px' }} />
+                    <Area type="monotone" dataKey="prs" name="Pull Requests" stroke="#3b82f6" strokeWidth={2} fillOpacity={1} fill="url(#colorPRs)" />
+                    <Area type="step" dataKey="bugs" name="Bugs Reportados" stroke="#ef4444" strokeWidth={2} fillOpacity={1} fill="url(#colorBugs)" />
+                  </AreaChart>
+                </ResponsiveContainer>
+              )}
             </div>
           </div>
 

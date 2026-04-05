@@ -22,6 +22,11 @@ const mockMissions = [
 export default function EscuelaDashboard() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
+
+  React.useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   const handleLogout = async () => {
     setLoading(true)
@@ -128,20 +133,24 @@ export default function EscuelaDashboard() {
             <h2 className="text-xl font-black text-slate-800 flex items-center gap-2 mb-6">
               <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" /> Estrellas Ganadas
             </h2>
-            <div className="flex-1 w-full min-h-[250px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={mockMissions} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                  <XAxis dataKey="name" fontSize={11} stroke="#64748b" tickLine={false} axisLine={false} />
-                  <YAxis fontSize={11} stroke="#64748b" tickLine={false} axisLine={false} />
-                  <Tooltip cursor={{fill: '#f1f5f9'}} contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} />
-                  <Bar dataKey="pts" radius={[6, 6, 0, 0]} barSize={30}>
-                    {mockMissions.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={['#38bdf8', '#fb923c', '#34d399', '#a78bfa'][index % 4]} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
+            <div className="flex-1 w-full min-h-[250px] flex items-center justify-center">
+              {!isMounted ? (
+                <div className="text-slate-300 font-mono text-xs animate-pulse tracking-widest uppercase">Initializing_UI...</div>
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={mockMissions} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                    <XAxis dataKey="name" fontSize={11} stroke="#64748b" tickLine={false} axisLine={false} />
+                    <YAxis fontSize={11} stroke="#64748b" tickLine={false} axisLine={false} />
+                    <Tooltip cursor={{fill: '#f1f5f9'}} contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} />
+                    <Bar dataKey="pts" radius={[6, 6, 0, 0]} barSize={30}>
+                      {mockMissions.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={['#38bdf8', '#fb923c', '#34d399', '#a78bfa'][index % 4]} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              )}
             </div>
             <p className="text-center text-sm font-bold text-slate-500 mt-4">¡Sigue así, casi logras la medalla Diamante!</p>
           </div>

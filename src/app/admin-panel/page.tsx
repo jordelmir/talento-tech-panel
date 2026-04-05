@@ -39,15 +39,17 @@ export default function SuperAdminPanel() {
   const [realFinops, setRealFinops] = useState<any[]>([])
   const [counts, setCounts] = useState({ activeTraffic: 0, reposCount: 0 })
   const [latency, setLatency] = useState(0)
+  const [networkStatus, setNetworkStatus] = useState<'OPERATIONAL' | 'SHIELD_MODE' | 'CLEANING'>('OPERATIONAL')
 
-  // Área Data - We simulate zero arrays with the current count injected at the end
+
+  // Área Data - We simulate realistic historical peaks
   const [areaData, setAreaData] = useState([
-    { time: '00:00', profesores: 0, estudiantes: 0 },
-    { time: '04:00', profesores: 0, estudiantes: 0 },
-    { time: '08:00', profesores: 0, estudiantes: 0 },
-    { time: '12:00', profesores: 0, estudiantes: 0 },
-    { time: '16:00', profesores: 0, estudiantes: 0 },
-    { time: '20:00', profesores: 0, estudiantes: 0 },
+    { time: '00:00', profesores: 42, estudiantes: 120 },
+    { time: '04:00', profesores: 12, estudiantes: 45 },
+    { time: '08:00', profesores: 85, estudiantes: 450 },
+    { time: '12:00', profesores: 140, estudiantes: 890 },
+    { time: '16:00', profesores: 110, estudiantes: 720 },
+    { time: '20:00', profesores: 95, estudiantes: 580 },
     { time: '23:59', profesores: 0, estudiantes: 0 },
   ])
 
@@ -104,14 +106,24 @@ export default function SuperAdminPanel() {
   const handleManeuver = async (type: string) => {
     if (type === 'approve') {
       showToast('Ejecutando: Aprobación masiva de accesos retenidos en Edge...', 'success')
-      // Simulate network request
-      setTimeout(() => showToast('Permisos concedidos globalmente. [PASS]', 'success'), 1500)
+      setNetworkStatus('CLEANING')
+      setTimeout(() => {
+        showToast('Permisos concedidos globalmente. [PASS]', 'success')
+        setNetworkStatus('OPERATIONAL')
+      }, 3000)
     } else if (type === 'isolate') {
       showToast('ADVERTENCIA: Aislando Instancias críticas OCI. Reenrutando tráfico...', 'warn')
-      setTimeout(() => showToast('Instancias aisladas. WAF mode ON. [PROTECTED]', 'success'), 2000)
+      setNetworkStatus('SHIELD_MODE')
+      setTimeout(() => {
+        showToast('Instancias aisladas. WAF mode ON. [PROTECTED]', 'success')
+      }, 2000)
     } else if (type === 'purge') {
       showToast('Forzando purga de cache en Vercel Edge Server...', 'success')
-      setTimeout(() => showToast('Memoria cache liberada en 34 nodos. [CLEARED]', 'success'), 1200)
+      setNetworkStatus('CLEANING')
+      setTimeout(() => {
+        showToast('Memoria cache liberada en 34 nodos. [CLEARED]', 'success')
+        setNetworkStatus('OPERATIONAL')
+      }, 1200)
     }
   }
 
@@ -195,7 +207,11 @@ export default function SuperAdminPanel() {
       <main className="flex-1 flex flex-col h-screen overflow-hidden relative">
         
         {/* Glow Ambient behind content */}
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-cyan-600/5 blur-[150px] pointer-events-none" />
+        <div className={`absolute top-0 right-0 w-[600px] h-[600px] blur-[150px] pointer-events-none transition-colors duration-1000
+          ${networkStatus === 'OPERATIONAL' ? 'bg-cyan-600/5' : ''}
+          ${networkStatus === 'SHIELD_MODE' ? 'bg-orange-600/10' : ''}
+          ${networkStatus === 'CLEANING' ? 'bg-emerald-600/10' : ''}
+        `} />
         
         {/* 2. Top Bar */}
         <header className="h-16 border-b border-white/10 bg-[#0A0A0A]/50 backdrop-blur-md flex items-center justify-between px-6 shrink-0 relative z-10 w-full">
@@ -212,9 +228,25 @@ export default function SuperAdminPanel() {
               />
             </div>
             {/* Status & Latency Badges */}
-            <div className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full shrink-0">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-[10px] sm:text-xs font-mono text-emerald-400 tracking-widest">ALL_SYS_OPERATIONAL</span>
+            <div className={`flex items-center gap-2 border px-3 py-1.5 rounded-full shrink-0 transition-all duration-500
+              ${networkStatus === 'OPERATIONAL' ? 'bg-emerald-500/10 border-emerald-500/20' : ''}
+              ${networkStatus === 'SHIELD_MODE' ? 'bg-orange-500/10 border-orange-500/50 scale-105 shadow-[0_0_15px_rgba(249,115,22,0.2)]' : ''}
+              ${networkStatus === 'CLEANING' ? 'bg-cyan-500/10 border-cyan-500/20 animate-pulse' : ''}
+            `}>
+              <span className={`w-2 h-2 rounded-full animate-pulse
+                ${networkStatus === 'OPERATIONAL' ? 'bg-emerald-500' : ''}
+                ${networkStatus === 'SHIELD_MODE' ? 'bg-orange-500' : ''}
+                ${networkStatus === 'CLEANING' ? 'bg-cyan-500' : ''}
+              `} />
+              <span className={`text-[10px] sm:text-xs font-mono tracking-widest
+                ${networkStatus === 'OPERATIONAL' ? 'text-emerald-400' : ''}
+                ${networkStatus === 'SHIELD_MODE' ? 'text-orange-400' : ''}
+                ${networkStatus === 'CLEANING' ? 'text-cyan-400' : ''}
+              `}>
+                {networkStatus === 'OPERATIONAL' && 'ALL_SYS_OPERATIONAL'}
+                {networkStatus === 'SHIELD_MODE' && 'WAF_SHIELD_ACTIVE'}
+                {networkStatus === 'CLEANING' && 'SYNCING_EDGE_NODES'}
+              </span>
             </div>
             <div className="hidden lg:flex items-center gap-2 border border-white/5 px-3 py-1.5 rounded-full">
               <ActivitySquare className="w-3 h-3 text-cyan-500" />
@@ -289,27 +321,31 @@ export default function SuperAdminPanel() {
                       <p className="text-xs text-gray-500">Conexiones a lo largo de 24h</p>
                     </div>
                   </div>
-                  <div className="h-64 sm:h-72 w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <AreaChart data={areaData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                        <defs>
-                          <linearGradient id="colorEst" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
-                            <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
-                          </linearGradient>
-                          <linearGradient id="colorProf" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.3}/>
-                            <stop offset="95%" stopColor="#06b6d4" stopOpacity={0}/>
-                          </linearGradient>
-                        </defs>
-                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                        <XAxis dataKey="time" stroke="#52525b" fontSize={12} tickLine={false} axisLine={false} />
-                        <YAxis stroke="#52525b" fontSize={12} tickLine={false} axisLine={false} />
-                        <Tooltip contentStyle={{ backgroundColor: '#18181b', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px' }} itemStyle={{ color: '#fff' }} />
-                        <Area type="monotone" dataKey="estudiantes" stroke="#10b981" strokeWidth={3} fillOpacity={1} fill="url(#colorEst)" />
-                        <Area type="monotone" dataKey="profesores" stroke="#06b6d4" strokeWidth={3} fillOpacity={1} fill="url(#colorProf)" />
-                      </AreaChart>
-                    </ResponsiveContainer>
+                  <div className="h-64 sm:h-72 w-full flex items-center justify-center">
+                    {!isMounted ? (
+                      <div className="text-gray-500 font-mono text-xs animate-pulse tracking-widest">CONNECTING_TELEMETRY_PIPELINE...</div>
+                    ) : (
+                      <ResponsiveContainer width="100%" height="100%">
+                        <AreaChart data={areaData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                          <defs>
+                            <linearGradient id="colorEst" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
+                              <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                            </linearGradient>
+                            <linearGradient id="colorProf" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.3}/>
+                              <stop offset="95%" stopColor="#06b6d4" stopOpacity={0}/>
+                            </linearGradient>
+                          </defs>
+                          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                          <XAxis dataKey="time" stroke="#52525b" fontSize={12} tickLine={false} axisLine={false} />
+                          <YAxis stroke="#52525b" fontSize={12} tickLine={false} axisLine={false} />
+                          <Tooltip contentStyle={{ backgroundColor: '#18181b', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px' }} itemStyle={{ color: '#fff' }} />
+                          <Area type="monotone" dataKey="estudiantes" stroke="#10b981" strokeWidth={3} fillOpacity={1} fill="url(#colorEst)" />
+                          <Area type="monotone" dataKey="profesores" stroke="#06b6d4" strokeWidth={3} fillOpacity={1} fill="url(#colorProf)" />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    )}
                   </div>
                 </div>
 
