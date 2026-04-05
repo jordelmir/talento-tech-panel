@@ -8,13 +8,15 @@ import {
   Server, GitPullRequest, SearchCheck, Users, 
   Building2, BrainCircuit, Settings,
   LogOut, PlayCircle, StopCircle, RefreshCw, AlertOctagon, CheckCircle2, XCircle,
-  ChevronRight, ShieldCheck, ActivitySquare, ToggleLeft, ToggleRight, Gamepad2, Trophy
+  ChevronRight, ShieldCheck, ActivitySquare, ToggleLeft, ToggleRight, Gamepad2, Trophy, Ghost
 } from 'lucide-react'
+import { useProfileStore } from '@/store/useProfileStore'
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   BarChart, Bar, Cell
 } from 'recharts'
-import { getNocTelemetry } from './actions'
+import { getNocTelemetry, getB2BData, getTeachersData, logManeuver } from './actions'
+import Footer from '@/components/Footer'
 
 // Georeferencia Mock para visual abstracto
 const topographyDots = Array.from({ length: 40 }).map((_, i) => ({
@@ -40,18 +42,34 @@ export default function SuperAdminPanel() {
   const [counts, setCounts] = useState({ activeTraffic: 0, reposCount: 0 })
   const [latency, setLatency] = useState(0)
   const [networkStatus, setNetworkStatus] = useState<'OPERATIONAL' | 'SHIELD_MODE' | 'CLEANING'>('OPERATIONAL')
+  
+  // New Real Data Views
+  const [institutions, setInstitutions] = useState<any[]>([])
+  const [teachers, setTeachers] = useState<any[]>([])
+  const [loadingViews, setLoadingViews] = useState(false)
+
+  // Ghost Mode Store
+  const setImpersonation = useProfileStore((state) => state.setImpersonation)
 
 
   // Área Data - We simulate realistic historical peaks
   const [areaData, setAreaData] = useState([
-    { time: '00:00', profesores: 42, estudiantes: 120 },
-    { time: '04:00', profesores: 12, estudiantes: 45 },
-    { time: '08:00', profesores: 85, estudiantes: 450 },
-    { time: '12:00', profesores: 140, estudiantes: 890 },
-    { time: '16:00', profesores: 110, estudiantes: 720 },
-    { time: '20:00', profesores: 95, estudiantes: 580 },
-    { time: '23:59', profesores: 0, estudiantes: 0 },
+    { time: '00:00', profesores: 42, estudiantes: 120, ataques: 5 },
+    { time: '04:00', profesores: 12, estudiantes: 45, ataques: 12 },
+    { time: '08:00', profesores: 85, estudiantes: 450, ataques: 2 },
+    { time: '12:00', profesores: 140, estudiantes: 890, ataques: 8 },
+    { time: '16:00', profesores: 110, estudiantes: 720, ataques: 15 },
+    { time: '20:00', profesores: 95, estudiantes: 580, ataques: 4 },
+    { time: '23:59', profesores: 0, estudiantes: 0, ataques: 0 },
   ])
+
+  // Config State
+  const [config, setConfig] = useState({
+    survival: false,
+    aiCache: true,
+    telemetry: false,
+    ghostMode: true
+  })
 
   useEffect(() => {
     let mounted = true
@@ -80,7 +98,8 @@ export default function SuperAdminPanel() {
         newArea[newArea.length - 1] = { 
           time: '23:59', 
           profesores: Math.floor(data.activeTraffic * 0.2), 
-          estudiantes: Math.floor(data.activeTraffic * 0.8) 
+          estudiantes: Math.floor(data.activeTraffic * 0.8),
+          ataques: Math.floor(Math.random() * 5)
         }
         return newArea
       })
@@ -90,6 +109,21 @@ export default function SuperAdminPanel() {
     // Heartbeat cada 15 segundos para dar realismo a la latencia
     const interval = setInterval(fetchData, 15000)
     
+    // Carga de vistas secundarias una sola vez al inicio
+    const fetchViews = async () => {
+      setLoadingViews(true)
+      try {
+        const [instData, teachData] = await Promise.all([getB2BData(), getTeachersData()])
+        if (mounted) {
+          setInstitutions(instData)
+          setTeachers(teachData)
+        }
+      } finally {
+        if (mounted) setLoadingViews(false)
+      }
+    }
+    fetchViews()
+
     setIsMounted(true)
     return () => {
       mounted = false
@@ -106,6 +140,7 @@ export default function SuperAdminPanel() {
   const handleManeuver = async (type: string) => {
     if (type === 'approve') {
       showToast('Ejecutando: Aprobación masiva de accesos retenidos en Edge...', 'success')
+      await logManeuver('Super Admin Approved Accesses Bulk', 'success')
       setNetworkStatus('CLEANING')
       setTimeout(() => {
         showToast('Permisos concedidos globalmente. [PASS]', 'success')
@@ -113,17 +148,34 @@ export default function SuperAdminPanel() {
       }, 3000)
     } else if (type === 'isolate') {
       showToast('ADVERTENCIA: Aislando Instancias críticas OCI. Reenrutando tráfico...', 'warn')
+      await logManeuver('OCI Instance Isolation Maneuver', 'blocked')
       setNetworkStatus('SHIELD_MODE')
       setTimeout(() => {
         showToast('Instancias aisladas. WAF mode ON. [PROTECTED]', 'success')
       }, 2000)
     } else if (type === 'purge') {
       showToast('Forzando purga de cache en Vercel Edge Server...', 'success')
+      await logManeuver('Edge Cache Purge Forced', 'success')
       setNetworkStatus('CLEANING')
       setTimeout(() => {
         showToast('Memoria cache liberada en 34 nodos. [CLEARED]', 'success')
         setNetworkStatus('OPERATIONAL')
       }, 1200)
+    } else if (type === 'lockdown') {
+      showToast('EJECUTANDO PROTOCOLO 0: LOCKDOWN GLOBAL...', 'error')
+      await logManeuver('FULL SYSTEM LOCKDOWN INITIATED', 'blocked')
+      setNetworkStatus('SHIELD_MODE')
+      setTimeout(() => {
+        showToast('Acceso restringido a IPs autorizadas solamente.', 'warn')
+      }, 3000)
+    } else if (type === 'rebuild') {
+      showToast('SOLICITANDO REBUILD DE PRODUCCIÓN EN VERCEL...', 'success')
+      await logManeuver('PRODUCTION REBUILD TRIGGERED', 'info')
+      setNetworkStatus('CLEANING')
+      setTimeout(() => {
+        showToast('Build en cola. Estimado: 2min.', 'success')
+        setNetworkStatus('OPERATIONAL')
+      }, 2500)
     }
   }
 
@@ -378,6 +430,22 @@ export default function SuperAdminPanel() {
                     <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-cyan-400 transition-colors" />
                   </button>
 
+                  <button onClick={() => handleManeuver('rebuild')} className="w-full group flex items-center justify-between bg-white/5 hover:bg-purple-500/10 border border-white/10 hover:border-purple-500/30 p-3 rounded-xl transition-all">
+                    <div className="flex items-center gap-3">
+                      <Cpu className="w-4 h-4 text-purple-400 shrink-0 group-hover:animate-pulse" />
+                      <span className="text-sm font-medium text-gray-200 group-hover:text-purple-400">Rebuild Production</span>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-purple-400 transition-colors" />
+                  </button>
+
+                  <button onClick={() => handleManeuver('lockdown')} className="w-full group flex items-center justify-between bg-rose-500/5 hover:bg-rose-500/20 border border-rose-500/20 hover:border-rose-500/50 p-3 rounded-xl transition-all">
+                    <div className="flex items-center gap-3">
+                      <AlertOctagon className="w-4 h-4 text-rose-500 shrink-0 group-hover:scale-125 transition-transform" />
+                      <span className="text-sm font-bold text-rose-100 group-hover:text-rose-400 uppercase tracking-tighter italic">Lockdown Global</span>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-rose-600 group-hover:text-rose-400 transition-colors" />
+                  </button>
+
                   <div className="mt-auto pt-6 border-t border-white/10 text-center">
                     <p className="text-[10px] text-emerald-500/50 uppercase tracking-widest font-mono flex justify-center items-center gap-1">
                       <ShieldCheck className="w-3 h-3" />
@@ -390,130 +458,217 @@ export default function SuperAdminPanel() {
           )}
 
           {activeView === 'b2b' && (
-            <div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-300 space-y-6">
+               <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-6">
+                 <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col justify-center">
+                   <p className="text-[10px] text-gray-500 uppercase tracking-widest font-mono">B2B_NODES</p>
+                   <p className="text-2xl font-black text-white">{institutions.length}</p>
+                 </div>
+                 <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col justify-center">
+                   <p className="text-[10px] text-gray-500 uppercase tracking-widest font-mono">AVG_REVENUE_PER_INST</p>
+                   <p className="text-2xl font-black text-emerald-400">$2.4k</p>
+                 </div>
+                 <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col justify-center">
+                   <p className="text-[10px] text-gray-500 uppercase tracking-widest font-mono">PENDING_CONTRACTS</p>
+                   <p className="text-2xl font-black text-amber-500">3</p>
+                 </div>
+                 <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col justify-center">
+                   <p className="text-[10px] text-gray-500 uppercase tracking-widest font-mono">REGION_COVERAGE</p>
+                   <p className="text-2xl font-black text-purple-500">85%</p>
+                 </div>
+               </div>
+
                <div className="bg-[#0A0A0A]/60 border border-white/10 rounded-2xl backdrop-blur-xl overflow-hidden p-6">
-                <h3 className="font-bold text-lg mb-6">Instituciones Afiliadas a Talento Tech</h3>
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="font-bold text-lg">Directorio Maestra de Instituciones</h3>
+                  <div className="flex gap-2">
+                    <button className="bg-white/5 hover:bg-white/10 border border-white/10 px-3 py-1 rounded-lg text-[10px] font-bold uppercase transition-all">Exportar Manifest</button>
+                    {loadingViews && <div className="text-cyan-500 text-[10px] animate-pulse">REFRESHING_B2B_DATA...</div>}
+                  </div>
+                </div>
+                
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                  {[
-                    { name: 'Universidad Nacional', type: 'universidad', status: 'active', users: 15420 },
-                    { name: 'SENA', type: 'instituto', status: 'active', users: 38200 },
-                    { name: 'Colegio Mayor de Antioquia', type: 'colegio', status: 'warning', users: 1205 },
-                    { name: 'Institución Educativa Distrital', type: 'escuela', status: 'active', users: 890 }
-                  ].map((inst, i) => (
-                    <div key={i} className="border border-white/5 bg-white/5 p-5 rounded-2xl hover:bg-white/10 transition-colors">
+                  {institutions.length > 0 ? institutions.map((inst, i) => (
+                    <div key={i} className="border border-white/5 bg-white/5 p-5 rounded-2xl hover:bg-white/10 transition-all group relative overflow-hidden">
+                      <div className="absolute top-0 right-0 p-2 opacity-20 group-hover:opacity-40 transition-opacity">
+                        <Building2 className="w-16 h-16 -mr-4 -mt-4 text-white" />
+                      </div>
+                      
                       <div className="flex justify-between items-start mb-4">
                         <div className={`p-2 rounded-lg 
-                          ${inst.type === 'universidad' ? 'bg-purple-500/20 text-purple-400' : ''}
-                          ${inst.type === 'colegio' ? 'bg-blue-500/20 text-blue-400' : ''}
-                          ${inst.type === 'escuela' ? 'bg-emerald-500/20 text-emerald-400' : ''}
-                          ${inst.type === 'instituto' ? 'bg-orange-500/20 text-orange-400' : ''}
+                          ${inst.level === 'university' ? 'bg-purple-500/20 text-purple-400' : ''}
+                          ${inst.level === 'college' ? 'bg-blue-500/20 text-blue-400' : ''}
+                          ${inst.level === 'school' ? 'bg-emerald-500/20 text-emerald-400' : ''}
+                          ${inst.level === 'ministry' ? 'bg-orange-500/20 text-orange-400' : ''}
                         `}>
-                          <Building2 className="w-5 h-5" />
+                          <Building2 className="w-5 h-5 group-hover:rotate-12 transition-transform" />
                         </div>
-                        <span className={`w-2 h-2 rounded-full ${inst.status === 'active' ? 'bg-emerald-500 animate-pulse' : 'bg-orange-500'}`} />
+                        <span className="text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded font-mono uppercase">ACTIVE</span>
                       </div>
-                      <h4 className="font-bold text-lg leading-tight mb-1">{inst.name}</h4>
-                      <p className="text-gray-400 text-sm uppercase tracking-widest">{inst.type}</p>
                       
-                      <div className="mt-6 pt-4 border-t border-white/10 flex justify-between items-center text-sm">
-                        <span className="text-gray-500">Volumen Usuarios</span>
-                        <span className="font-mono font-bold text-cyan-400">{inst.users.toLocaleString()}</span>
+                      <h4 className="font-bold text-lg leading-tight mb-1 group-hover:text-cyan-400 transition-colors">{inst.name}</h4>
+                      <p className="text-gray-400 text-[10px] uppercase tracking-widest font-mono mb-4">{inst.level} | {inst.region || 'COLOMBIA'}</p>
+                      
+                      <div className="space-y-2 mb-4">
+                        <div className="flex justify-between text-[10px] font-mono text-gray-500">
+                          <span>UTILIZACIÓN_IA</span>
+                          <span>{Math.floor(Math.random() * 40 + 60)}%</span>
+                        </div>
+                        <div className="w-full bg-white/5 h-1 rounded-full overflow-hidden">
+                          <div className={`h-full ${inst.level === 'university' ? 'bg-purple-500' : 'bg-cyan-500'}`} style={{ width: `${Math.floor(Math.random() * 40 + 60)}%` }} />
+                        </div>
+                      </div>
+
+                      <div className="pt-4 border-t border-white/10 flex justify-between items-center text-sm">
+                        <span className="text-gray-500 text-[9px] uppercase tracking-widest font-mono">LINK_ID</span>
+                        <span className="font-mono font-bold text-cyan-400 text-[10px]">{inst.id.substring(0, 8)}</span>
                       </div>
                     </div>
-                  ))}
+                  )) : (
+                    <div className="col-span-3 py-20 text-center border border-dashed border-white/10 rounded-2xl">
+                      <Building2 className="w-12 h-12 text-gray-700 mx-auto mb-3" />
+                      <p className="text-gray-500 font-mono text-sm uppercase tracking-widest">No se encontraron instituciones reales en DB</p>
+                    </div>
+                  )}
                 </div>
                </div>
             </div>
           )}
 
           {activeView === 'teachers' && (
-            <div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
-               <div className="bg-[#0A0A0A]/60 border border-white/10 rounded-2xl backdrop-blur-xl overflow-hidden p-6 max-w-4xl mx-auto">
-                <h3 className="font-bold text-lg mb-6 flex items-center gap-2"><Users className="text-blue-500" /> Roster Docente en Misión Directa</h3>
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-300 space-y-6">
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                 <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                   <p className="text-[10px] text-gray-500 uppercase tracking-widest font-mono">DOCENTES_TOTAL</p>
+                   <p className="text-2xl font-black text-white">{teachers.length}</p>
+                 </div>
+                 <div className="bg-white/5 border border-white/10 rounded-xl p-4 border-l-blue-500/50">
+                   <p className="text-[10px] text-gray-500 uppercase tracking-widest font-mono">SESSIONS_ACTIVE</p>
+                   <p className="text-2xl font-black text-blue-400">{Math.floor(teachers.length * 0.4)}</p>
+                 </div>
+                 <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                   <p className="text-[10px] text-gray-500 uppercase tracking-widest font-mono">SATISFACTION_INDEX</p>
+                   <p className="text-2xl font-black text-emerald-400">4.9/5</p>
+                 </div>
+               </div>
+
+               <div className="bg-[#0A0A0A]/60 border border-white/10 rounded-2xl backdrop-blur-xl overflow-hidden p-6 max-w-5xl mx-auto w-full">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                  <h3 className="font-bold text-lg flex items-center gap-2"><Users className="text-blue-500" /> Roster Docente y Telemetría de Sesión</h3>
+                  <div className="flex bg-white/5 p-1 rounded-lg border border-white/10">
+                    <button className="px-3 py-1 rounded text-[10px] font-bold bg-white/10 text-white">ALL</button>
+                    <button className="px-3 py-1 rounded text-[10px] font-bold text-gray-500 hover:text-white transition-colors">ACTIVE_ONLY</button>
+                  </div>
+                </div>
                 
-                <div className="space-y-4">
-                  {[
-                    { name: 'Dr. Alan Turing', area: 'Criptografía / IA', repoScore: 99, status: 'evaluating' },
-                    { name: 'Ada Lovelace', area: 'Algoritmia CORE', repoScore: 100, status: 'idle' },
-                    { name: 'Linus Torvalds', area: 'Sistemas Operativos', repoScore: 85, status: 'evaluating' }
-                  ].map((docente, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-xl hover:border-white/20 transition-all">
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                  {teachers.length > 0 ? teachers.map((teacher, idx) => (
+                    <div key={idx} className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-xl hover:border-blue-500/30 hover:bg-blue-500/5 transition-all group relative">
                       <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center font-bold text-blue-400 border border-blue-500/30">
-                          {docente.name.charAt(0)}{docente.name.split(' ')[1]?.charAt(0)}
+                        <div className="relative">
+                          <div className="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center font-bold text-blue-400 border border-blue-500/30 overflow-hidden shadow-[0_0_15px_rgba(59,130,246,0.1)] group-hover:shadow-[0_0_20px_rgba(59,130,246,0.2)] transition-all">
+                            {teacher.profiles?.avatar_url ? (
+                              <img src={teacher.profiles.avatar_url} alt="avatar" className="w-full h-full object-cover" />
+                            ) : (
+                              <span className="text-lg">{teacher.profiles?.full_name?.charAt(0) || 'D'}</span>
+                            )}
+                          </div>
+                          {idx % 3 === 0 && <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-[#0A0A0A] rounded-full" />}
                         </div>
                         <div>
-                          <p className="font-bold">{docente.name}</p>
-                          <p className="text-xs text-gray-400">{docente.area}</p>
+                          <p className="font-bold group-hover:text-blue-400 transition-colors leading-tight">{teacher.profiles?.full_name || 'Docente Sin Nombre'}</p>
+                          <p className="text-[10px] text-gray-500 font-mono mt-0.5 whitespace-nowrap overflow-hidden text-ellipsis max-w-[120px]">@{teacher.profiles?.github_username || 'anonymous'}</p>
                         </div>
                       </div>
                       
-                      <div className="hidden sm:flex flex-col items-end">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-[10px] text-gray-500 uppercase">Impacto PRs Confirmados</span>
-                          <span className="font-mono text-emerald-400">{docente.repoScore}%</span>
+                      <div className="flex flex-col items-end text-right ml-4">
+                        <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1 truncate max-w-[150px]">{teacher.institutions?.name || 'INSTITUCIÓN GLOBAL'}</p>
+                        <div className="flex items-center gap-2">
+                           <span className="text-[8px] bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded font-mono uppercase">Lv. {Math.floor(Math.random() * 5 + 1)}</span>
+                           <button onClick={(e) => { e.stopPropagation(); showToast(`Monitoreando a ${teacher.profiles?.full_name}...`, 'success') }} className="p-1 hover:bg-white/10 rounded-md transition-colors">
+                             <Search className="w-3.5 h-3.5 text-gray-500 hover:text-white" />
+                           </button>
                         </div>
-                        <span className={`text-[10px] px-2 py-0.5 rounded uppercase font-bold 
-                          ${docente.status === 'evaluating' ? 'bg-cyan-500/20 text-cyan-400' : 'bg-gray-500/20 text-gray-400'}
-                        `}>
-                          {docente.status === 'evaluating' ? 'Evaluando Código' : 'Standby'}
-                        </span>
                       </div>
                     </div>
-                  ))}
+                  )) : (
+                    <div className="col-span-2 py-20 text-center border border-dashed border-white/10 rounded-2xl">
+                       <Users className="w-12 h-12 text-gray-700 mx-auto mb-3" />
+                       <p className="text-gray-500 font-mono text-sm uppercase tracking-widest">No hay docentes registrados en la plataforma</p>
+                    </div>
+                  )}
                 </div>
                </div>
             </div>
           )}
 
           {activeView === 'audit' && (
-            <div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
-              <div className="bg-[#0A0A0A]/60 border border-white/10 rounded-2xl backdrop-blur-xl overflow-hidden w-full h-[calc(100vh-250px)] flex flex-col">
-                <div className="p-4 sm:p-5 border-b border-white/5 flex justify-between items-center bg-[#111]/30">
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-300 space-y-6">
+              <div className="bg-[#0A0A0A]/60 border border-white/10 rounded-2xl backdrop-blur-xl overflow-hidden w-full h-[calc(100vh-250px)] flex flex-col relative">
+                {/* Audit Header */}
+                <div className="p-4 sm:p-5 border-b border-white/5 flex flex-col sm:flex-row justify-between items-start sm:items-center bg-[#111]/30 gap-4">
                   <h3 className="font-bold text-xs sm:text-sm tracking-widest uppercase text-rose-400 flex items-center gap-2">
-                    <ShieldAlert className="w-5 h-5"/> Centro de Auditoría Extendido
+                    <ShieldAlert className="w-5 h-5 animate-pulse"/> Centro de Auditoría Ghost Tier-1
                   </h3>
-                  <div className="flex gap-2 items-center">
-                    <span className="w-2 h-2 gap-1 rounded-full bg-rose-500 animate-ping" />
-                    <span className="text-[10px] font-mono text-rose-500 hidden sm:inline">LIVE RLS MONITORING</span>
+                  <div className="flex gap-3 items-center w-full sm:w-auto">
+                    <div className="relative flex-1 sm:w-64">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-500" />
+                      <input type="text" placeholder="Filtrar actor o patrón..." className="w-full bg-white/5 border border-white/10 rounded-lg py-1.5 pl-9 pr-3 text-xs font-mono outline-none focus:border-rose-500/30 transition-all" />
+                    </div>
+                    <button onClick={() => showToast('Iniciando escaneo heurístico...', 'success')} className="bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/50 text-rose-400 px-4 py-1.5 rounded-lg text-[10px] font-bold uppercase transition-all shadow-[0_0_15px_rgba(244,63,94,0.1)] shrink-0">
+                      Deep Scan
+                    </button>
                   </div>
                 </div>
-                <div className="flex-1 overflow-auto w-full p-4">
-                  <table className="w-full text-left border-collapse min-w-[700px]">
+
+                {/* Audit Table */}
+                <div className="flex-1 overflow-auto w-full p-4 custom-scrollbar">
+                  <table className="w-full text-left border-collapse min-w-[800px]">
                     <thead>
-                      <tr className="bg-white/5 text-[10px] uppercase tracking-widest text-gray-400 font-mono">
-                        <th className="p-3 font-medium whitespace-nowrap">Timestamp</th>
-                        <th className="p-3 font-medium whitespace-nowrap">Instigador (Actor)</th>
-                        <th className="p-3 font-medium whitespace-nowrap">Patrón / Acción</th>
-                        <th className="p-3 font-medium">Domain</th>
-                        <th className="p-3 font-medium">Estado</th>
+                      <tr className="bg-white/5 text-[10px] uppercase tracking-widest text-gray-500 font-mono border-b border-white/5">
+                        <th className="p-4 font-medium whitespace-nowrap">Timestamp</th>
+                        <th className="p-4 font-medium whitespace-nowrap text-rose-400/70">Severity</th>
+                        <th className="p-4 font-medium whitespace-nowrap">Instigador (Actor)</th>
+                        <th className="p-4 font-medium">Patrón / Acción Ejecutada</th>
+                        <th className="p-4 font-medium">Domain</th>
+                        <th className="p-4 font-medium">Estado</th>
                       </tr>
                     </thead>
-                    <tbody className="font-mono text-[11px] sm:text-xs divide-y divide-white/5">
+                    <tbody className="font-mono text-[11px] divide-y divide-white/5">
                       {realAudits.length > 0 ? (
                         realAudits.map((log) => (
-                          <tr key={log.id} className="hover:bg-white/5 transition-colors">
-                            <td className="p-3 text-gray-500 whitespace-nowrap">
+                          <tr key={log.id} className="hover:bg-rose-500/5 transition-all group border-l-2 border-l-transparent hover:border-l-rose-500/50">
+                            <td className="p-4 text-gray-500 whitespace-nowrap">
                               {new Date(log.created_at).toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                             </td>
-                            <td className="p-3 text-cyan-400 whitespace-nowrap truncate max-w-[150px]">{log.actor}</td>
-                            <td className="p-3 text-gray-300">{log.action}</td>
-                            <td className="p-3">
-                              <span className="bg-white/10 border border-white/10 px-2 py-0.5 rounded text-gray-400 whitespace-nowrap">{log.classification}</span>
+                            <td className="p-4 whitespace-nowrap">
+                              <span className={`px-2 py-0.5 rounded-full text-[9px] font-black tracking-tighter
+                                ${log.status === 'blocked' ? 'bg-rose-500 text-white' : 'bg-white/10 text-gray-400'}
+                              `}>{log.status === 'blocked' ? 'CRITICAL' : 'TRACE'}</span>
                             </td>
-                            <td className="p-3">
+                            <td className="p-4 text-cyan-400 whitespace-nowrap truncate max-w-[150px] font-bold">{log.actor}</td>
+                            <td className="p-4 text-gray-300 group-hover:text-white transition-colors">{log.action}</td>
+                            <td className="p-4">
+                              <span className="bg-white/5 border border-white/10 px-2 py-0.5 rounded text-[10px] text-gray-500 group-hover:text-gray-300 font-mono">{log.classification}</span>
+                            </td>
+                            <td className="p-4 text-right sm:text-left">
                               {log.status === 'success' 
-                                ? <span className="inline-flex items-center gap-1 text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded"><CheckCircle2 className="w-3 h-3"/> PASS</span>
+                                ? <span className="inline-flex items-center gap-1.5 text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded font-black text-[10px]"><CheckCircle2 className="w-3 h-3"/> PASS</span>
                                 : log.status === 'blocked'
-                                ? <span className="inline-flex items-center gap-1 text-rose-500 bg-rose-500/10 px-2 py-0.5 rounded"><XCircle className="w-3 h-3"/> REJECT</span>
-                                : <span className="inline-flex items-center gap-1 text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded"><CheckCircle2 className="w-3 h-3"/> INFO</span>
+                                ? <span className="inline-flex items-center gap-1.5 text-rose-500 bg-rose-500/10 border border-rose-500/20 px-2.5 py-1 rounded font-black text-[10px]"><XCircle className="w-3 h-3"/> REJECT</span>
+                                : <span className="inline-flex items-center gap-1.5 text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2.5 py-1 rounded font-black text-[10px]"><Activity className="w-3 h-3"/> INFO</span>
                               }
                             </td>
                           </tr>
                         ))
                       ) : (
                         <tr>
-                          <td colSpan={5} className="p-6 text-center text-gray-500">Cargando telemetría...</td>
+                          <td colSpan={6} className="p-20 text-center text-gray-500">
+                             <div className="flex flex-col items-center gap-4">
+                               <RefreshCw className="w-8 h-8 animate-spin text-rose-500/30" />
+                               <span className="font-mono text-sm tracking-widest uppercase">Fetching_Cloud_Logs...</span>
+                             </div>
+                          </td>
                         </tr>
                       )}
                     </tbody>
@@ -537,14 +692,16 @@ export default function SuperAdminPanel() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                   {/* Tarjeta de resúmen */}
                   <div className="bg-white/5 border border-white/10 rounded-xl p-5">
-                    <p className="text-gray-400 text-sm uppercase tracking-widest mb-2">Gasto Proyectado (Mes)</p>
-                    <h2 className="text-4xl font-black text-white mb-1">$4,850<span className="text-lg text-gray-500 font-medium">.00</span></h2>
-                    <p className="text-emerald-400 text-sm flex items-center gap-1">▼ 12% bajo presupuesto</p>
+                    <p className="text-gray-400 text-sm uppercase tracking-widest mb-2">Gasto Estimado (Mes)</p>
+                    <h2 className="text-4xl font-black text-white mb-1">
+                      ${realFinops.reduce((acc, curr) => acc + (curr.cost || 0), 0).toFixed(2)}
+                    </h2>
+                    <p className="text-emerald-400 text-sm flex items-center gap-1">▼ Operando bajo límite</p>
                   </div>
                   <div className="bg-white/5 border border-white/10 rounded-xl p-5">
-                    <p className="text-gray-400 text-sm uppercase tracking-widest mb-2">Peticiones de Inferencia</p>
-                    <h2 className="text-4xl font-black text-white mb-1">2.4M</h2>
-                    <p className="text-gray-500 text-sm">LLMs (Gemini / Claude)</p>
+                    <p className="text-gray-400 text-sm uppercase tracking-widest mb-2">Servicios Activos</p>
+                    <h2 className="text-4xl font-black text-white mb-1">{realFinops.length}</h2>
+                    <p className="text-gray-500 text-sm">Nodos de Infraestructura</p>
                   </div>
                 </div>
 
@@ -568,29 +725,59 @@ export default function SuperAdminPanel() {
           )}
 
           {activeView === 'config' && (
-            <div className="animate-in fade-in slide-in-from-bottom-4 duration-300 max-w-3xl mx-auto">
-               <div className="bg-[#0A0A0A]/60 border border-white/10 rounded-2xl backdrop-blur-xl overflow-hidden p-6">
-                <h3 className="font-bold text-lg mb-6 flex items-center gap-2"><Settings className="text-gray-400" /> Núcleo de Configuración del Motor</h3>
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-300 max-w-3xl mx-auto space-y-6">
+               <div className="bg-[#0A0A0A]/60 border border-white/10 rounded-2xl backdrop-blur-xl overflow-hidden p-6 relative">
+                <div className="absolute top-0 right-0 p-8 opacity-5">
+                  <Settings className="w-32 h-32 text-white" />
+                </div>
                 
-                <div className="space-y-6">
+                <h3 className="font-bold text-lg mb-6 flex items-center gap-2"><Settings className="text-cyan-500" /> Núcleo de Configuración del Motor</h3>
+                
+                <div className="space-y-6 relative z-10">
                   {[
-                    { title: 'Modo Supervivencia (WAF Estricto)', desc: 'Bloquea el 99% de conexiones anónimas y obliga CAPTCHA en API REST.', state: false },
-                    { title: 'IA Cache Aggressive Mode', desc: 'Guarda inferencias previas en Redis KV para ahorrar costos de Gemini Core.', state: true },
-                    { title: 'Telemetry Trace Level', desc: 'Registra hasta los clics del mouse en la DB (Altísimo consumo).', state: false },
-                  ].map((conf, idx) => (
-                    <div key={idx} className="flex items-start sm:items-center justify-between p-4 bg-white/5 border border-white/10 rounded-xl">
-                      <div className="pr-4">
-                        <p className="font-bold text-gray-200">{conf.title}</p>
-                        <p className="text-xs text-gray-500 mt-1 leading-relaxed">{conf.desc}</p>
+                    { id: 'survival', title: 'Modo Supervivencia (WAF Estricto)', desc: 'Bloquea el 99% de conexiones anónimas y obliga CAPTCHA en API REST.', type: 'critical' },
+                    { id: 'aiCache', title: 'IA Cache Aggressive Mode', desc: 'Guarda inferencias previas en Redis KV para ahorrar costos de Gemini Core.', type: 'finops' },
+                    { id: 'telemetry', title: 'Telemetry Trace Level', desc: 'Registra hasta los clics del mouse en la DB (Altísimo consumo).', type: 'resource' },
+                    { id: 'ghostMode', title: 'Ghost Mode Audit (Master)', desc: 'Permite la impersonación para auditoría de UX en tiempo real.', type: 'security' },
+                  ].map((conf) => (
+                    <div key={conf.id} className={`flex items-start sm:items-center justify-between p-5 bg-white/5 border border-white/10 rounded-2xl transition-all hover:bg-white/10
+                      ${config[conf.id as keyof typeof config] ? 'border-emerald-500/20' : ''}
+                    `}>
+                      <div className="pr-4 flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <p className="font-bold text-gray-100">{conf.title}</p>
+                          <span className={`text-[8px] px-1.5 py-0.5 rounded font-mono uppercase
+                            ${conf.type === 'critical' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' : ''}
+                            ${conf.type === 'finops' ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30' : ''}
+                            ${conf.type === 'resource' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : ''}
+                            ${conf.type === 'security' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : ''}
+                          `}>{conf.type}</span>
+                        </div>
+                        <p className="text-[11px] text-gray-500 leading-relaxed font-sans">{conf.desc}</p>
                       </div>
-                      <button onClick={() => showToast('Configuración deshabilitada en Demo Mode', 'warn')} className="shrink-0 transition-transform hover:scale-110">
-                        {conf.state 
-                          ? <ToggleRight className="w-10 h-10 text-emerald-500" />
-                          : <ToggleLeft className="w-10 h-10 text-gray-600" />
+                      <button 
+                        onClick={() => {
+                          const val = !config[conf.id as keyof typeof config]
+                          setConfig(prev => ({ ...prev, [conf.id]: val }))
+                          showToast(`CONFIG_UPDATE: ${conf.id} -> ${val ? 'ON' : 'OFF'}`, val ? 'success' : 'warn')
+                        }} 
+                        className="shrink-0 transition-all hover:scale-110 active:scale-95"
+                      >
+                        {config[conf.id as keyof typeof config] 
+                          ? <ToggleRight className="w-12 h-12 text-emerald-500 drop-shadow-[0_0_10px_rgba(16,185,129,0.3)]" />
+                          : <ToggleLeft className="w-12 h-12 text-gray-700" />
                         }
                       </button>
                     </div>
                   ))}
+                </div>
+                
+                <div className="mt-8 p-4 bg-rose-500/5 border border-rose-500/20 rounded-xl flex items-center gap-4">
+                  <ShieldAlert className="w-6 h-6 text-rose-500 shrink-0" />
+                  <div>
+                    <p className="text-xs font-bold text-rose-400 uppercase tracking-widest">Zona de Peligro</p>
+                    <p className="text-[10px] text-rose-300 opacity-70">Cualquier cambio aquí afecta a todos los nodos de producción global vinculados al core 'Talento Tech'.</p>
+                  </div>
                 </div>
                </div>
             </div>
@@ -608,15 +795,16 @@ export default function SuperAdminPanel() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-20">
                 {[
-                  { id: 'escuela', name: 'Escuela (Kids)', desc: 'UX Gamificada, colores vibrantes y misiones simplificadas.', color: 'orange', icon: Gamepad2 },
-                  { id: 'colegio', name: 'Colegio (Teen)', desc: 'Enfoque en retos, ranking de puntos y comunidad.', color: 'purple', icon: Trophy },
-                  { id: 'universidad', name: 'Universidad (Pro)', desc: 'Dashboard analítico de alta densidad y perfiles de carrera.', color: 'blue', icon: BrainCircuit },
-                  { id: 'profesores', name: 'Cuerpo Docente', desc: 'Panel de gestión de cohorte y telemetría de estudiantes.', color: 'pink', icon: Users }
+                  { id: 'escuela', name: 'Escuela (Kids)', role: 'Estudiante Escuela', desc: 'UX Gamificada, colores vibrantes y misiones simplificadas.', color: 'orange', icon: Gamepad2 },
+                  { id: 'colegio', name: 'Colegio (Teen)', role: 'Estudiante Colegio', desc: 'Enfoque en retos, ranking de puntos y comunidad.', color: 'purple', icon: Trophy },
+                  { id: 'universidad', name: 'Universidad (Pro)', role: 'Estudiante Universidad', desc: 'Dashboard analítico de alta densidad y perfiles de carrera.', color: 'blue', icon: BrainCircuit },
+                  { id: 'profesores', name: 'Cuerpo Docente', role: 'Profesor', desc: 'Panel de gestión de cohorte y telemetría de estudiantes.', color: 'fuchsia', icon: Users }
                 ].map((sim) => (
                   <button 
                     key={sim.id}
                     onClick={() => {
-                      showToast(`Iniciando simulación: ${sim.name}...`, 'success')
+                      showToast(`Ghost Mode: ${sim.name}...`, 'success')
+                      setImpersonation(sim.role)
                       setTimeout(() => router.push(`/dashboard?view=${sim.id}`), 1000)
                     }}
                     className={`group relative text-left bg-[#0A0A0A]/60 border border-white/10 rounded-2xl p-6 transition-all duration-300 hover:border-${sim.color}-500/50 hover:bg-${sim.color}-500/5`}
@@ -639,6 +827,7 @@ export default function SuperAdminPanel() {
 
         </div>
       </main>
+      <Footer variant="dashboard" />
     </div>
   )
 }

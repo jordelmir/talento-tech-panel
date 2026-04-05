@@ -15,6 +15,7 @@ import {
   Terminal,
   ArrowRight
 } from 'lucide-react'
+import Footer from '@/components/Footer'
 
 export default function LandingPage() {
   const [hoveredRole, setHoveredRole] = useState<string | null>(null)
@@ -167,18 +168,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-white/5 py-12 bg-[#050505]">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="font-bold text-sm tracking-widest uppercase text-gray-300">Talento Tech '26</span>
-          </div>
-          <div className="text-gray-600 text-xs font-mono tracking-widest text-center">
-            PROUDLY ENGINEERED IN COLOMBIA • OCI/SUPABASE BACKED
-          </div>
-        </div>
-      </footer>
+      <Footer variant="landing" />
     </div>
   )
 }
