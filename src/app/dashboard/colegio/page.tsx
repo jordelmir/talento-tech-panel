@@ -7,7 +7,8 @@ import {
   LogOut, Code2, GitMerge, GitPullRequest, 
   TerminalSquare, BookMarked, Medal, ArrowRight,
   Zap, Trophy, LayoutDashboard, ShieldCheck, 
-  Loader2, Activity, Search, BrainCircuit, Fingerprint
+  Loader2, Activity, Search, BrainCircuit, Fingerprint,
+  ChevronRight, Users, Star, Cpu, Terminal
 } from 'lucide-react'
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -65,155 +66,249 @@ export default function ColegioDashboard() {
     router.replace('/')
   }
 
+  if (!isMounted) return null
+
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-sans selection:bg-blue-300">
+    <div className="min-h-screen bg-[#020617] text-slate-300 font-mono selection:bg-purple-500/30 overflow-x-hidden">
       
-      {/* Navbar Colegio Premium */}
-      <nav className="bg-[#050505]/80 backdrop-blur-xl border-b border-white/10 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
-        <div className="flex items-center gap-8">
-          <div className="flex items-center gap-3">
-             <div className="bg-purple-600 p-2 rounded-xl text-white shadow-[0_0_20px_rgba(168,85,247,0.4)]">
-                <Trophy className="w-5 h-5" />
+      {/* Background Dots Grid - Universidad Style */}
+      <div className="fixed inset-0 pointer-events-none z-0 opacity-20" 
+           style={{ 
+             backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', 
+             backgroundSize: '30px 30px' 
+           }} 
+      />
+
+      {/* Ambient Glows */}
+      <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-0">
+        <div className="absolute top-[-10%] right-[-10%] w-[45%] h-[45%] bg-purple-600/10 blur-[140px] rounded-full animate-pulse" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[45%] h-[45%] bg-indigo-600/10 blur-[140px] rounded-full" />
+      </div>
+
+      {/* Navbar Colegio High-Fidelity */}
+      <nav className="bg-[#0f172a]/95 backdrop-blur-xl border-b border-white/5 px-4 md:px-8 py-3 flex justify-between items-center sticky top-0 z-50 shadow-2xl">
+        <div className="flex items-center gap-4 md:gap-10">
+          <div className="flex items-center gap-3 group cursor-pointer" onClick={() => setActiveTab('overview')}>
+             <div className="bg-gradient-to-br from-purple-600/20 to-indigo-600/20 border border-purple-500/50 p-2 rounded-xl text-purple-400 shadow-[0_0_20px_rgba(168,85,247,0.2)] group-hover:scale-110 transition-transform">
+                <TerminalSquare className="w-5 h-5 md:w-6 md:h-6" />
              </div>
-             <span className="font-black text-2xl tracking-tighter text-white">
-                TALENTO<span className="text-purple-500">TECH</span>
-             </span>
+             <div className="flex flex-col">
+               <span className="font-black text-xl md:text-2xl tracking-tighter text-white uppercase italic leading-none">
+                  TALENTO<span className="text-purple-500">TEEN</span>_
+               </span>
+               <span className="text-[8px] font-bold text-purple-500/60 tracking-[0.3em] uppercase">Core_System_A3</span>
+             </div>
           </div>
 
-          <div className="hidden lg:flex items-center gap-1 bg-white/5 p-1 rounded-2xl border border-white/10">
+          <div className="hidden lg:flex items-center gap-1 bg-white/5 p-1 rounded-xl border border-white/10">
             {[
-              { id: 'overview', label: 'Dashboard', icon: LayoutDashboard },
-              { id: 'missions', label: 'Retos Activos', icon: Zap },
-              { id: 'ranking', label: 'Hall of Fame', icon: Trophy },
+              { id: 'overview', label: 'Terminal', icon: LayoutDashboard },
+              { id: 'missions', label: 'Retos_Binarios', icon: Zap },
+              { id: 'ranking', label: 'Hall_of_Fame', icon: Trophy },
             ].map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2 px-5 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
+                className={`flex items-center gap-2 px-5 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${
                   activeTab === tab.id 
-                    ? 'bg-purple-600 text-white shadow-[0_0_15px_rgba(168,85,247,0.3)] border border-purple-500/50' 
-                    : 'text-gray-500 hover:text-white hover:bg-white/5'
+                    ? 'bg-purple-600/20 text-purple-400 border border-purple-500/30 shadow-[inset_0_0_10px_rgba(168,85,247,0.1)]' 
+                    : 'text-slate-500 hover:text-white hover:bg-white/5'
                 }`}
               >
-                <tab.icon className="w-3 h-3" />
+                <tab.icon className="w-3.5 h-3.5" />
                 {tab.label}
               </button>
             ))}
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 md:gap-4">
           {isAdmin && (
             <button 
               onClick={() => router.push('/admin-panel')}
-              className="flex items-center gap-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-4 py-2 rounded-xl font-black text-xs uppercase tracking-widest transition-all">
+              className="flex items-center gap-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3 md:px-5 py-2 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(16,185,129,0.1)]">
               <ShieldCheck className="w-4 h-4" />
-              NOC
+              <span className="hidden sm:inline">NOC_ACCESS</span>
             </button>
           )}
 
           <button 
             onClick={handleLogout}
             disabled={loading}
-            className="flex items-center gap-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 border border-rose-500/20 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all disabled:opacity-50">
+            className="flex items-center gap-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 border border-rose-500/20 px-3 md:px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">
             <LogOut className="w-4 h-4" />
-            Cerrar sesión
+            <span className="hidden sm:inline">Log_Out</span>
           </button>
         </div>
       </nav>
 
-      <main className="max-w-7xl mx-auto p-6 lg:p-10 space-y-8">
+      {/* Mobile Nav Tabs */}
+      <div className="lg:hidden flex justify-around bg-[#0f172a]/95 border-b border-white/5 p-2 sticky top-[65px] z-40 backdrop-blur-md">
+        {[
+          { id: 'overview', icon: LayoutDashboard },
+          { id: 'missions', icon: Zap },
+          { id: 'ranking', icon: Trophy },
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id as any)}
+            className={`p-3 rounded-lg ${activeTab === tab.id ? 'bg-purple-600/20 text-purple-400' : 'text-slate-500'}`}
+          >
+            <tab.icon className="w-5 h-5" />
+          </button>
+        ))}
+      </div>
+
+      <main className="max-w-7xl mx-auto p-4 md:p-8 lg:p-10 space-y-8 relative z-10">
         
         {activeTab === 'overview' && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-               <div className="md:col-span-2 bg-[#0A0A0A]/60 border border-white/10 rounded-3xl p-8 backdrop-blur-xl relative overflow-hidden group shadow-2xl">
-                  <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity"><Zap className="w-32 h-32 text-purple-500" /></div>
-                  <h2 className="text-4xl font-black tracking-tighter mb-2 text-white">¡Hola de nuevo, {userName}!</h2>
-                  <p className="text-gray-400 max-w-md">Tienes <span className="text-purple-400 font-bold">3 retos pendientes</span> para completar el nivel Bronce. Tu racha de 5 días sigue activa. 🔥</p>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+               <div className="lg:col-span-2 bg-[#0b1120]/80 border border-white/10 rounded-[2.5rem] p-6 md:p-10 backdrop-blur-xl relative overflow-hidden group shadow-2xl">
+                  {/* Decorative corner */}
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 -translate-y-16 translate-x-16 rotate-45 group-hover:rotate-0 transition-transform duration-1000" />
                   
-                  <div className="mt-10 flex gap-4">
-                     <button onClick={() => setActiveTab('missions')} className="bg-purple-600 hover:bg-purple-500 text-white px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-sm shadow-xl shadow-purple-600/20 transition-all border border-purple-400/30">Lanzar Próximo Reto</button>
-                     <button className="bg-white/5 hover:bg-white/10 text-white px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-sm transition-all border border-white/10">Ver Inventario</button>
+                  <div className="relative z-10">
+                    <div className="flex flex-wrap items-center gap-3 mb-8">
+                       <div className="flex items-center gap-2 px-4 py-1.5 bg-purple-500/10 border border-purple-500/30 rounded-full text-[9px] font-black uppercase tracking-[0.2em] text-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.1)]">
+                         <ShieldCheck className="w-3 h-3" />
+                         Digital Identity Verified
+                       </div>
+                       <div className="flex items-center gap-2 px-4 py-1.5 bg-indigo-500/10 border border-indigo-500/30 rounded-full text-[9px] font-black uppercase tracking-[0.2em] text-indigo-400 font-mono">
+                         SYNC_OK: 2024_TEEN
+                       </div>
+                    </div>
+
+                    <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-4 text-white uppercase italic leading-[0.9] text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-purple-500/50">
+                      HOLA DE NUEVO, <br />{userName}_
+                    </h2>
+                    <p className="text-slate-400 max-w-md text-sm md:text-base leading-relaxed mb-10">
+                      Tienes <span className="text-purple-400 font-black underline underline-offset-4">3 retos críticos</span> pendientes para el nivel Bronce. <br/>
+                      Tu racha de <span className="text-indigo-400 font-black">5 días</span> está online. 🔥
+                    </p>
+                    
+                    <div className="flex flex-wrap gap-4">
+                       <button onClick={() => setActiveTab('missions')} className="bg-purple-600 hover:bg-purple-500 text-white px-8 md:px-10 py-4 rounded-xl font-black uppercase tracking-widest text-[10px] shadow-[0_0_30px_rgba(168,85,247,0.3)] transition-all border border-purple-400/30 flex items-center gap-3 group">
+                          Lanzar Próximo Reto
+                          <ChevronRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                       </button>
+                       <button className="bg-white/5 hover:bg-white/10 text-white px-8 py-4 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all border border-white/10 backdrop-blur-md">
+                        Ver Inventario
+                       </button>
+                    </div>
                   </div>
                </div>
 
-               <div className="bg-[#0A0A0A]/60 border border-white/10 rounded-3xl p-8 backdrop-blur-xl flex flex-col justify-between text-white shadow-2xl">
-                  <div>
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 mb-4">Tu Rango Actual</p>
-                    <div className="flex items-center gap-4 mb-6">
-                       <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/20">
-                          <Trophy className="w-8 h-8 text-white" />
+               <div className="bg-[#0b1120]/80 border border-white/10 rounded-[2.5rem] p-8 md:p-10 backdrop-blur-xl flex flex-col justify-between text-white shadow-2xl group overflow-hidden relative">
+                  <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-10 transition-opacity duration-1000 rotate-12 group-hover:rotate-0">
+                    <Trophy className="w-48 h-48 text-white" />
+                  </div>
+                  
+                  <div className="relative z-10">
+                    <p className="text-[9px] font-black uppercase tracking-[0.4em] text-slate-500 mb-8 leading-none">RANGO_TEMPORADA_SYST</p>
+                    <div className="flex items-center gap-6 mb-10">
+                       <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-amber-500/20 to-orange-600/20 flex items-center justify-center shadow-[0_0_30px_rgba(245,158,11,0.15)] border border-amber-400/30 group-hover:scale-110 transition-transform relative">
+                          <Trophy className="w-10 h-10 text-white filter drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]" />
+                          <div className="absolute inset-0 bg-amber-500/10 blur-xl rounded-full" />
                        </div>
                        <div>
-                          <h3 className="text-2xl font-black tracking-tighter">GOLD TIER</h3>
-                          <p className="text-xs text-gray-500 font-mono tracking-widest">TOP_NODES: #12 / 500</p>
+                          <h3 className="text-2xl md:text-3xl font-black tracking-tighter italic uppercase text-transparent bg-clip-text bg-gradient-to-r from-white to-amber-500">GOLD_TIER</h3>
+                          <p className="text-[10px] text-slate-500 font-mono tracking-widest mt-1">NODE_ID: #12 / 500</p>
                        </div>
                     </div>
                   </div>
-                  <div className="space-y-2">
-                     <div className="flex justify-between text-[10px] font-black uppercase">
-                        <span className="text-gray-400">Progreso a Platino</span>
+
+                  <div className="space-y-4 relative z-10">
+                     <div className="flex justify-between text-[9px] font-black uppercase tracking-widest">
+                        <span className="text-slate-500 uppercase tracking-[0.2em]">Sync_Protocol: Platinum</span>
                         <span className="text-purple-400">850 / 1000 XP</span>
                      </div>
-                     <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
-                        <div className="h-full bg-gradient-to-r from-purple-600 to-blue-500" style={{ width: '85%' }} />
+                     <div className="h-2 w-full bg-[#020617] rounded-full overflow-hidden border border-white/5 p-[1px]">
+                        <div className="h-full bg-gradient-to-r from-purple-600 via-indigo-500 to-blue-500 shadow-[0_0_15px_rgba(168,85,247,0.5)] transition-all duration-1000" style={{ width: '85%' }} />
+                     </div>
+                     <div className="flex items-center justify-center gap-1.5 opacity-40">
+                        <Terminal className="w-3 h-3 text-slate-500" />
+                        <span className="text-[7px] font-mono tracking-[0.3em] uppercase">Delta_Pulse_Stable</span>
                      </div>
                   </div>
                </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2 bg-[#0A0A0A]/60 border border-white/10 rounded-3xl p-8 backdrop-blur-xl shadow-2xl">
-                   <div className="flex justify-between items-center mb-10">
-                      <h3 className="text-2xl font-black tracking-tighter text-white">Actividad de Desarrollo</h3>
-                      <div className="flex gap-2 text-[10px] items-center">
-                         <span className="w-2 h-2 rounded-full bg-purple-500" />
-                         <span className="text-gray-500 font-bold uppercase tracking-widest">Commits Semanales</span>
+                <div className="lg:col-span-2 bg-[#0b1120]/80 border border-white/10 rounded-[2.5rem] p-6 md:p-10 backdrop-blur-xl shadow-2xl group overflow-hidden">
+                   <div className="flex justify-between items-center mb-12 relative z-10">
+                      <div>
+                        <h3 className="text-2xl font-black tracking-tighter text-white uppercase italic">TELEMETRÍA_CODE_V3</h3>
+                        <p className="text-[9px] text-slate-500 font-bold uppercase tracking-[0.3em] mt-1">Data_Stream: Activo</p>
+                      </div>
+                      <div className="flex gap-6 text-[9px] items-center">
+                         <div className="flex items-center gap-2">
+                           <span className="w-2 h-2 rounded-full bg-purple-500 shadow-[0_0_12px_rgba(168,85,247,0.6)]" />
+                           <span className="text-slate-300 font-black uppercase tracking-widest">Commits_Global</span>
+                         </div>
                       </div>
                    </div>
-                   <div className="h-64 w-full">
+                   <div className="h-72 w-full relative z-10">
                       <ResponsiveContainer width="100%" height="100%">
                          <BarChart data={mockCommits}>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
-                            <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#666', fontSize: 12, fontWeight: 900 }} />
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.02)" />
+                            <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#4b5563', fontSize: 10, fontWeight: 900 }} />
                             <YAxis hide />
-                            <Tooltip cursor={{ fill: 'rgba(168,85,247,0.1)' }} contentStyle={{ backgroundColor: '#050505', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '15px' }} />
+                            <Tooltip cursor={{ fill: 'rgba(168,85,247,0.03)' }} contentStyle={{ backgroundColor: '#020617', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '15px', color: '#fff', fontSize: '10px', backdropFilter: 'blur(10px)' }} />
                             <Bar dataKey="commits" radius={[8, 8, 0, 0]}>
                                {mockCommits.map((entry, index) => (
-                                  <Cell key={`cell-${index}`} fill={index === 5 ? '#a855f7' : '#27272a'} />
+                                  <Cell key={`cell-${index}`} fill={index === 5 ? '#8b5cf6' : 'rgba(168,85,247,0.1)'} className="hover:fill-purple-500 transition-all duration-300" />
                                ))}
                             </Bar>
                          </BarChart>
                       </ResponsiveContainer>
                    </div>
+                   <div className="mt-6 flex items-center justify-between opacity-30 text-[8px] font-mono uppercase tracking-[0.5em]">
+                      <span>Node_0x4F2</span>
+                      <span>Buffer_Clear_Ready</span>
+                   </div>
                 </div>
 
                 <div className="space-y-6">
-                   <div className="bg-[#0A0A0A]/60 border border-white/10 rounded-3xl p-6 backdrop-blur-xl text-white shadow-2xl">
-                      <h4 className="font-black text-sm uppercase tracking-[0.2em] text-gray-500 mb-6">Comunidad Live</h4>
-                      <div className="space-y-4">
+                   <div className="bg-[#0b1120]/80 border border-white/10 rounded-[2.5rem] p-8 backdrop-blur-xl text-white shadow-2xl group transition-all hover:border-purple-500/20">
+                      <div className="flex items-center justify-between mb-10">
+                        <h4 className="font-black text-[10px] uppercase tracking-[0.4em] text-slate-500">SQUAD_ACTIVITY_LOG</h4>
+                        <div className="p-2 bg-white/5 border border-white/10 rounded-lg group-hover:bg-purple-500/10 transition-colors">
+                          <Users className="w-4 h-4 text-slate-500 group-hover:text-purple-400" />
+                        </div>
+                      </div>
+                      <div className="space-y-5">
                          {[1,2,3].map(i => (
-                            <div key={i} className="flex items-center gap-3 group cursor-pointer">
-                               <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 group-hover:border-purple-500/50 transition-all overflow-hidden text-white flex items-center justify-center font-black text-[10px]">
-                                  {i}U
+                            <div key={i} className="flex items-center gap-5 group/item cursor-pointer p-3 rounded-2xl hover:bg-white/5 transition-all border border-transparent hover:border-white/5">
+                               <div className="w-12 h-12 rounded-xl bg-[#020617] border border-white/5 group-hover/item:border-purple-500/50 transition-all overflow-hidden flex items-center justify-center relative">
+                                  <span className="text-slate-600 font-black text-xs relative z-10">{i}U</span>
+                                  <div className="absolute inset-0 bg-purple-500/5 opacity-0 group-hover/item:opacity-100 transition-opacity" />
                                </div>
                                <div>
-                                  <p className="text-xs font-black text-white group-hover:text-purple-400 transition-colors">GhostUser_{i*432}</p>
-                                  <p className="text-[10px] text-gray-600 font-black uppercase">Completó Reto React V2</p>
-                               </div>
+                                  <p className="text-sm font-black text-slate-200 group-hover/item:text-purple-400 transition-colors uppercase italic tracking-tighter">GhostUser_{i*432}</p>
+                                  <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest mt-1">Reto: React_Hooks_V3</p>
+                                </div>
                             </div>
                          ))}
                       </div>
                    </div>
 
-                   <button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white rounded-3xl p-10 flex flex-col items-center justify-center gap-4 transition-all group relative overflow-hidden shadow-2xl shadow-purple-500/20">
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 blur-3xl rounded-full translate-x-10 -translate-y-10 group-hover:scale-150 transition-transform duration-700" />
-                      <BrainCircuit className="w-10 h-10 group-hover:scale-125 transition-transform" />
-                      <div>
-                        <p className="font-black text-2xl tracking-tighter">SALA DE PARES</p>
-                        <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-60">5 compañeros online</p>
+                   <button className="w-full bg-gradient-to-br from-indigo-900/40 via-purple-900/40 to-[#0b1120]/80 border border-purple-500/20 hover:border-purple-500/40 text-white rounded-[2.5rem] p-10 flex flex-col items-center justify-center gap-6 transition-all group relative overflow-hidden shadow-2xl backdrop-blur-xl group-hover:-translate-y-2">
+                      {/* Internal glow */}
+                      <div className="absolute top-0 right-0 w-48 h-48 bg-purple-600/10 blur-[60px] rounded-full translate-x-10 -translate-y-10 group-hover:scale-150 transition-transform duration-1000" />
+                      
+                      <div className="w-20 h-20 bg-purple-600/10 rounded-3xl flex items-center justify-center border border-purple-500/20 group-hover:scale-110 group-hover:border-purple-500/50 transition-all shadow-[0_0_30px_rgba(168,85,247,0.1)] relative">
+                        <BrainCircuit className="w-10 h-10 text-purple-400 group-hover:text-purple-300 transition-colors" />
+                        <div className="absolute inset-0 bg-purple-500/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                       </div>
+                      <div className="text-center relative z-10">
+                        <p className="font-black text-3xl tracking-tighter uppercase italic leading-none mb-2">SALA_DE_PARES</p>
+                        <div className="flex items-center justify-center gap-3">
+                          <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
+                          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">{activePeers} COMPAÑEROS ONLINE</p>
+                        </div>
+                      </div>
+                      <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                    </button>
                 </div>
             </div>
@@ -221,71 +316,108 @@ export default function ColegioDashboard() {
         )}
 
         {activeTab === 'missions' && (
-          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8 text-white">
-            <div className="flex justify-between items-end">
-               <h2 className="text-4xl font-black tracking-tighter">Retos del Módulo 04</h2>
-               <div className="flex gap-2">
-                  <span className="px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest text-gray-500">Frontend Masters</span>
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-10 text-white">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 border-b border-white/5 pb-10">
+               <div>
+                 <h2 className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic leading-[0.85] text-transparent bg-clip-text bg-gradient-to-r from-white to-purple-500/50">RETOS_ <br />BINARIOS_</h2>
+                 <p className="text-slate-500 text-sm mt-4 font-bold uppercase tracking-[0.3em] opacity-80 flex items-center gap-3">
+                   <TerminalSquare className="w-4 h-4 text-purple-500" />
+                   Módulo 04: Arquitecturas_Descentralizadas
+                 </p>
+               </div>
+               <div className="flex gap-4">
+                  <div className="px-6 py-3 bg-[#0b1120]/80 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] text-slate-300 flex items-center gap-3 shadow-xl backdrop-blur-md">
+                    <Fingerprint className="w-4 h-4 text-purple-500 animate-pulse" />
+                    Frontend_Core_V3
+                  </div>
                </div>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-               {[
-                 { title: 'Dominando Flexbox', xp: '250 XP', diff: 'EASY', color: 'emerald' },
-                 { title: 'The Grid Protocol', xp: '450 XP', diff: 'MEDIUM', color: 'purple' },
-                 { title: 'Animations Tier-1', xp: '800 XP', diff: 'HARD', color: 'rose' },
-                 { title: 'API Integration', xp: '500 XP', diff: 'MEDIUM', color: 'blue' },
-                 { title: 'State Warriors', xp: '1000 XP', diff: 'GOD', color: 'fuchsia' },
-                 { title: 'Deployment Edge', xp: '300 XP', diff: 'EASY', color: 'emerald' },
-               ].map((mission, i) => (
-                 <div key={i} className="bg-[#0A0A0A]/60 border border-white/10 rounded-3xl p-6 backdrop-blur-xl hover:border-white/20 transition-all group relative shadow-2xl">
-                    <div className="flex justify-between items-start mb-10">
-                       <div className={`px-3 py-1 rounded-full text-[8px] font-black uppercase border border-slate-700 bg-white/5 text-slate-400`}>
-                          RET_LVL: {mission.diff}
-                       </div>
-                       <span className="font-mono text-[10px] text-gray-600">ID_MISSION_{i+100}</span>
-                    </div>
-                    <h4 className="text-xl font-black mb-1 group-hover:text-purple-400 transition-colors uppercase">{mission.title}</h4>
-                    <p className="text-xs text-gray-500 font-bold mb-8">Recompensa: <span className="text-white font-black">{mission.xp}</span></p>
-                    
-                    <button className="w-full py-4 rounded-2xl bg-white/5 group-hover:bg-purple-600 text-[10px] font-black uppercase tracking-[0.2em] transition-all group-hover:text-white group-hover:shadow-[0_0_20px_rgba(168,85,247,0.3)]">
-                       Iniciar Protocolo
-                    </button>
-                 </div>
-               ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                {[
+                  { title: 'Protocolo Flexbox', xp: '250 XP', diff: 'LOW', color: 'text-emerald-400', border: 'border-emerald-500/20' },
+                  { title: 'The Grid Engine', xp: '450 XP', diff: 'MID', color: 'text-purple-400', border: 'border-purple-500/20' },
+                  { title: 'Cyber_Animations', xp: '800 XP', diff: 'HIGH', color: 'text-rose-400', border: 'border-rose-500/20' },
+                  { title: 'REST_Interceptor', xp: '500 XP', diff: 'MID', color: 'text-blue-400', border: 'border-blue-500/20' },
+                  { title: 'State_Singularity', xp: '1000 XP', diff: 'BOSS', color: 'text-fuchsia-400', border: 'border-fuchsia-500/30' },
+                  { title: 'Deployment_Edge', xp: '300 XP', diff: 'LOW', color: 'text-cyan-400', border: 'border-cyan-500/20' },
+                ].map((mission, i) => (
+                  <div key={i} className={`bg-[#0b1120]/80 border ${mission.border} rounded-[2.5rem] p-10 backdrop-blur-xl hover:border-white/40 transition-all group relative shadow-2xl overflow-hidden hover:-translate-y-2`}>
+                     {/* Hover gradient overlay */}
+                     <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                     
+                     <div className="flex justify-between items-start mb-16 relative z-10">
+                        <div className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase border border-white/5 bg-[#020617]/60 ${mission.color} tracking-[0.2em] shadow-inner`}>
+                           DIFF: {mission.diff}
+                        </div>
+                        <span className="font-mono text-[10px] text-slate-700 tracking-tighter leading-none opacity-50 uppercase">Sec_0x{i+100}_CORE</span>
+                     </div>
+                     
+                     <div className="relative z-10">
+                        <h4 className="text-3xl font-black mb-3 group-hover:text-purple-400 transition-colors uppercase italic tracking-tighter leading-none">{mission.title}</h4>
+                        <p className="text-[11px] text-slate-500 font-bold mb-12 tracking-[0.2em]">RECOMPENSA: <span className="text-white font-black">{mission.xp}</span></p>
+                        
+                        <button className="w-full py-5 rounded-2xl bg-[#020617] border border-white/5 group-hover:bg-purple-600 group-hover:border-purple-400/50 text-[10px] font-black uppercase tracking-[0.4em] transition-all group-hover:text-white shadow-[inset_0_0_20px_rgba(255,255,255,0.02)] group-hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] flex items-center justify-center gap-3">
+                           Iniciar_Protocolo
+                           <Zap className="w-3.5 h-3.5" />
+                        </button>
+                     </div>
+
+                     {/* Progress tiny indicator */}
+                     <div className="absolute bottom-4 left-10 right-10 flex gap-2">
+                        {[1,2,3,4].map(s => <div key={s} className="h-1 flex-1 bg-white/5 rounded-full" />)}
+                     </div>
+                  </div>
+                ))}
             </div>
           </div>
         )}
 
         {activeTab === 'ranking' && (
-          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-4xl mx-auto py-10 text-white">
-             <div className="text-center mb-16">
-                <Trophy className="w-16 h-16 text-amber-500 mx-auto mb-4 animate-bounce" />
-                <h2 className="text-6xl font-black tracking-tighter uppercase italic">Hall of Fame</h2>
-                <p className="text-gray-500 font-black uppercase tracking-[0.3em] text-[10px] mt-2">Los mejores 10 del cohorte actual</p>
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-5xl mx-auto py-10 text-white">
+             <div className="text-center mb-24 relative">
+                <div className="absolute inset-0 bg-purple-500/5 blur-[100px] rounded-full -z-10" />
+                <div className="w-24 h-24 bg-purple-500/5 border border-purple-500/20 rounded-[2.5rem] flex items-center justify-center mx-auto mb-10 shadow-[0_0_50px_rgba(168,85,247,0.1)] group">
+                  <Trophy className="w-12 h-12 text-purple-500 animate-pulse group-hover:scale-110 transition-transform" />
+                </div>
+                <h2 className="text-5xl md:text-8xl font-black tracking-tighter uppercase italic leading-[0.85] text-transparent bg-clip-text bg-gradient-to-b from-white to-purple-500/50">HALL_OF_ <br /> FAME_</h2>
+                <p className="text-slate-500 font-black uppercase tracking-[0.5em] text-[11px] mt-8 opacity-70">Global_Sync: Nodo_Sur_Core_IAD1</p>
              </div>
              
-             <div className="space-y-4">
+             <div className="space-y-6">
                 {[1,2,3,4,5].map(rank => (
-                   <div key={rank} className={`flex items-center justify-between p-6 rounded-3xl backdrop-blur-xl border transition-all ${rank === 1 ? 'bg-amber-500/10 border-amber-500/30 scale-105' : 'bg-[#0A0A0A]/60 border-white/10 shadow-2xl'}`}>
-                      <div className="flex items-center gap-6">
-                         <span className={`text-4xl font-black italic ${rank === 1 ? 'text-amber-500' : 'text-gray-700'}`}>0{rank}</span>
-                         <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-2xl bg-white/5 overflow-hidden border border-white/10 flex items-center justify-center font-black">
-                               {rank}U
+                   <div key={rank} className={`flex items-center justify-between p-8 rounded-[3rem] backdrop-blur-3xl border transition-all relative overflow-hidden group ${rank === 1 ? 'bg-purple-500/5 border-purple-500/30 scale-105 shadow-[0_0_60px_rgba(168,85,247,0.15)]' : 'bg-[#0b1120]/60 border-white/5 shadow-2xl hover:border-white/20'}`}>
+                      {rank === 1 && <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-transparent to-transparent pointer-events-none" />}
+                      
+                      <div className="flex items-center gap-8 relative z-10">
+                         <span className={`text-5xl font-black italic tracking-tighter leading-none ${rank === 1 ? 'text-purple-500' : 'text-slate-800'}`}>0{rank}_</span>
+                         <div className="flex items-center gap-6">
+                            <div className="w-16 h-16 rounded-[1.5rem] bg-[#020617] border border-white/10 flex items-center justify-center font-black group-hover:border-purple-500/40 transition-all shadow-inner overflow-hidden relative">
+                               <span className="text-slate-500 text-sm group-hover:text-purple-400">U{rank}</span>
+                               <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                             </div>
                             <div>
-                               <p className="font-black text-xl tracking-tighter uppercase">Alumno_Promesa_{rank*7}</p>
-                               <p className="text-[10px] font-mono text-gray-600 uppercase">COLOMBIA_REG_NODE</p>
+                               <p className="font-black text-2xl tracking-tighter uppercase italic group-hover:text-purple-400 transition-all leading-none">Alumno_Promesa_{rank*7}</p>
+                               <div className="flex items-center gap-3 mt-2">
+                                 <span className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse" />
+                                 <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest leading-none mt-0.5">REG_NODE: CO-ANT-0{rank}_SEC</p>
+                               </div>
                             </div>
                          </div>
                       </div>
-                      <div className="text-right">
-                         <p className="text-2xl font-black tracking-tighter text-purple-400">{2000 - rank*150} XP</p>
-                         <p className="text-[8px] font-black uppercase text-gray-600 tracking-widest">Sincronizado</p>
+                      
+                      <div className="text-right relative z-10 flex flex-col items-end">
+                         <p className="text-3xl font-black tracking-tighter text-purple-400 font-mono leading-none">{2000 - rank*150} XP</p>
+                         <p className="text-[10px] font-black uppercase text-slate-600 tracking-[0.2em] mt-3 bg-white/5 px-3 py-1 rounded-full border border-white/5">PROTO_OK</p>
                       </div>
                    </div>
                 ))}
+             </div>
+             
+             <div className="mt-20 text-center opacity-30 flex items-center justify-center gap-6">
+                <div className="h-px w-20 bg-white/10" />
+                <span className="text-[9px] font-mono tracking-[0.6em] uppercase">End_Of_Transmission</span>
+                <div className="h-px w-20 bg-white/10" />
              </div>
           </div>
         )}

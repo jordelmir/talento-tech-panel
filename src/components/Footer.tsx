@@ -21,7 +21,14 @@ export default function Footer({ variant = 'landing' }: FooterProps) {
           <div className="h-4 w-px bg-white/10 hidden md:block" />
           <div className="flex items-center gap-2 text-[10px] text-gray-500 font-mono tracking-widest uppercase py-1 px-3 border border-white/5 rounded-full bg-white/5">
             <span className="opacity-50">Chief_Engineer:</span>
-            <span className="text-emerald-400 font-black">JORDAN ELMIR</span>
+            <a 
+              href="https://github.com/jordelmir?tab=repositories" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-emerald-400 font-black hover:text-emerald-300 transition-colors border-b border-transparent hover:border-emerald-500/50"
+            >
+              Jorge David Del Valle Miranda
+            </a>
           </div>
         </div>
 

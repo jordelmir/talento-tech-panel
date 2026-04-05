@@ -211,28 +211,45 @@ export default function SuperAdminPanel() {
         </div>
       )}
 
-      {/* 1. Sidebar Táctica */}
-      <aside className={`transition-all duration-300 ease-in-out border-r border-white/10 bg-[#0A0A0A]/80 backdrop-blur-xl flex flex-col z-20 shrink-0 ${sidebarOpen ? 'w-64' : 'w-20'}`}>
-        <div className="p-4 border-b border-white/10 flex items-center justify-between">
-          {sidebarOpen && (
-            <div className="flex items-center gap-2">
+      {/* 1. Sidebar Táctica (Desktop: Relative, Mobile: Fixed Overlay) */}
+      <aside className={`
+        fixed inset-y-0 left-0 z-50 w-64 bg-[#0A0A0A]/95 backdrop-blur-2xl border-r border-white/10 transition-transform duration-300 ease-in-out
+        lg:relative lg:translate-x-0 lg:bg-[#0A0A0A]/80
+        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+        ${!sidebarOpen && 'lg:w-20'}
+      `}>
+        <div className="p-4 border-b border-white/10 flex items-center justify-between h-16">
+          {(sidebarOpen || !sidebarOpen) && (
+            <div className={`flex items-center gap-2 ${!sidebarOpen && 'lg:hidden'}`}>
               <Activity className="text-emerald-500 w-6 h-6" />
-              <span className="font-black tracking-tighter text-lg uppercase">NOC Tier-1</span>
+              <span className="font-black tracking-tighter text-lg uppercase whitespace-nowrap">NOC Tier-1</span>
             </div>
           )}
-          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-1 hover:bg-white/10 rounded-md transition-colors mx-auto">
+          {/* Collapse toggle (Desktop only) */}
+          <button 
+            onClick={() => setSidebarOpen(!sidebarOpen)} 
+            className="hidden lg:block p-1 hover:bg-white/10 rounded-md transition-colors ml-auto"
+          >
             <Menu className="w-5 h-5 text-gray-400" />
+          </button>
+          
+          {/* Close button (Mobile only) */}
+          <button 
+            onClick={() => setSidebarOpen(false)} 
+            className="lg:hidden p-1 hover:bg-white/10 rounded-md transition-colors"
+          >
+            <XCircle className="w-5 h-5 text-gray-400" />
           </button>
         </div>
         
         <nav className="flex-1 overflow-y-auto py-6 px-3 flex flex-col gap-2">
-          <NavItem icon={SearchCheck} label="Radar General" active={activeView === 'radar'} onClick={() => setActiveView('radar')} open={sidebarOpen} />
-          <NavItem icon={Building2} label="Instituciones (B2B)" active={activeView === 'b2b'} onClick={() => setActiveView('b2b')} open={sidebarOpen} />
-          <NavItem icon={Users} label="Cuerpo Docente" active={activeView === 'teachers'} onClick={() => setActiveView('teachers')} open={sidebarOpen} />
-          <NavItem icon={ShieldAlert} label="Auditoría / RLS" active={activeView === 'audit'} onClick={() => setActiveView('audit')} open={sidebarOpen} textStyle="text-rose-400" />
-          <NavItem icon={Cpu} label="FinOps (Costos IA)" active={activeView === 'finops'} onClick={() => setActiveView('finops')} open={sidebarOpen} textStyle="text-cyan-400" />
-          <NavItem icon={PlayCircle} label="Simuladores (God)" active={activeView === 'simulators'} onClick={() => setActiveView('simulators')} open={sidebarOpen} textStyle="text-emerald-400" />
-          <NavItem icon={Settings} label="Core Config" active={activeView === 'config'} onClick={() => setActiveView('config')} open={sidebarOpen} />
+          <NavItem icon={SearchCheck} label="Radar General" active={activeView === 'radar'} onClick={() => { setActiveView('radar'); if(window.innerWidth < 1024) setSidebarOpen(false); }} open={sidebarOpen} />
+          <NavItem icon={Building2} label="Instituciones (B2B)" active={activeView === 'b2b'} onClick={() => { setActiveView('b2b'); if(window.innerWidth < 1024) setSidebarOpen(false); }} open={sidebarOpen} />
+          <NavItem icon={Users} label="Cuerpo Docente" active={activeView === 'teachers'} onClick={() => { setActiveView('teachers'); if(window.innerWidth < 1024) setSidebarOpen(false); }} open={sidebarOpen} />
+          <NavItem icon={ShieldAlert} label="Auditoría / RLS" active={activeView === 'audit'} onClick={() => { setActiveView('audit'); if(window.innerWidth < 1024) setSidebarOpen(false); }} open={sidebarOpen} textStyle="text-rose-400" />
+          <NavItem icon={Cpu} label="FinOps (Costos IA)" active={activeView === 'finops'} onClick={() => { setActiveView('finops'); if(window.innerWidth < 1024) setSidebarOpen(false); }} open={sidebarOpen} textStyle="text-cyan-400" />
+          <NavItem icon={PlayCircle} label="Simuladores (God)" active={activeView === 'simulators'} onClick={() => { setActiveView('simulators'); if(window.innerWidth < 1024) setSidebarOpen(false); }} open={sidebarOpen} textStyle="text-emerald-400" />
+          <NavItem icon={Settings} label="Core Config" active={activeView === 'config'} onClick={() => { setActiveView('config'); if(window.innerWidth < 1024) setSidebarOpen(false); }} open={sidebarOpen} />
         </nav>
 
         <div className="p-4 border-t border-white/10 flex flex-col gap-4">
@@ -256,21 +273,37 @@ export default function SuperAdminPanel() {
         </div>
       </aside>
 
+      {/* Mobile Sidebar Overlay */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col h-screen overflow-hidden relative">
         
         {/* Glow Ambient behind content */}
-        <div className={`absolute top-0 right-0 w-[600px] h-[600px] blur-[150px] pointer-events-none transition-colors duration-1000
+        <div className={`absolute top-0 right-0 w-[400px] md:w-[600px] h-[400px] md:h-[600px] blur-[100px] md:blur-[150px] pointer-events-none transition-colors duration-1000
           ${networkStatus === 'OPERATIONAL' ? 'bg-cyan-600/5' : ''}
           ${networkStatus === 'SHIELD_MODE' ? 'bg-orange-600/10' : ''}
           ${networkStatus === 'CLEANING' ? 'bg-emerald-600/10' : ''}
         `} />
         
         {/* 2. Top Bar */}
-        <header className="h-16 border-b border-white/10 bg-[#0A0A0A]/50 backdrop-blur-md flex items-center justify-between px-6 shrink-0 relative z-10 w-full">
-          <div className="flex items-center gap-4 flex-1">
-            {/* Buscador Omnipresente */}
-            <div className={`hidden md:flex items-center bg-[#111] border transition-colors rounded-lg px-3 py-1.5 w-96 ${searchFocused ? 'border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.15)]' : 'border-white/10'}`}>
+        <header className="h-16 border-b border-white/10 bg-[#0A0A0A]/50 backdrop-blur-md flex items-center justify-between px-4 md:px-6 shrink-0 relative z-10 w-full">
+          <div className="flex items-center gap-3 md:gap-4 flex-1">
+            {/* Mobile Menu Button */}
+            <button 
+              onClick={() => setSidebarOpen(true)}
+              className="lg:hidden p-2 hover:bg-white/10 rounded-lg transition-colors"
+            >
+              <Menu className="w-6 h-6 text-gray-400" />
+            </button>
+
+            {/* Buscador Omnipresente (Desktop only) */}
+            <div className={`hidden lg:flex items-center bg-[#111] border transition-colors rounded-lg px-3 py-1.5 w-64 xl:w-96 ${searchFocused ? 'border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.15)]' : 'border-white/10'}`}>
               <Search className="w-4 h-4 text-gray-500 shrink-0" />
               <input 
                 type="text" 
@@ -281,24 +314,24 @@ export default function SuperAdminPanel() {
               />
             </div>
             {/* Status & Latency Badges */}
-            <div className={`flex items-center gap-2 border px-3 py-1.5 rounded-full shrink-0 transition-all duration-500
+            <div className={`flex items-center gap-2 border px-2 py-1 md:px-3 md:py-1.5 rounded-full shrink-0 transition-all duration-500
               ${networkStatus === 'OPERATIONAL' ? 'bg-emerald-500/10 border-emerald-500/20' : ''}
               ${networkStatus === 'SHIELD_MODE' ? 'bg-orange-500/10 border-orange-500/50 scale-105 shadow-[0_0_15px_rgba(249,115,22,0.2)]' : ''}
               ${networkStatus === 'CLEANING' ? 'bg-cyan-500/10 border-cyan-500/20 animate-pulse' : ''}
             `}>
-              <span className={`w-2 h-2 rounded-full animate-pulse
+              <span className={`w-1.5 h-1.5 md:w-2 md:h-2 rounded-full animate-pulse
                 ${networkStatus === 'OPERATIONAL' ? 'bg-emerald-500' : ''}
                 ${networkStatus === 'SHIELD_MODE' ? 'bg-orange-500' : ''}
                 ${networkStatus === 'CLEANING' ? 'bg-cyan-500' : ''}
               `} />
-              <span className={`text-[10px] sm:text-xs font-mono tracking-widest
+              <span className={`text-[8px] md:text-xs font-mono tracking-widest
                 ${networkStatus === 'OPERATIONAL' ? 'text-emerald-400' : ''}
                 ${networkStatus === 'SHIELD_MODE' ? 'text-orange-400' : ''}
                 ${networkStatus === 'CLEANING' ? 'text-cyan-400' : ''}
               `}>
-                {networkStatus === 'OPERATIONAL' && 'ALL_SYS_OPERATIONAL'}
-                {networkStatus === 'SHIELD_MODE' && 'WAF_SHIELD_ACTIVE'}
-                {networkStatus === 'CLEANING' && 'SYNCING_EDGE_NODES'}
+                {networkStatus === 'OPERATIONAL' && 'SYS_OK'}
+                {networkStatus === 'SHIELD_MODE' && 'PROT_ON'}
+                {networkStatus === 'CLEANING' && 'SYNC'}
               </span>
             </div>
             <div className="hidden lg:flex items-center gap-2 border border-white/5 px-3 py-1.5 rounded-full">
@@ -784,46 +817,80 @@ export default function SuperAdminPanel() {
           )}
 
           {activeView === 'simulators' && (
-            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-5xl mx-auto">
-              <div className="flex flex-col items-center mb-12 text-center">
-                <div className="w-16 h-16 bg-emerald-500/20 border border-emerald-500/40 rounded-2xl flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(16,185,129,0.2)]">
-                  <PlayCircle className="w-8 h-8 text-emerald-400" />
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-5xl mx-auto py-10">
+              <div className="flex flex-col items-center mb-16 text-center">
+                <div className="w-20 h-20 bg-emerald-500/10 border border-emerald-500/30 rounded-[2rem] flex items-center justify-center mb-8 shadow-[0_0_40px_rgba(16,185,129,0.15)] relative group">
+                  <PlayCircle className="w-10 h-10 text-emerald-400 animate-pulse" />
+                  <div className="absolute inset-0 bg-emerald-500/10 blur-2xl rounded-full" />
                 </div>
-                <h2 className="text-3xl font-black tracking-tight mb-2 uppercase italic">Mando de Simulación Global</h2>
-                <p className="text-gray-400 max-w-xl">Ejecuta impersonación de roles en tiempo real para auditar la experiencia de usuario (UX) en todos los niveles del ecosistema.</p>
+                <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-4 uppercase italic text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-emerald-500/50">Mando de Simulación Global_</h2>
+                <p className="text-slate-500 max-w-2xl font-bold text-sm md:text-base uppercase tracking-[0.2em] leading-relaxed">
+                  Ejecuta impersonación de roles en tiempo real para auditar la experiencia de usuario (UX) en todos los niveles del ecosistema.
+                </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-20">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pb-32">
                 {[
-                  { id: 'escuela', name: 'Escuela (Kids)', role: 'Estudiante Escuela', desc: 'UX Gamificada, colores vibrantes y misiones simplificadas.', color: 'orange', icon: Gamepad2 },
-                  { id: 'colegio', name: 'Colegio (Teen)', role: 'Estudiante Colegio', desc: 'Enfoque en retos, ranking de puntos y comunidad.', color: 'purple', icon: Trophy },
-                  { id: 'universidad', name: 'Universidad (Pro)', role: 'Estudiante Universidad', desc: 'Dashboard analítico de alta densidad y perfiles de carrera.', color: 'blue', icon: BrainCircuit },
-                  { id: 'profesores', name: 'Cuerpo Docente', role: 'Profesor', desc: 'Panel de gestión de cohorte y telemetría de estudiantes.', color: 'fuchsia', icon: Users }
+                  { id: 'escuela', name: 'Escuela (Kids)', role: 'Estudiante Escuela', desc: 'UX Gamificada, colores vibrantes y misiones simplificadas.', color: 'orange', icon: Gamepad2, tag: 'GAMI_V0.5', glow: 'rgba(249,115,22,0.1)' },
+                  { id: 'colegio', name: 'Colegio (Teen)', role: 'Estudiante Colegio', desc: 'Enfoque en retos, ranking de puntos y comunidad.', color: 'purple', icon: Trophy, tag: 'RANK_A3.1', glow: 'rgba(168,85,247,0.1)' },
+                  { id: 'universidad', name: 'Universidad (Pro)', role: 'Estudiante Universidad', desc: 'Dashboard analítico de alta densidad y perfiles de carrera.', color: 'blue', icon: BrainCircuit, tag: 'PRO_ANALYTICS_V2', glow: 'rgba(59,130,246,0.1)' },
+                  { id: 'profesores', name: 'Cuerpo Docente', role: 'Profesor', desc: 'Panel de gestión de cohorte y telemetría de estudiantes.', color: 'emerald', icon: Users, tag: 'COHORT_CMD_V1', glow: 'rgba(16,185,129,0.1)' }
                 ].map((sim) => (
                   <button 
                     key={sim.id}
                     onClick={() => {
-                      showToast(`Ghost Mode: ${sim.name}...`, 'success')
+                      showToast(`Iniciando Ghost Protocol: ${sim.name}...`, 'success')
                       setImpersonation(sim.role)
-                      setTimeout(() => router.push(`/dashboard?view=${sim.id}`), 1000)
+                      setTimeout(() => router.push(`/dashboard?view=${sim.id}`), 1200)
                     }}
-                    className={`group relative text-left bg-[#0A0A0A]/60 border border-white/10 rounded-2xl p-6 transition-all duration-300 hover:border-${sim.color}-500/50 hover:bg-${sim.color}-500/5`}
+                    className={`group relative text-left bg-[#0b1120]/80 border border-white/10 rounded-[2.5rem] p-10 transition-all duration-700 hover:border-${sim.color}-500/50 hover:bg-[#020617] hover:-translate-y-2 block overflow-hidden shadow-2xl backdrop-blur-xl`}
                   >
-                    <div className={`w-12 h-12 bg-white/5 border border-white/10 rounded-xl mb-4 flex items-center justify-center transition-colors group-hover:bg-${sim.color}-500/20 group-hover:border-${sim.color}-500/50`}>
-                      <sim.icon className={`w-6 h-6 text-gray-400 group-hover:text-white transition-colors`} />
-                    </div>
-                    <h3 className="font-black text-xl mb-2 tracking-tight flex items-center justify-between">
-                      {sim.name}
-                      <ChevronRight className="w-5 h-5 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
-                    </h3>
-                    <p className="text-sm text-gray-500 leading-relaxed group-hover:text-gray-300 transition-colors uppercase tracking-widest text-[10px] font-bold">{sim.desc}</p>
+                    {/* Background Dot Grid inside card */}
+                    <div className="absolute inset-0 opacity-[0.05] pointer-events-none group-hover:opacity-[0.1] transition-opacity duration-700" 
+                         style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '18px 18px' }} />
                     
-                    <div className={`absolute top-0 right-0 w-32 h-32 bg-${sim.color}-500/5 blur-[40px] rounded-full pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity`} />
+                    {/* Dynamic Glow */}
+                    <div className={`absolute -top-24 -right-24 w-64 h-64 blur-[100px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-1000`} 
+                         style={{ backgroundColor: sim.color === 'emerald' ? 'rgba(16,185,129,0.15)' : 
+                                               sim.color === 'orange' ? 'rgba(249,115,22,0.15)' : 
+                                               sim.color === 'purple' ? 'rgba(168,85,247,0.15)' : 
+                                               'rgba(59,130,246,0.15)' }} />
+                    
+                    <div className="relative z-10">
+                      <div className="flex justify-between items-start mb-10">
+                        <div className={`w-16 h-16 bg-[#020617] border border-white/10 rounded-2xl flex items-center justify-center transition-all duration-700 group-hover:scale-110 group-hover:border-${sim.color}-500/50 shadow-inner`}>
+                          <sim.icon className={`w-8 h-8 text-slate-500 group-hover:text-white transition-colors`} />
+                        </div>
+                        <div className="flex flex-col items-end">
+                          <span className={`text-[9px] font-black font-mono px-3 py-1.5 rounded-full bg-${sim.color}-500/10 text-${sim.color}-400 border border-${sim.color}-500/20 tracking-widest uppercase mb-2`}>{sim.tag}</span>
+                          <p className="text-[7px] font-mono text-slate-700 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">SEC_0x{sim.id.toUpperCase()}</p>
+                        </div>
+                      </div>
+
+                      <h3 className="font-black text-3xl mb-4 tracking-tighter text-white group-hover:text-white transition-colors uppercase italic leading-none">
+                        {sim.name}
+                      </h3>
+                      
+                      <p className="text-sm text-slate-500 leading-relaxed font-bold group-hover:text-slate-300 transition-colors uppercase tracking-tight">
+                        {sim.desc}
+                      </p>
+
+                      <div className="mt-12 pt-8 border-t border-white/5 flex items-center justify-between opacity-30 group-hover:opacity-100 transition-opacity">
+                        <div className="flex items-center gap-3">
+                           <div className={`w-2 h-2 rounded-full animate-pulse bg-${sim.color}-500 shadow-[0_0_10px_${sim.glow}]`}></div>
+                           <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] flex items-center gap-2">Execute_Ghost_Mode</span>
+                        </div>
+                        <div className={`p-2 rounded-lg border border-white/5 bg-white/5 group-hover:border-${sim.color}-500/30 transition-all`}>
+                           <ChevronRight className={`w-4 h-4 text-slate-500 group-hover:text-${sim.color}-400 translate-x-0 group-hover:translate-x-1 transition-transform`} />
+                        </div>
+                      </div>
+                    </div>
                   </button>
                 ))}
               </div>
             </div>
           )}
+
 
         </div>
       </main>

@@ -10,9 +10,9 @@ import {
   Globe, 
   Users,
   Code2,
-  GraduationCap,
-  Building2,
-  Terminal,
+  Gamepad2,
+  Trophy,
+  BrainCircuit,
   ArrowRight
 } from 'lucide-react'
 import Footer from '@/components/Footer'
@@ -22,44 +22,44 @@ export default function LandingPage() {
 
   const roles = [
     {
-      id: 'student',
-      title: 'Estudiantes',
-      desc: 'Accede a tu cápsula de aprendizaje, conecta tu GitHub y recibe auditoría en tiempo real.',
-      icon: GraduationCap,
+      id: 'escuela',
+      title: 'Escuela (Kids)',
+      desc: 'UX Gamificada, colores vibrantes y misiones simplificadas.',
+      icon: Gamepad2,
+      color: 'from-orange-500 to-amber-400',
+      shadow: 'group-hover:shadow-[0_0_30px_rgba(245,158,11,0.3)]',
+      border: 'group-hover:border-orange-500/50',
+      href: '/login?role=escuela'
+    },
+    {
+      id: 'colegio',
+      title: 'Colegio (Teen)',
+      desc: 'Enfoque en retos, ranking de puntos y comunidad.',
+      icon: Trophy,
+      color: 'from-purple-500 to-indigo-400',
+      shadow: 'group-hover:shadow-[0_0_30px_rgba(168,85,247,0.3)]',
+      border: 'group-hover:border-purple-500/50',
+      href: '/login?role=colegio'
+    },
+    {
+      id: 'universidad',
+      title: 'Universidad (Pro)',
+      desc: 'Dashboard analítico de alta densidad y perfiles de carrera.',
+      icon: BrainCircuit,
       color: 'from-blue-500 to-cyan-400',
-      shadow: 'group-hover:shadow-[0_0_30px_rgba(56,189,248,0.3)]',
+      shadow: 'group-hover:shadow-[0_0_30px_rgba(59,130,246,0.3)]',
       border: 'group-hover:border-blue-500/50',
-      href: '/login?role=student'
+      href: '/login?role=universidad'
     },
     {
       id: 'teacher',
-      title: 'Profesores expert',
-      desc: 'Evalúa el progreso algorítmico, aprueba pull requests y gestiona tus células educativas.',
+      title: 'Cuerpo Docente',
+      desc: 'Panel de gestión de cohorte y telemetría de estudiantes.',
       icon: Users,
-      color: 'from-purple-500 to-fuchsia-400',
-      shadow: 'group-hover:shadow-[0_0_30px_rgba(217,70,239,0.3)]',
-      border: 'group-hover:border-fuchsia-500/50',
-      href: '/login?role=teacher'
-    },
-    {
-      id: 'institution',
-      title: 'Institución (B2B)',
-      desc: 'Métricas de éxito escolar, telemetría general y estadísticas enlazadas al plan nacional.',
-      icon: Building2,
       color: 'from-emerald-500 to-teal-400',
       shadow: 'group-hover:shadow-[0_0_30px_rgba(16,185,129,0.3)]',
       border: 'group-hover:border-emerald-500/50',
-      href: '/login?role=institution'
-    },
-    {
-      id: 'admin',
-      title: 'NOC / Admin',
-      desc: 'Centro de comando táctico, observabilidad global y control total de infraestructura IA.',
-      icon: Terminal,
-      color: 'from-red-500 to-orange-400',
-      shadow: 'group-hover:shadow-[0_0_30px_rgba(239,68,68,0.3)]',
-      border: 'group-hover:border-red-500/50',
-      href: '/login?role=admin'
+      href: '/login?role=teacher'
     }
   ]
 
@@ -71,17 +71,17 @@ export default function LandingPage() {
       <div className="fixed bottom-0 right-1/4 w-[500px] h-[500px] bg-blue-600/10 blur-[130px] -z-10 pointer-events-none" />
 
       {/* Navigation */}
-      <nav className="max-w-7xl mx-auto px-6 py-8 flex justify-between items-center relative z-10">
-        <div className="flex items-center gap-3 group cursor-pointer">
-          <div className="bg-gradient-to-tr from-emerald-500 to-cyan-400 p-2 rounded-xl group-hover:rotate-12 transition-transform shadow-[0_0_15px_rgba(16,185,129,0.4)]">
-            <Activity className="w-5 h-5 text-black" strokeWidth={3} />
+      <nav className="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-8 flex justify-between items-center relative z-10">
+        <div className="flex items-center gap-2 md:gap-3 group cursor-pointer">
+          <div className="bg-gradient-to-tr from-emerald-500 to-cyan-400 p-1.5 md:p-2 rounded-xl group-hover:rotate-12 transition-transform shadow-[0_0_15px_rgba(16,185,129,0.4)]">
+            <Activity className="w-4 h-4 md:w-5 md:h-5 text-black" strokeWidth={3} />
           </div>
-          <span className="font-bold text-2xl tracking-tighter">Talento<span className="text-emerald-400">Tech</span></span>
+          <span className="font-bold text-xl md:text-2xl tracking-tighter">Talento<span className="text-emerald-400">Tech</span></span>
         </div>
-        <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
-          <Link href="/genesis" className="hover:text-emerald-400 transition-colors">Muro Génesis</Link>
-          <Link href="/curriculum" className="hover:text-emerald-400 transition-colors">Programas</Link>
-          <Link href="/docs" className="hover:text-emerald-400 transition-colors">Documentación Core</Link>
+        <div className="hidden sm:flex items-center gap-4 md:gap-8 text-[10px] md:text-sm font-medium text-gray-400">
+          <Link href="/genesis" className="hover:text-emerald-400 transition-colors uppercase tracking-widest">Génesis</Link>
+          <Link href="/curriculum" className="hover:text-emerald-400 transition-colors uppercase tracking-widest">Programas</Link>
+          <Link href="/docs" className="hover:text-emerald-400 transition-colors uppercase tracking-widest">Docs</Link>
         </div>
       </nav>
 
@@ -96,12 +96,12 @@ export default function LandingPage() {
             <span className="text-gray-300 text-xs font-bold tracking-widest uppercase">Sistema Operacional v1.4 Activo</span>
           </div>
           
-          <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] mb-8 bg-gradient-to-br from-white via-gray-200 to-gray-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] mb-6 md:mb-8 bg-gradient-to-br from-white via-gray-200 to-gray-600 bg-clip-text text-transparent px-4">
             EL FUTURO <br />
             <span className="bg-gradient-to-r from-emerald-400 to-cyan-500 bg-clip-text text-transparent">SE ORQUESTA.</span>
           </h1>
           
-          <p className="text-lg md:text-xl text-gray-400 mb-16 max-w-2xl mx-auto leading-relaxed font-light">
+          <p className="text-base md:text-xl text-gray-400 mb-12 md:mb-16 max-w-2xl mx-auto leading-relaxed font-light px-6">
             Selecciona tu identidad dentro del ecosistema nacional. <br />
             Telemetría activa, auditoría impulsada por IA y fricción cero hacia producción.
           </p>
