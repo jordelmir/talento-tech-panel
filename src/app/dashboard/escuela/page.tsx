@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
 import { 
   LogOut, Star, Trophy, Target, Gamepad2, 
-  Map, Sparkles, BookOpen, GraduationCap 
+  Map, Sparkles, BookOpen, GraduationCap,
+  Search, Cpu
 } from 'lucide-react'
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell 
