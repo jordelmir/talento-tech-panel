@@ -10,6 +10,8 @@ import {
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer 
 } from 'recharts'
+import { useProfileStore } from '@/store/useProfileStore'
+import { ShieldCheck } from 'lucide-react'
 
 const mockCommits = [
   { day: 'Lun', commits: 5 },
@@ -25,10 +27,13 @@ export default function ColegioDashboard() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
+  const activeProfile = useProfileStore((state) => state.activeProfile)
 
   React.useEffect(() => {
     setIsMounted(true)
   }, [])
+
+  const isAdmin = activeProfile?.includes('Simulado') || activeProfile === 'Administrador'
 
   const handleLogout = async () => {
     setLoading(true)
@@ -56,10 +61,20 @@ export default function ColegioDashboard() {
             <GitMerge className="w-4 h-4 text-purple-500" />
             <span>BRANCH: MAIN</span>
           </div>
+
+          {isAdmin && (
+            <button 
+              onClick={() => router.push('/admin-panel')}
+              className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20">
+              <ShieldCheck className="w-4 h-4" />
+              <span className="hidden sm:inline text-sm">Comando Central (NOC)</span>
+            </button>
+          )}
+
           <button 
             onClick={handleLogout}
             disabled={loading}
-            className="flex items-center gap-2 border border-slate-200 hover:bg-slate-50 text-slate-600 px-4 py-2 rounded-xl text-sm font-bold transition-all">
+            className="flex items-center gap-2 border border-slate-200 hover:bg-slate-50 text-slate-600 px-4 py-2 rounded-xl text-sm font-bold transition-all disabled:opacity-50">
             <LogOut className="w-4 h-4" />
             <span className="hidden md:inline">Desconectar Sesión</span>
           </button>

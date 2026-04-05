@@ -8,7 +8,7 @@ import {
   Server, GitPullRequest, SearchCheck, Users, 
   Building2, BrainCircuit, Settings,
   LogOut, PlayCircle, StopCircle, RefreshCw, AlertOctagon, CheckCircle2, XCircle,
-  ChevronRight, ShieldCheck, ActivitySquare, ToggleLeft, ToggleRight
+  ChevronRight, ShieldCheck, ActivitySquare, ToggleLeft, ToggleRight, Gamepad2, Trophy
 } from 'lucide-react'
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -179,6 +179,7 @@ export default function SuperAdminPanel() {
           <NavItem icon={Users} label="Cuerpo Docente" active={activeView === 'teachers'} onClick={() => setActiveView('teachers')} open={sidebarOpen} />
           <NavItem icon={ShieldAlert} label="Auditoría / RLS" active={activeView === 'audit'} onClick={() => setActiveView('audit')} open={sidebarOpen} textStyle="text-rose-400" />
           <NavItem icon={Cpu} label="FinOps (Costos IA)" active={activeView === 'finops'} onClick={() => setActiveView('finops')} open={sidebarOpen} textStyle="text-cyan-400" />
+          <NavItem icon={PlayCircle} label="Simuladores (God)" active={activeView === 'simulators'} onClick={() => setActiveView('simulators')} open={sidebarOpen} textStyle="text-emerald-400" />
           <NavItem icon={Settings} label="Core Config" active={activeView === 'config'} onClick={() => setActiveView('config')} open={sidebarOpen} />
         </nav>
 
@@ -592,6 +593,47 @@ export default function SuperAdminPanel() {
                   ))}
                 </div>
                </div>
+            </div>
+          )}
+
+          {activeView === 'simulators' && (
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-5xl mx-auto">
+              <div className="flex flex-col items-center mb-12 text-center">
+                <div className="w-16 h-16 bg-emerald-500/20 border border-emerald-500/40 rounded-2xl flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(16,185,129,0.2)]">
+                  <PlayCircle className="w-8 h-8 text-emerald-400" />
+                </div>
+                <h2 className="text-3xl font-black tracking-tight mb-2 uppercase italic">Mando de Simulación Global</h2>
+                <p className="text-gray-400 max-w-xl">Ejecuta impersonación de roles en tiempo real para auditar la experiencia de usuario (UX) en todos los niveles del ecosistema.</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-20">
+                {[
+                  { id: 'escuela', name: 'Escuela (Kids)', desc: 'UX Gamificada, colores vibrantes y misiones simplificadas.', color: 'orange', icon: Gamepad2 },
+                  { id: 'colegio', name: 'Colegio (Teen)', desc: 'Enfoque en retos, ranking de puntos y comunidad.', color: 'purple', icon: Trophy },
+                  { id: 'universidad', name: 'Universidad (Pro)', desc: 'Dashboard analítico de alta densidad y perfiles de carrera.', color: 'blue', icon: BrainCircuit },
+                  { id: 'profesores', name: 'Cuerpo Docente', desc: 'Panel de gestión de cohorte y telemetría de estudiantes.', color: 'pink', icon: Users }
+                ].map((sim) => (
+                  <button 
+                    key={sim.id}
+                    onClick={() => {
+                      showToast(`Iniciando simulación: ${sim.name}...`, 'success')
+                      setTimeout(() => router.push(`/dashboard?view=${sim.id}`), 1000)
+                    }}
+                    className={`group relative text-left bg-[#0A0A0A]/60 border border-white/10 rounded-2xl p-6 transition-all duration-300 hover:border-${sim.color}-500/50 hover:bg-${sim.color}-500/5`}
+                  >
+                    <div className={`w-12 h-12 bg-white/5 border border-white/10 rounded-xl mb-4 flex items-center justify-center transition-colors group-hover:bg-${sim.color}-500/20 group-hover:border-${sim.color}-500/50`}>
+                      <sim.icon className={`w-6 h-6 text-gray-400 group-hover:text-white transition-colors`} />
+                    </div>
+                    <h3 className="font-black text-xl mb-2 tracking-tight flex items-center justify-between">
+                      {sim.name}
+                      <ChevronRight className="w-5 h-5 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
+                    </h3>
+                    <p className="text-sm text-gray-500 leading-relaxed group-hover:text-gray-300 transition-colors uppercase tracking-widest text-[10px] font-bold">{sim.desc}</p>
+                    
+                    <div className={`absolute top-0 right-0 w-32 h-32 bg-${sim.color}-500/5 blur-[40px] rounded-full pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity`} />
+                  </button>
+                ))}
+              </div>
             </div>
           )}
 

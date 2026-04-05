@@ -11,6 +11,8 @@ import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, 
   ResponsiveContainer, Tooltip, AreaChart, Area, XAxis, YAxis, CartesianGrid 
 } from 'recharts'
+import { useProfileStore } from '@/store/useProfileStore'
+import { ShieldCheck } from 'lucide-react'
 
 const radarData = [
   { subject: 'Algoritmia', A: 120, fullMark: 150 },
@@ -35,10 +37,13 @@ export default function UniversidadDashboard() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
+  const activeProfile = useProfileStore((state) => state.activeProfile)
 
   React.useEffect(() => {
     setIsMounted(true)
   }, [])
+
+  const isAdmin = activeProfile?.includes('Simulado') || activeProfile === 'Administrador'
 
   const handleLogout = async () => {
     setLoading(true)
@@ -67,6 +72,16 @@ export default function UniversidadDashboard() {
             <Activity className="w-3 h-3 text-emerald-400" />
             <span>SESSION_ACTIVE</span>
           </div>
+
+          {isAdmin && (
+            <button 
+              onClick={() => router.push('/admin-panel')}
+              className="flex items-center gap-2 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/50 text-emerald-400 px-3 py-1.5 rounded-md text-[10px] font-bold transition-all shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+              <ShieldCheck className="w-3 h-3" />
+              <span className="hidden sm:inline">NOC_ACCESS</span>
+            </button>
+          )}
+
           <button 
             onClick={handleLogout}
             disabled={loading}

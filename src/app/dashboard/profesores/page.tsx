@@ -10,6 +10,8 @@ import {
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer 
 } from 'recharts'
+import { useProfileStore } from '@/store/useProfileStore'
+import { ShieldCheck } from 'lucide-react'
 
 const performanceData = [
   { week: 'Sem 1', avg: 65, participation: 80 },
@@ -24,10 +26,13 @@ export default function ProfesoresDashboard() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
+  const activeProfile = useProfileStore((state) => state.activeProfile)
 
   React.useEffect(() => {
     setIsMounted(true)
   }, [])
+
+  const isAdmin = activeProfile?.includes('Simulado') || activeProfile === 'Administrador'
   const [searchQuery, setSearchQuery] = useState('')
 
   const handleLogout = async () => {
@@ -62,6 +67,15 @@ export default function ProfesoresDashboard() {
               className="bg-slate-100 border-none outline-none pl-9 pr-4 py-2 rounded-full text-sm font-medium w-64 focus:ring-2 focus:ring-fuchsia-500/50 transition-all"
             />
           </div>
+          {isAdmin && (
+            <button 
+              onClick={() => router.push('/admin-panel')}
+              className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20">
+              <ShieldCheck className="w-4 h-4" />
+              <span className="hidden sm:inline text-sm">Comando Central (NOC)</span>
+            </button>
+          )}
+
           <button 
             onClick={handleLogout}
             disabled={loading}
