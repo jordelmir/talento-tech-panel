@@ -12,6 +12,7 @@ import {
 import { useProfileStore } from '@/store/useProfileStore'
 import Footer from '@/components/Footer'
 import StreakTracker from '@/components/StreakTracker'
+import { useToast } from '@/components/ToastProvider'
 
 export default function FamiliaDashboard() {
   const router = useRouter()
@@ -19,6 +20,7 @@ export default function FamiliaDashboard() {
   const [isMounted, setIsMounted] = useState(false)
   const activeProfile = useProfileStore((state) => state.activeProfile)
   const [activeTab, setActiveTab] = useState<'overview' | 'progress' | 'projects' | 'alerts'>('overview')
+  const { showToast } = useToast()
 
   const [childData, setChildData] = useState<any>(null)
 
@@ -423,7 +425,7 @@ export default function FamiliaDashboard() {
                 { type: 'mentor', icon: Users, title: 'Sesión de Mentoría', desc: 'Ana García (Universidad) revisó el código de Santiago como mentora.', time: 'Hace 2d', color: 'border-cyan-500 bg-cyan-500/10 text-cyan-400' },
                 { type: 'time', icon: Clock, title: 'Reporte Semanal', desc: 'Santiago dedicó 8.5 horas esta semana, un 15% más que la anterior.', time: 'Hace 3d', color: 'border-blue-500 bg-blue-500/10 text-blue-400' },
               ].map((alert, i) => (
-                <div key={i} className={`${alert.color} border-l-[6px] rounded-[2rem] p-6 md:p-8 flex items-start gap-6 group hover:translate-x-2 transition-all cursor-pointer`}>
+                <div key={i} onClick={() => showToast('Abriendo detalle de la notificación...', 'info')} className={`${alert.color} border-l-[6px] rounded-[2rem] p-6 md:p-8 flex items-start gap-6 group hover:translate-x-2 transition-all cursor-pointer`}>
                   <div className={`w-12 h-12 rounded-xl ${alert.color} border flex items-center justify-center flex-shrink-0`}>
                     <alert.icon className="w-6 h-6" />
                   </div>

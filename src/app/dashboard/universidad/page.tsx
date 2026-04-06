@@ -18,6 +18,8 @@ import { getUserMetrics } from '../actions'
 import StreakTracker from '@/components/StreakTracker'
 import CodePlayground from '@/components/CodePlayground'
 import MentorshipPanel from '@/components/MentorshipPanel'
+import RepoSubmit from '@/components/RepoSubmit'
+import { useToast } from '@/components/ToastProvider'
 
 const radarData = [
   { subject: 'Algoritmia', A: 120, fullMark: 150 },
@@ -47,6 +49,7 @@ export default function UniversidadDashboard() {
   
   const [activeTab, setActiveTab] = useState<'overview' | 'repos' | 'live_code' | 'mentors' | 'stack' | 'settings'>('overview')
   const [toast, setToast] = useState<{message: string, type: 'success' | 'warn'} | null>(null)
+  const { showToast: globalToast } = useToast()
   
   const showToast = (message: string, type: 'success' | 'warn' = 'success') => {
     setToast({ message, type })
@@ -57,6 +60,7 @@ export default function UniversidadDashboard() {
   const [userProfile, setUserProfile] = useState<any>(null)
   const [submissions, setSubmissions] = useState<any[]>([])
   const [activePeers, setActivePeers] = useState(0)
+  const [userId, setUserId] = useState<string>('')
 
   React.useEffect(() => {
     setIsMounted(true)
@@ -64,6 +68,7 @@ export default function UniversidadDashboard() {
       const supabase = createClient()
       const { data: { session } } = await supabase.auth.getSession()
       if (session) {
+        setUserId(session.user.id)
         const data = await getUserMetrics(session.user.id)
         setUserProfile(data.profile)
         setSubmissions(data.submissions)
@@ -378,9 +383,7 @@ export default function UniversidadDashboard() {
                    <h2 className="text-2xl font-black text-white tracking-tight">Consola de Repositorios</h2>
                    <p className="text-slate-500 text-sm">Gestiona tus participaciones y envíos a revisión.</p>
                 </div>
-                <button className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-xl transition-all shadow-lg shadow-purple-600/20">
-                   Nuevo Envío
-                </button>
+                {userId && <RepoSubmit userId={userId} variant="compact" onSubmitSuccess={() => window.location.reload()} />}
              </div>
              
              <div className="grid grid-cols-1 gap-4">
@@ -400,7 +403,7 @@ export default function UniversidadDashboard() {
                             <p className="text-[10px] text-slate-500 uppercase font-bold">Status</p>
                             <p className="text-xs text-emerald-400 font-bold uppercase tracking-widest">VERIFIED</p>
                          </div>
-                         <button className="p-2 bg-white/5 rounded-lg border border-white/10 hover:border-white/30 transition-all">
+                         <button onClick={() => window.open(sub.repository_url, '_blank')} className="p-2 bg-white/5 rounded-lg border border-white/10 hover:border-white/30 transition-all">
                             <ChevronRight className="w-5 h-5 text-slate-400" />
                          </button>
                       </div>

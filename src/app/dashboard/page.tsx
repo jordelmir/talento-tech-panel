@@ -37,13 +37,14 @@ function DashboardRouter() {
         setStatus('Permisos de Super Administrador detectados.')
         
         // Impersonación Dinámica (God Mode)
-        if (forcedView && ['escuela', 'colegio', 'universidad', 'profesores'].includes(forcedView)) {
+        if (forcedView && ['escuela', 'colegio', 'universidad', 'profesores', 'familia'].includes(forcedView)) {
           setStatus(`Modo Simulación: Vista ${forcedView}...`)
           const labels: Record<string, string> = {
             'escuela': 'Escuela (Simulado)',
             'colegio': 'Colegio (Simulado)',
             'universidad': 'Universidad (Simulado)',
-            'profesores': 'Profesores (Simulado)'
+            'profesores': 'Profesores (Simulado)',
+            'familia': 'Familia (Simulado)'
           }
           setProfile(labels[forcedView])
           router.replace(`/dashboard/${forcedView}`)
@@ -70,7 +71,8 @@ function DashboardRouter() {
           'escuela': 'Escuela',
           'colegio': 'Colegio',
           'universidad': 'Universidad',
-          'profesores': 'Profesores'
+          'profesores': 'Profesores',
+          'familia': 'Familia'
         }
         
         setProfile(labels[metadataProfile] || metadataProfile)

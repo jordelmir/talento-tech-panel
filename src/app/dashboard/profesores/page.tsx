@@ -17,6 +17,7 @@ import {
 import { useProfileStore } from '@/store/useProfileStore'
 import Footer from '@/components/Footer'
 import { getTeacherDashboardData } from '../actions'
+import { useToast } from '@/components/ToastProvider'
 
 const performanceData = [
   { week: 'Sem 1', avg: 65, participation: 80 },
@@ -33,6 +34,7 @@ export default function ProfesoresDashboard() {
   const [dataLoading, setDataLoading] = useState(true)
   const [isMounted, setIsMounted] = useState(false)
   const activeProfile = useProfileStore((state) => state.activeProfile)
+  const { showToast } = useToast()
   
   const [activeTab, setActiveTab] = useState<'overview' | 'repos' | 'stack' | 'students' | 'audit' | 'config'>('overview')
   
@@ -313,7 +315,7 @@ export default function ProfesoresDashboard() {
                      ))}
                   </div>
                   
-                  <button className="w-full mt-12 bg-cyan-600/10 hover:bg-cyan-600 hover:text-white text-cyan-400 border border-cyan-500/30 rounded-2xl py-5 font-black text-[10px] uppercase tracking-[0.4em] transition-all relative z-10 shadow-[inset_0_0_20px_rgba(6,182,212,0.05)] group-hover:shadow-[0_0_30px_rgba(6,182,212,0.2)]">
+                  <button onClick={() => showToast('Auditoría Ghost IA iniciada. Escaneando repositorios de la cohorte...', 'success')} className="w-full mt-12 bg-cyan-600/10 hover:bg-cyan-600 hover:text-white text-cyan-400 border border-cyan-500/30 rounded-2xl py-5 font-black text-[10px] uppercase tracking-[0.4em] transition-all relative z-10 shadow-[inset_0_0_20px_rgba(6,182,212,0.05)] group-hover:shadow-[0_0_30px_rgba(6,182,212,0.2)]">
                      Lanzar Auditoría Ghost_AI
                   </button>
                </div>
@@ -342,7 +344,7 @@ export default function ProfesoresDashboard() {
                     </p>
                   </div>
                   <div className="flex gap-3">
-                    <button className="bg-white/5 border border-white/10 text-white px-6 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-white/10 transition-all shadow-xl flex items-center gap-2">
+                    <button onClick={() => showToast('Generando manifesto de repositorios...', 'info')} className="bg-white/5 border border-white/10 text-white px-6 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-white/10 transition-all shadow-xl flex items-center gap-2">
                       <GitPullRequest className="w-3.5 h-3.5 text-cyan-400" /> Exportar_Manifest
                     </button>
                   </div>
@@ -399,7 +401,7 @@ export default function ProfesoresDashboard() {
                       <span className="text-[10px] font-black text-emerald-400 bg-emerald-500/10 px-4 py-2 rounded-xl border border-emerald-500/20 uppercase tracking-widest hidden md:flex items-center gap-2">
                         <CheckCircle2 className="w-3 h-3" /> ALL_SYNCED
                       </span>
-                      <button className="p-3 bg-white/5 rounded-xl border border-white/10 hover:border-cyan-500/30 transition-all">
+                      <button onClick={() => showToast('Detalle del estudiante disponible próximamente', 'info')} className="p-3 bg-white/5 rounded-xl border border-white/10 hover:border-cyan-500/30 transition-all">
                         <Eye className="w-4 h-4 text-slate-500 group-hover:text-cyan-400" />
                       </button>
                     </div>
@@ -519,7 +521,7 @@ export default function ProfesoresDashboard() {
                            className="bg-[#020617]/50 border border-white/10 outline-none pl-11 pr-6 py-3 rounded-2xl text-[10px] font-black uppercase w-64 focus:border-cyan-500/50 transition-all text-white placeholder:text-slate-800"
                          />
                       </div>
-                      <button className="bg-white/5 border border-white/10 text-white px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-white/10 hover:border-cyan-500/50 transition-all shadow-xl">
+                      <button onClick={() => showToast('Exportación CSV disponible próximamente', 'info')} className="bg-white/5 border border-white/10 text-white px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-white/10 hover:border-cyan-500/50 transition-all shadow-xl">
                         Exp_Nodes (.CSV)
                       </button>
                    </div>
@@ -580,7 +582,7 @@ export default function ProfesoresDashboard() {
                                   </span>
                                 </td>
                                 <td className="px-12 py-7 text-right">
-                                  <button className="p-3.5 bg-[#020617] border border-white/10 rounded-2xl hover:border-cyan-500/40 hover:bg-white/5 transition-all group/btn shadow-xl">
+                                  <button onClick={() => showToast('Menú de opciones del nodo activo', 'info')} className="p-3.5 bg-[#020617] border border-white/10 rounded-2xl hover:border-cyan-500/40 hover:bg-white/5 transition-all group/btn shadow-xl">
                                     <MoreVertical className="w-5 h-5 text-slate-500 group-hover/btn:text-white" />
                                   </button>
                                 </td>

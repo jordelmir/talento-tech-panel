@@ -18,8 +18,10 @@ import { useProfileStore } from '@/store/useProfileStore'
 import Footer from '@/components/Footer'
 import { getUserMetrics } from '../actions'
 import StreakTracker from '@/components/StreakTracker'
+import RepoSubmit from '@/components/RepoSubmit'
 import CodePlayground from '@/components/CodePlayground'
 import MentorshipPanel from '@/components/MentorshipPanel'
+import { useToast } from '@/components/ToastProvider'
 
 const rankings = [
   { name: 'Player_Ultra', pts: 25 },
@@ -36,9 +38,11 @@ export default function EscuelaDashboard() {
   
   const [activeTab, setActiveTab] = useState<'mission_control' | 'repos' | 'live_code' | 'mentors' | 'stack' | 'awards' | 'gear'>('mission_control')
   const [playerName, setPlayerName] = useState('Super Creador')
+  const { showToast } = useToast()
   
   // Real Data states
   const [submissions, setSubmissions] = useState<any[]>([])
+  const [userId, setUserId] = useState<string>('')
 
   React.useEffect(() => {
     setIsMounted(true)
@@ -46,6 +50,7 @@ export default function EscuelaDashboard() {
       const supabase = createClient()
       const { data: { session } } = await supabase.auth.getSession()
       if (session) {
+        setUserId(session.user.id)
         const data = await getUserMetrics(session.user.id)
         setSubmissions(data.submissions)
       }
@@ -216,11 +221,11 @@ export default function EscuelaDashboard() {
                           </p>
                           
                           <div className="flex flex-wrap gap-3">
-                             <button className="bg-orange-600 hover:bg-orange-500 text-white px-8 md:px-10 py-4 rounded-xl font-black uppercase tracking-widest text-[10px] shadow-[0_0_30px_rgba(234,88,12,0.3)] transition-all flex items-center gap-2 group border border-orange-400/30">
+                             <button onClick={() => router.push('/curriculum')} className="bg-orange-600 hover:bg-orange-500 text-white px-8 md:px-10 py-4 rounded-xl font-black uppercase tracking-widest text-[10px] shadow-[0_0_30px_rgba(234,88,12,0.3)] transition-all flex items-center gap-2 group border border-orange-400/30">
                                Continuar Aventura
                                <ChevronRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
                              </button>
-                             <button className="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-8 py-4 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all backdrop-blur-md">
+                             <button onClick={() => showToast('El Mapa Táctico se desbloqueará al completar el Módulo 3', 'info')} className="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-8 py-4 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all backdrop-blur-md">
                                Mapa Táctico
                              </button>
                           </div>
@@ -287,7 +292,7 @@ export default function EscuelaDashboard() {
                     </div>
                   </div>
                   
-                  <button className="mt-8 w-full py-4 bg-orange-500/10 hover:bg-orange-500/20 border border-orange-500/20 text-orange-400 rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] transition-all flex items-center justify-center gap-3 group relative overflow-hidden shadow-[inset_0_0_20px_rgba(251,146,60,0.05)]">
+                  <button onClick={() => showToast('Sala de Juego estará disponible próximamente 🎮', 'info')} className="mt-8 w-full py-4 bg-orange-500/10 hover:bg-orange-500/20 border border-orange-500/20 text-orange-400 rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] transition-all flex items-center justify-center gap-3 group relative overflow-hidden shadow-[inset_0_0_20px_rgba(251,146,60,0.05)]">
                     <Gamepad2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
                     Entrar a Sala de Juego
                     <div className="absolute bottom-0 left-0 h-0.5 bg-orange-500 w-0 group-hover:w-full transition-all duration-500" />
@@ -367,7 +372,7 @@ export default function EscuelaDashboard() {
                     ))}
                   </div>
                   
-                  <button className="mt-10 w-full py-4 text-slate-600 hover:text-white font-black uppercase text-[9px] tracking-[0.4em] transition-colors border-t border-white/5 group-hover:border-orange-500/20">
+                  <button onClick={() => showToast('Historial completo disponible en la sección de Progreso', 'info')} className="mt-10 w-full py-4 text-slate-600 hover:text-white font-black uppercase text-[9px] tracking-[0.4em] transition-colors border-t border-white/5 group-hover:border-orange-500/20">
                     HISTORIAL_COMPLETO_SYSTEM
                   </button>
                </div>
@@ -410,10 +415,7 @@ export default function EscuelaDashboard() {
                       ¡Cada proyecto es una nueva aventura! Sube tu código aquí 🚀
                     </p>
                   </div>
-                  <button className="bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white font-black py-4 px-8 rounded-2xl transition-all shadow-[0_0_30px_rgba(16,185,129,0.3)] text-[10px] uppercase tracking-widest flex items-center gap-3 border border-emerald-400/30">
-                    <Rocket className="w-4 h-4" />
-                    Nuevo Proyecto
-                  </button>
+                  {userId && <RepoSubmit userId={userId} variant="compact" onSubmitSuccess={() => window.location.reload()} />}
                 </div>
 
                 {/* Stats Row */}
@@ -472,7 +474,7 @@ export default function EscuelaDashboard() {
                     <span className="text-[8px] text-slate-600 font-mono uppercase tracking-widest">
                       {new Date(sub.created_at).toLocaleDateString()}
                     </span>
-                    <button className="flex items-center gap-2 text-[10px] font-black text-white bg-white/5 hover:bg-white/10 px-4 py-2 rounded-xl border border-white/10 transition-all uppercase tracking-widest">
+                    <button onClick={() => window.open(sub.repository_url, '_blank')} className="flex items-center gap-2 text-[10px] font-black text-white bg-white/5 hover:bg-white/10 px-4 py-2 rounded-xl border border-white/10 transition-all uppercase tracking-widest">
                       Ver Proyecto <ChevronRight className="w-3 h-3" />
                     </button>
                   </div>
@@ -556,7 +558,7 @@ export default function EscuelaDashboard() {
                     <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
                       <span className="text-[8px] text-slate-600 font-mono uppercase tracking-widest">{tool.status}</span>
                       {tool.level !== 'LOCKED' && (
-                        <button className="text-[9px] font-black text-orange-400 hover:text-white transition-colors uppercase tracking-widest flex items-center gap-1">
+                        <button onClick={() => showToast(`Abriendo práctica de ${tool.name}...`, 'success')} className="text-[9px] font-black text-orange-400 hover:text-white transition-colors uppercase tracking-widest flex items-center gap-1">
                           Practicar <ChevronRight className="w-3 h-3" />
                         </button>
                       )}

@@ -21,6 +21,8 @@ import { getUserMetrics } from '../actions'
 import StreakTracker from '@/components/StreakTracker'
 import CodePlayground from '@/components/CodePlayground'
 import MentorshipPanel from '@/components/MentorshipPanel'
+import RepoSubmit from '@/components/RepoSubmit'
+import { useToast } from '@/components/ToastProvider'
 
 const mockCommits = [
   { day: 'Lun', commits: 5 },
@@ -41,10 +43,12 @@ export default function ColegioDashboard() {
   
   const [activeTab, setActiveTab] = useState<'overview' | 'repos' | 'live_code' | 'mentors' | 'stack' | 'missions' | 'ranking'>('overview')
   const [userName, setUserName] = useState('Cadete')
+  const { showToast } = useToast()
 
   // Real Data states
   const [submissions, setSubmissions] = useState<any[]>([])
   const [activePeers, setActivePeers] = useState(0)
+  const [userId, setUserId] = useState<string>('')
 
   React.useEffect(() => {
     setIsMounted(true)
@@ -52,6 +56,7 @@ export default function ColegioDashboard() {
       const supabase = createClient()
       const { data: { session } } = await supabase.auth.getSession()
       if (session) {
+        setUserId(session.user.id)
         const data = await getUserMetrics(session.user.id)
         setSubmissions(data.submissions)
         setActivePeers(data.activePeers)
@@ -361,9 +366,7 @@ export default function ColegioDashboard() {
                       Gestiona tus repositorios y envíos. Cada commit cuenta.
                     </p>
                   </div>
-                  <button className="bg-purple-600 hover:bg-purple-500 text-white font-black py-4 px-8 rounded-2xl transition-all shadow-[0_0_30px_rgba(168,85,247,0.3)] text-[10px] uppercase tracking-widest flex items-center gap-3 border border-purple-400/30">
-                    <GitCommit className="w-4 h-4" /> Nuevo Envío
-                  </button>
+                  {userId && <RepoSubmit userId={userId} variant="compact" onSubmitSuccess={() => window.location.reload()} />}
                 </div>
 
                 {/* Stats */}
@@ -411,7 +414,7 @@ export default function ColegioDashboard() {
                       </span>
                     </div>
                     <span className="text-[9px] font-mono text-slate-600">{new Date(sub.created_at).toLocaleDateString()}</span>
-                    <button className="p-3 bg-white/5 rounded-xl border border-white/10 hover:border-purple-500/30 transition-all">
+                    <button onClick={() => window.open(sub.repository_url, '_blank')} className="p-3 bg-white/5 rounded-xl border border-white/10 hover:border-purple-500/30 transition-all">
                       <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-purple-400" />
                     </button>
                   </div>
@@ -539,7 +542,7 @@ export default function ColegioDashboard() {
                         <h4 className="text-3xl font-black mb-3 group-hover:text-purple-400 transition-colors uppercase italic tracking-tighter leading-none">{mission.title}</h4>
                         <p className="text-[11px] text-slate-500 font-bold mb-12 tracking-[0.2em]">RECOMPENSA: <span className="text-white font-black">{mission.xp}</span></p>
                         
-                        <button className="w-full py-5 rounded-2xl bg-[#020617] border border-white/5 group-hover:bg-purple-600 group-hover:border-purple-400/50 text-[10px] font-black uppercase tracking-[0.4em] transition-all group-hover:text-white shadow-[inset_0_0_20px_rgba(255,255,255,0.02)] group-hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] flex items-center justify-center gap-3">
+                        <button onClick={() => { showToast(`Misión "${mission.title}" aceptada. Ve a Módulos para avanzar.`, 'success'); router.push('/curriculum') }} className="w-full py-5 rounded-2xl bg-[#020617] border border-white/5 group-hover:bg-purple-600 group-hover:border-purple-400/50 text-[10px] font-black uppercase tracking-[0.4em] transition-all group-hover:text-white shadow-[inset_0_0_20px_rgba(255,255,255,0.02)] group-hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] flex items-center justify-center gap-3">
                            Iniciar_Protocolo
                            <Zap className="w-3.5 h-3.5" />
                         </button>

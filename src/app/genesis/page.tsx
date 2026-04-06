@@ -133,7 +133,7 @@ export default function MuroGenesis() {
 
               {/* CTA */}
               <a 
-                href="#" 
+                href="/curriculum" 
                 className="inline-flex w-full items-center justify-center gap-2 bg-white text-black font-bold py-3 rounded-xl hover:bg-slate-200 transition-colors shadow-lg"
               >
                 Auditar Código (PoC)
