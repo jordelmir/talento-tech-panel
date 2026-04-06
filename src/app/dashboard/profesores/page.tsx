@@ -8,7 +8,8 @@ import {
   BookOpen, Beaker, UserX, BarChart3, Fingerprint,
   Activity, ShieldCheck, Loader2, ChevronRight,
   LayoutDashboard, Settings, MoreVertical, Terminal,
-  LineChart as LineIcon, Eye, Database
+  LineChart as LineIcon, Eye, Database,
+  GitBranch, GitCommit, GitPullRequest, Globe, Server, Cpu, Code2, Cloud, CheckCircle2, Wrench
 } from 'lucide-react'
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area
@@ -33,7 +34,7 @@ export default function ProfesoresDashboard() {
   const [isMounted, setIsMounted] = useState(false)
   const activeProfile = useProfileStore((state) => state.activeProfile)
   
-  const [activeTab, setActiveTab] = useState<'overview' | 'students' | 'audit' | 'config'>('overview')
+  const [activeTab, setActiveTab] = useState<'overview' | 'repos' | 'stack' | 'students' | 'audit' | 'config'>('overview')
   
   // Real Data states
   const [students, setStudents] = useState<any[]>([])
@@ -103,6 +104,8 @@ export default function ProfesoresDashboard() {
           <div className="hidden lg:flex items-center gap-1 bg-white/5 p-1 rounded-xl border border-white/10">
             {[
               { id: 'overview', label: 'Monitor_Global', icon: BarChart3 },
+              { id: 'repos', label: 'Repos_Cohorte', icon: GitBranch },
+              { id: 'stack', label: 'Infra_Monitor', icon: Server },
               { id: 'students', label: 'Gestión_Salón', icon: Users },
               { id: 'audit', label: 'Ghost_Audit', icon: Fingerprint },
               { id: 'config', label: 'Ajustes', icon: Settings },
@@ -157,6 +160,8 @@ export default function ProfesoresDashboard() {
       <div className="lg:hidden flex justify-around bg-[#0f172a]/95 border-b border-white/5 p-2 sticky top-[65px] z-40 backdrop-blur-md">
         {[
           { id: 'overview', icon: BarChart3 },
+          { id: 'repos', icon: GitBranch },
+          { id: 'stack', icon: Server },
           { id: 'students', icon: Users },
           { id: 'audit', icon: Fingerprint },
           { id: 'config', icon: Settings },
@@ -312,6 +317,180 @@ export default function ProfesoresDashboard() {
                      Lanzar Auditoría Ghost_AI
                   </button>
                </div>
+            </div>
+          </div>
+        )}
+
+        {/* ═══════════════════════════════════════════════════════════════════════ */}
+        {/* REPOS_COHORTE - TEACHER EDITION                                       */}
+        {/* ═══════════════════════════════════════════════════════════════════════ */}
+        {activeTab === 'repos' && (
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
+            <div className="bg-[#0b1120]/80 border border-white/10 rounded-[2.5rem] p-8 md:p-12 backdrop-blur-xl shadow-2xl relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-600/10 blur-[80px] rounded-full -translate-y-20 translate-x-20" />
+              <div className="relative z-10">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-10">
+                  <div>
+                    <div className="flex items-center gap-2 px-4 py-1.5 bg-cyan-500/10 border border-cyan-500/30 rounded-full text-[9px] font-black uppercase tracking-[0.2em] text-cyan-400 mb-4 w-fit">
+                      <GitBranch className="w-3 h-3" /> COHORTE_REPOSITORY_MATRIX
+                    </div>
+                    <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-white uppercase italic leading-[0.85]">
+                      REPOS_ <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-400">COHORTE_</span>
+                    </h2>
+                    <p className="text-slate-500 text-sm mt-4 font-bold uppercase tracking-[0.2em]">
+                      Monitoreo de repositorios de todos los estudiantes del salón
+                    </p>
+                  </div>
+                  <div className="flex gap-3">
+                    <button className="bg-white/5 border border-white/10 text-white px-6 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-white/10 transition-all shadow-xl flex items-center gap-2">
+                      <GitPullRequest className="w-3.5 h-3.5 text-cyan-400" /> Exportar_Manifest
+                    </button>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-4 gap-4">
+                  {[
+                    { label: 'TOTAL_REPOS', value: students.length > 0 ? (students.length * 3).toString() : '0', color: 'text-cyan-400' },
+                    { label: 'ACTIVE_PUSHES_24H', value: '12', color: 'text-emerald-400' },
+                    { label: 'REVIEW_PENDING', value: '4', color: 'text-amber-400' },
+                    { label: 'PASS_RATE_GLOBAL', value: '96%', color: 'text-purple-400' },
+                  ].map((s, i) => (
+                    <div key={i} className="bg-white/5 border border-white/5 rounded-2xl p-5 text-center hover:border-white/20 transition-all">
+                      <p className={`text-2xl font-black italic ${s.color}`}>{s.value}</p>
+                      <p className="text-[7px] text-slate-600 font-black uppercase tracking-widest mt-1">{s.label}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Student Repos Table */}
+            <div className="bg-[#0b1120]/80 border border-white/10 rounded-[2.5rem] overflow-hidden backdrop-blur-xl shadow-2xl">
+              <div className="px-8 md:px-12 py-8 border-b border-white/5 flex items-center justify-between">
+                <h3 className="font-black text-xl text-white uppercase italic tracking-tighter">Registro_de_Envíos_Global</h3>
+                <div className="flex gap-2">
+                  <button className="px-4 py-2 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded-xl text-[9px] font-black uppercase tracking-widest">ALL</button>
+                  <button className="px-4 py-2 bg-white/5 border border-white/10 text-slate-500 rounded-xl text-[9px] font-black uppercase tracking-widest hover:text-white transition-colors">NEEDS_REVIEW</button>
+                </div>
+              </div>
+
+              <div className="divide-y divide-white/5">
+                {students.map((est, i) => (
+                  <div key={i} className="px-8 md:px-12 py-6 flex items-center justify-between group hover:bg-white/5 transition-all">
+                    <div className="flex items-center gap-6">
+                      <div className="w-12 h-12 rounded-2xl bg-[#020617] border border-white/10 flex items-center justify-center group-hover:border-cyan-500/40 transition-all shadow-inner overflow-hidden">
+                        {est.profiles?.avatar_url ? <img src={est.profiles.avatar_url} className="w-full h-full object-cover" /> : <span className="text-slate-600 font-black text-xs">ID</span>}
+                      </div>
+                      <div>
+                        <p className="font-black text-base text-white uppercase tracking-tighter leading-none group-hover:text-cyan-400 transition-colors mb-1">
+                          {est.profiles?.full_name || 'Anonymous_Node'}
+                        </p>
+                        <div className="flex items-center gap-4">
+                          <span className="text-[9px] text-slate-600 font-mono flex items-center gap-1.5">
+                            <GitCommit className="w-3 h-3 text-cyan-500" /> 3 repos
+                          </span>
+                          <span className="text-[9px] text-slate-600 font-mono flex items-center gap-1.5">
+                            <CheckCircle2 className="w-3 h-3 text-emerald-500" /> 100% passed
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <span className="text-[10px] font-black text-emerald-400 bg-emerald-500/10 px-4 py-2 rounded-xl border border-emerald-500/20 uppercase tracking-widest hidden md:flex items-center gap-2">
+                        <CheckCircle2 className="w-3 h-3" /> ALL_SYNCED
+                      </span>
+                      <button className="p-3 bg-white/5 rounded-xl border border-white/10 hover:border-cyan-500/30 transition-all">
+                        <Eye className="w-4 h-4 text-slate-500 group-hover:text-cyan-400" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+
+                {students.length === 0 && (
+                  <div className="px-12 py-32 text-center">
+                    <div className="w-16 h-16 bg-white/5 rounded-3xl flex items-center justify-center border border-white/10 mx-auto mb-6 animate-pulse">
+                      <Loader2 className="w-8 h-8 animate-spin text-slate-600" />
+                    </div>
+                    <p className="text-[11px] font-black uppercase tracking-[0.5em] text-slate-700">SCANNING_REPOSITORY_MATRIX...</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ═══════════════════════════════════════════════════════════════════════ */}
+        {/* INFRA_MONITOR - TEACHER EDITION                                       */}
+        {/* ═══════════════════════════════════════════════════════════════════════ */}
+        {activeTab === 'stack' && (
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-4">
+              <div>
+                <div className="flex items-center gap-2 px-4 py-1.5 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-[9px] font-black uppercase tracking-[0.2em] text-emerald-400 mb-4 w-fit">
+                  <Server className="w-3 h-3" /> INFRASTRUCTURE_LAYER_V2
+                </div>
+                <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-white uppercase italic leading-[0.85]">
+                  INFRA_ <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">MONITOR_</span>
+                </h2>
+                <p className="text-slate-500 text-sm mt-4 font-bold uppercase tracking-[0.2em]">
+                  Monitoreo de salud del ecosistema institucional
+                </p>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
+                <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">ALL_SYSTEMS_NOMINAL</span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[
+                { name: 'Supabase (Auth + DB)', status: 'online', health: '99.9%', latency: '12ms', icon: Database, color: 'emerald', desc: 'Autenticación y almacenamiento de datos' },
+                { name: 'Vercel (CDN + Deploy)', status: 'online', health: '100%', latency: '45ms', icon: Globe, color: 'cyan', desc: 'Despliegue y edge functions' },
+                { name: 'GitHub (Source Control)', status: 'online', health: '100%', latency: '80ms', icon: GitBranch, color: 'purple', desc: 'Repositorios y CI/CD' },
+                { name: 'Oracle Cloud (Compute)', status: 'online', health: '99.8%', latency: '120ms', icon: Server, color: 'blue', desc: 'Instancias de cómputo OCI' },
+                { name: 'Gemini AI (Inference)', status: 'online', health: '99.5%', latency: '250ms', icon: Cpu, color: 'amber', desc: 'Motor de IA para auditorías' },
+                { name: 'Edge Functions (WAF)', status: 'online', health: '100%', latency: '8ms', icon: ShieldCheck, color: 'rose', desc: 'Firewall y protección perimetral' },
+              ].map((svc, i) => (
+                <div key={i} className="bg-[#0b1120]/80 border border-white/5 rounded-[2.5rem] p-8 group hover:border-emerald-500/30 transition-all backdrop-blur-xl shadow-2xl relative overflow-hidden">
+                  <div className={`absolute -top-10 -right-10 w-32 h-32 bg-${svc.color}-500/10 blur-[60px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700`} />
+                  
+                  <div className="relative z-10">
+                    <div className="flex justify-between items-start mb-8">
+                      <div className={`p-4 bg-${svc.color}-500/10 border border-${svc.color}-500/20 rounded-2xl group-hover:scale-110 transition-transform shadow-inner`}>
+                        <svc.icon className={`w-7 h-7 text-${svc.color}-400`} />
+                      </div>
+                      <div className="flex flex-col items-end">
+                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-pulse" />
+                        <span className="text-[7px] text-emerald-400 font-mono mt-1 uppercase tracking-widest">LIVE</span>
+                      </div>
+                    </div>
+                    
+                    <h4 className="text-base font-black text-white mb-1 uppercase tracking-tighter leading-tight">{svc.name}</h4>
+                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-8">{svc.desc}</p>
+
+                    <div className="grid grid-cols-2 gap-4 mb-4">
+                      <div className="bg-[#020617]/50 rounded-xl p-3 border border-white/5">
+                        <p className="text-[7px] text-slate-600 font-black uppercase tracking-widest mb-1">HEALTH</p>
+                        <p className="text-lg font-black text-emerald-400">{svc.health}</p>
+                      </div>
+                      <div className="bg-[#020617]/50 rounded-xl p-3 border border-white/5">
+                        <p className="text-[7px] text-slate-600 font-black uppercase tracking-widest mb-1">LATENCY</p>
+                        <p className="text-lg font-black text-cyan-400">{svc.latency}</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-[10px] font-black">
+                        <span className="text-slate-500 uppercase tracking-widest">UPTIME_30D</span>
+                        <span className="text-emerald-400 font-mono">{svc.health}</span>
+                      </div>
+                      <div className="h-2 w-full bg-[#020617] rounded-full overflow-hidden border border-white/5 p-[1px]">
+                        <div className="bg-gradient-to-r from-emerald-600 to-cyan-500 h-full rounded-full shadow-[0_0_10px_rgba(16,185,129,0.3)]" style={{ width: svc.health }} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         )}

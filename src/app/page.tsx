@@ -60,6 +60,16 @@ export default function LandingPage() {
       shadow: 'group-hover:shadow-[0_0_30px_rgba(16,185,129,0.3)]',
       border: 'group-hover:border-emerald-500/50',
       href: '/login?role=teacher'
+    },
+    {
+      id: 'admin',
+      title: 'Administrador (NOC)',
+      desc: 'Mando de Simulación Global y telemetría de infraestructura crítica.',
+      icon: ShieldCheck,
+      color: 'from-slate-600 to-slate-400',
+      shadow: 'group-hover:shadow-[0_0_30px_rgba(148,163,184,0.3)]',
+      border: 'group-hover:border-slate-500/50',
+      href: '/admin-panel'
     }
   ]
 
@@ -82,6 +92,7 @@ export default function LandingPage() {
           <Link href="/genesis" className="hover:text-emerald-400 transition-colors uppercase tracking-widest">Génesis</Link>
           <Link href="/curriculum" className="hover:text-emerald-400 transition-colors uppercase tracking-widest">Programas</Link>
           <Link href="/docs" className="hover:text-emerald-400 transition-colors uppercase tracking-widest">Docs</Link>
+          <Link href="/admin-panel" className="bg-white/5 px-4 py-2 rounded-lg hover:text-white border border-white/10 hover:border-white/20 transition-all font-bold text-[10px] uppercase tracking-widest">NOC_Admin</Link>
         </div>
       </nav>
 
@@ -108,7 +119,8 @@ export default function LandingPage() {
         </div>
 
         {/* Identity Selector Grid (The Core Addition) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto mb-32">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 max-w-7xl mx-auto mb-32">
+
           {roles.map((role) => {
             const Icon = role.icon
             const isHovered = hoveredRole === role.id

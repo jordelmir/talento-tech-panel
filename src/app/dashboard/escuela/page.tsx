@@ -7,7 +7,8 @@ import {
   LogOut, Star, Trophy, Target, Gamepad2, 
   Map, Sparkles, BookOpen, GraduationCap,
   Search, Cpu, Rocket, ShieldCheck, Loader2,
-  Heart, Zap, Crown, User, Users, Medal, ChevronRight, Activity, Terminal
+  Heart, Zap, Crown, User, Users, Medal, ChevronRight, Activity, Terminal,
+  GitBranch, GitCommit, Database, CloudRain, CheckCircle2, Globe, Wrench, MonitorSmartphone, Code2
 } from 'lucide-react'
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
@@ -30,7 +31,7 @@ export default function EscuelaDashboard() {
   const [isMounted, setIsMounted] = useState(false)
   const activeProfile = useProfileStore((state) => state.activeProfile)
   
-  const [activeTab, setActiveTab] = useState<'mission_control' | 'awards' | 'gear'>('mission_control')
+  const [activeTab, setActiveTab] = useState<'mission_control' | 'repos' | 'stack' | 'awards' | 'gear'>('mission_control')
   const [playerName, setPlayerName] = useState('Super Creador')
   
   // Real Data states
@@ -64,7 +65,7 @@ export default function EscuelaDashboard() {
   return (
     <div className="min-h-screen bg-[#020617] text-slate-300 font-mono selection:bg-orange-500/30 overflow-x-hidden">
       
-      {/* Background Dots Grid - Universidad Style */}
+      {/* Background Dots Grid */}
       <div className="fixed inset-0 pointer-events-none z-0 opacity-20" 
            style={{ 
              backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', 
@@ -78,7 +79,7 @@ export default function EscuelaDashboard() {
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-pink-600/10 blur-[140px] rounded-full" />
       </div>
 
-      {/* Navbar Escolar High-Fidelity */}
+      {/* Navbar Escolar */}
       <nav className="bg-[#0f172a]/95 backdrop-blur-xl border-b border-white/5 px-4 md:px-8 py-3 flex justify-between items-center sticky top-0 z-50 shadow-2xl">
         <div className="flex items-center gap-4 md:gap-10">
           <div className="flex items-center gap-3 group cursor-pointer" onClick={() => setActiveTab('mission_control')}>
@@ -96,6 +97,8 @@ export default function EscuelaDashboard() {
           <div className="hidden lg:flex items-center gap-1 bg-white/5 p-1 rounded-xl border border-white/10">
             {[
               { id: 'mission_control', label: 'Misiones', icon: Gamepad2, color: 'text-orange-400' },
+              { id: 'repos', label: 'Mis Proyectos', icon: GitBranch, color: 'text-emerald-400' },
+              { id: 'stack', label: 'Mi Taller', icon: Wrench, color: 'text-cyan-400' },
               { id: 'awards', label: 'Premios', icon: Trophy, color: 'text-yellow-400' },
               { id: 'gear', label: 'Equipo', icon: Sparkles, color: 'text-pink-400' },
             ].map((tab) => (
@@ -139,6 +142,8 @@ export default function EscuelaDashboard() {
       <div className="lg:hidden flex justify-around bg-[#0f172a]/95 border-b border-white/5 p-2 sticky top-[65px] z-40 backdrop-blur-md">
         {[
           { id: 'mission_control', icon: Gamepad2, color: 'text-orange-400' },
+          { id: 'repos', icon: GitBranch, color: 'text-emerald-400' },
+          { id: 'stack', icon: Wrench, color: 'text-cyan-400' },
           { id: 'awards', icon: Trophy, color: 'text-yellow-400' },
           { id: 'gear', icon: Sparkles, color: 'text-pink-400' },
         ].map((tab) => (
@@ -156,10 +161,9 @@ export default function EscuelaDashboard() {
         
         {activeTab === 'mission_control' && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8 md:space-y-10">
-            {/* Hero Section - Universidad Style */}
+            {/* Hero Section */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                <div className="lg:col-span-2 bg-[#0b1120]/80 border border-white/10 rounded-[2.5rem] p-6 md:p-10 text-white relative overflow-hidden shadow-2xl group backdrop-blur-xl">
-                  {/* Decorative corner */}
                   <div className="absolute top-0 right-0 w-24 h-24 bg-orange-500/10 -translate-y-10 translate-x-10 rotate-45 group-hover:rotate-0 transition-transform duration-700" />
                   
                   <div className="relative z-10">
@@ -218,7 +222,7 @@ export default function EscuelaDashboard() {
                   </div>
                </div>
 
-               {/* Squad Sidebar - Universidad Style */}
+               {/* Squad Sidebar */}
                <div className="bg-[#0b1120]/80 border border-white/10 rounded-[2.5rem] p-6 md:p-8 backdrop-blur-xl shadow-2xl flex flex-col justify-between group overflow-hidden">
                   <div className="relative z-10">
                     <div className="flex items-center justify-between mb-8">
@@ -263,7 +267,7 @@ export default function EscuelaDashboard() {
                </div>
             </div>
 
-            {/* Missions Section - Universidad Multi-gradient Style */}
+            {/* Missions Section */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
                <div className="bg-[#0b1120]/80 border border-white/10 rounded-[2.5rem] p-6 md:p-10 shadow-2xl backdrop-blur-xl relative group">
                   <div className="absolute top-10 right-10 p-4 border border-orange-500/20 rounded-2xl bg-orange-500/5 rotate-12 group-hover:rotate-0 transition-transform duration-500">
@@ -339,6 +343,185 @@ export default function EscuelaDashboard() {
                     HISTORIAL_COMPLETO_SYSTEM
                   </button>
                </div>
+            </div>
+          </div>
+        )}
+
+        {/* ═══════════════════════════════════════════════════════════════════════ */}
+        {/* MIS PROYECTOS (REPOS) - KIDS EDITION                                  */}
+        {/* ═══════════════════════════════════════════════════════════════════════ */}
+        {activeTab === 'repos' && (
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
+            {/* Header */}
+            <div className="bg-[#0b1120]/80 border border-white/10 rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden backdrop-blur-xl group shadow-2xl">
+              <div className="absolute top-0 right-0 w-48 h-48 bg-emerald-500/10 blur-[80px] rounded-full -translate-y-10 translate-x-10" />
+              <div className="relative z-10">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
+                  <div>
+                    <div className="flex items-center gap-2 px-4 py-1.5 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-[9px] font-black uppercase tracking-[0.2em] text-emerald-400 mb-4 w-fit">
+                      <GitBranch className="w-3 h-3" /> LABORATORIO_CREATIVO
+                    </div>
+                    <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-white uppercase italic leading-[0.9]">
+                      MIS <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">PROYECTOS_</span>
+                    </h2>
+                    <p className="text-slate-500 text-sm mt-3 font-bold uppercase tracking-[0.2em]">
+                      ¡Cada proyecto es una nueva aventura! Sube tu código aquí 🚀
+                    </p>
+                  </div>
+                  <button className="bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white font-black py-4 px-8 rounded-2xl transition-all shadow-[0_0_30px_rgba(16,185,129,0.3)] text-[10px] uppercase tracking-widest flex items-center gap-3 border border-emerald-400/30">
+                    <Rocket className="w-4 h-4" />
+                    Nuevo Proyecto
+                  </button>
+                </div>
+
+                {/* Stats Row */}
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="bg-white/5 border border-white/5 rounded-2xl p-5 text-center group/stat hover:border-emerald-500/30 transition-all">
+                    <Star className="w-8 h-8 text-yellow-400 fill-yellow-400 mx-auto mb-3 group-hover/stat:animate-bounce" />
+                    <p className="text-2xl font-black text-white italic">{submissions.length}</p>
+                    <p className="text-[8px] text-slate-500 uppercase tracking-widest font-black mt-1">PROYECTOS_TOTAL</p>
+                  </div>
+                  <div className="bg-white/5 border border-white/5 rounded-2xl p-5 text-center group/stat hover:border-orange-500/30 transition-all">
+                    <Trophy className="w-8 h-8 text-orange-400 mx-auto mb-3 group-hover/stat:animate-bounce" />
+                    <p className="text-2xl font-black text-white italic">{submissions.length * 150}</p>
+                    <p className="text-[8px] text-slate-500 uppercase tracking-widest font-black mt-1">XP_GANADO</p>
+                  </div>
+                  <div className="bg-white/5 border border-white/5 rounded-2xl p-5 text-center group/stat hover:border-pink-500/30 transition-all">
+                    <CheckCircle2 className="w-8 h-8 text-emerald-400 mx-auto mb-3 group-hover/stat:animate-bounce" />
+                    <p className="text-2xl font-black text-emerald-400 italic">100%</p>
+                    <p className="text-[8px] text-slate-500 uppercase tracking-widest font-black mt-1">TASA_ÉXITO</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Project Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {submissions.map((sub, i) => (
+                <div key={i} className="bg-[#0b1120]/80 border border-white/5 rounded-[2rem] p-8 group hover:border-emerald-500/30 hover:-translate-y-1 transition-all shadow-2xl backdrop-blur-xl relative overflow-hidden">
+                  <div className="absolute top-4 right-4">
+                    <div className="flex items-center gap-1">
+                      {[1,2,3].map(s => <Star key={s} className="w-3 h-3 text-yellow-400 fill-yellow-400" />)}
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-5 mb-6">
+                    <div className="w-14 h-14 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 border border-emerald-500/30 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-[0_0_20px_rgba(16,185,129,0.1)]">
+                      <GitCommit className="w-7 h-7 text-emerald-400" />
+                    </div>
+                    <div>
+                      <h4 className="font-black text-lg text-white group-hover:text-emerald-400 transition-colors uppercase tracking-tighter leading-none">
+                        {sub.repository_url.split('/').pop()}
+                      </h4>
+                      <p className="text-[9px] text-slate-500 font-mono mt-1.5 truncate max-w-[250px]">{sub.repository_url}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between mb-6">
+                    <span className="text-[10px] font-black text-emerald-400 bg-emerald-500/10 px-4 py-2 rounded-xl border border-emerald-500/20 uppercase tracking-widest flex items-center gap-2">
+                      <CheckCircle2 className="w-3 h-3" /> APROBADO
+                    </span>
+                    <span className="text-[9px] text-orange-400 font-black bg-orange-500/10 px-3 py-1.5 rounded-lg border border-orange-500/20">
+                      +150 XP ⭐
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-4 border-t border-white/5">
+                    <span className="text-[8px] text-slate-600 font-mono uppercase tracking-widest">
+                      {new Date(sub.created_at).toLocaleDateString()}
+                    </span>
+                    <button className="flex items-center gap-2 text-[10px] font-black text-white bg-white/5 hover:bg-white/10 px-4 py-2 rounded-xl border border-white/10 transition-all uppercase tracking-widest">
+                      Ver Proyecto <ChevronRight className="w-3 h-3" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+
+              {submissions.length === 0 && (
+                <div className="col-span-2 bg-[#0b1120]/80 border border-dashed border-white/10 rounded-[2.5rem] p-16 flex flex-col items-center justify-center text-center">
+                  <div className="w-20 h-20 bg-orange-500/10 border border-orange-500/20 rounded-3xl flex items-center justify-center mb-6 animate-bounce">
+                    <Rocket className="w-10 h-10 text-orange-400" />
+                  </div>
+                  <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter mb-3">¡Tu Aventura Empieza Aquí!</h3>
+                  <p className="text-slate-500 text-sm font-bold uppercase tracking-widest max-w-sm">
+                    Sube tu primer proyecto y gana <span className="text-orange-400">+500 XP</span> de bonificación
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* ═══════════════════════════════════════════════════════════════════════ */}
+        {/* MI TALLER (INFRAESTRUCTURA) - KIDS EDITION                            */}
+        {/* ═══════════════════════════════════════════════════════════════════════ */}
+        {activeTab === 'stack' && (
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
+            <div className="text-center mb-6">
+              <div className="w-20 h-20 bg-cyan-500/10 border border-cyan-500/20 rounded-[2rem] flex items-center justify-center mx-auto mb-6 shadow-[0_0_40px_rgba(6,182,212,0.15)]">
+                <Wrench className="w-10 h-10 text-cyan-400 animate-pulse" />
+              </div>
+              <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-white uppercase italic leading-[0.9]">
+                MI <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">TALLER_DIGITAL_</span>
+              </h2>
+              <p className="text-slate-500 text-sm mt-4 font-bold uppercase tracking-[0.2em]">
+                ¡Estas son tus herramientas de superhéroe! 🛠️
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[
+                { name: '🌐 Mi Navegador Web', desc: 'Tu ventana al mundo digital', status: 'Dominado', usage: '95%', color: 'from-blue-500 to-indigo-500', icon: Globe, level: 'MASTER' },
+                { name: '✏️ Editor de Código', desc: 'Donde escribes tu magia', status: 'Aprendiendo', usage: '60%', color: 'from-purple-500 to-pink-500', icon: Code2, level: 'PRO' },
+                { name: '🐙 GitHub', desc: 'Tu cofre de proyectos', status: 'Explorando', usage: '40%', color: 'from-emerald-500 to-cyan-500', icon: GitBranch, level: 'ROOKIE' },
+                { name: '🚀 Vercel Deploy', desc: 'Lanza tu sitio web al mundo', status: 'Nuevo', usage: '15%', color: 'from-orange-500 to-red-500', icon: Rocket, level: 'RECRUIT' },
+                { name: '💾 Base de Datos', desc: 'Donde guardas tus datos secretos', status: 'Próximamente', usage: '5%', color: 'from-amber-500 to-yellow-500', icon: Database, level: 'LOCKED' },
+                { name: '🤖 Asistente IA', desc: 'Tu compañero robot inteligente', status: 'Activo', usage: '70%', color: 'from-cyan-500 to-teal-500', icon: Cpu, level: 'ALLY' },
+              ].map((tool, i) => (
+                <div key={i} className={`bg-[#0b1120]/80 border border-white/5 rounded-[2.5rem] p-8 group transition-all duration-500 hover:-translate-y-2 shadow-2xl backdrop-blur-xl relative overflow-hidden ${tool.usage === '5%' ? 'opacity-40' : 'hover:border-white/30'}`}>
+                  {/* Glow */}
+                  <div className={`absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-br ${tool.color} blur-[60px] opacity-0 group-hover:opacity-20 transition-opacity duration-700`} />
+                  
+                  <div className="relative z-10">
+                    <div className="flex justify-between items-start mb-6">
+                      <div className={`p-4 rounded-2xl bg-gradient-to-br ${tool.color} shadow-lg shadow-black/30 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}>
+                        <tool.icon className="w-7 h-7 text-white" />
+                      </div>
+                      <span className={`text-[9px] font-black px-3 py-1.5 rounded-full border uppercase tracking-widest ${
+                        tool.level === 'MASTER' ? 'bg-yellow-500/10 text-yellow-400 border-yellow-500/30' :
+                        tool.level === 'PRO' ? 'bg-purple-500/10 text-purple-400 border-purple-500/30' :
+                        tool.level === 'ALLY' ? 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30' :
+                        tool.level === 'LOCKED' ? 'bg-slate-800 text-slate-600 border-slate-700' :
+                        'bg-orange-500/10 text-orange-400 border-orange-500/30'
+                      }`}>
+                        {tool.level}
+                      </span>
+                    </div>
+
+                    <h4 className="text-lg font-black text-white mb-1 leading-tight">{tool.name}</h4>
+                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-6">{tool.desc}</p>
+
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
+                        <span className="text-slate-500">Dominio</span>
+                        <span className="text-white">{tool.usage}</span>
+                      </div>
+                      <div className="h-3 w-full bg-[#020617] rounded-full overflow-hidden border border-white/5 p-[1px]">
+                        <div className={`bg-gradient-to-r ${tool.color} h-full rounded-full transition-all duration-1000 shadow-[0_0_10px_rgba(255,255,255,0.1)]`} style={{ width: tool.usage }} />
+                      </div>
+                    </div>
+
+                    <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
+                      <span className="text-[8px] text-slate-600 font-mono uppercase tracking-widest">{tool.status}</span>
+                      {tool.level !== 'LOCKED' && (
+                        <button className="text-[9px] font-black text-orange-400 hover:text-white transition-colors uppercase tracking-widest flex items-center gap-1">
+                          Practicar <ChevronRight className="w-3 h-3" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         )}
