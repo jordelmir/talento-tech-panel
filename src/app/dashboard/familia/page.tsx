@@ -20,9 +20,57 @@ export default function FamiliaDashboard() {
   const activeProfile = useProfileStore((state) => state.activeProfile)
   const [activeTab, setActiveTab] = useState<'overview' | 'progress' | 'projects' | 'alerts'>('overview')
 
+  const [childData, setChildData] = useState<any>(null)
+
   useEffect(() => {
     setIsMounted(true)
+    fetchFamilyData()
   }, [])
+
+  const fetchFamilyData = async () => {
+    const supabase = createClient()
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session?.user) return
+
+    // Find linked child
+    const { data: links } = await supabase
+      .from('family_links')
+      .select('student_id')
+      .eq('parent_id', session.user.id)
+      .eq('status', 'active')
+      .single()
+      
+    if (links?.student_id) {
+      // Fetch child profile
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select(`
+          full_name,
+          github_username,
+          user_roles(institutions(level))
+        `)
+        .eq('id', links.student_id)
+        .single()
+        
+      if (profile) {
+        setChildData({
+          name: profile.full_name,
+          username: profile.github_username,
+          level: (profile.user_roles as any)?.[0]?.institutions?.level || 'Colegio',
+          xp: 8500, // Still mocked for now as XP is complex logic
+          rank: 3,
+          streak: 12,
+          completedModules: 8,
+          totalModules: 12,
+          weeklyHours: 14.5,
+          lastActive: '5m ago',
+          projectsCount: 4,
+          certificatesCount: 2,
+        })
+        return
+      }
+    }
+  }
 
   const isAdmin = activeProfile?.includes('Simulado') || activeProfile === 'Administrador'
 
@@ -35,9 +83,10 @@ export default function FamiliaDashboard() {
 
   if (!isMounted) return null
 
-  // Mock child data
-  const child = {
+  // Fallback to mock child data if no link exists (for demo)
+  const child = childData || {
     name: 'Santiago Mendoza',
+    username: 'santiago-mendoza',
     level: 'Colegio',
     xp: 4200,
     rank: 8,
@@ -324,7 +373,7 @@ export default function FamiliaDashboard() {
                   SUS <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-rose-400">PROYECTOS_</span>
                 </h2>
               </div>
-              <button onClick={() => router.push('/portfolio/carlos-mendoza')} className="flex items-center gap-2 bg-pink-600/10 hover:bg-pink-600/20 text-pink-400 border border-pink-500/30 px-5 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">
+              <button onClick={() => router.push(`/portfolio/${child.username}`)} className="flex items-center gap-2 bg-pink-600/10 hover:bg-pink-600/20 text-pink-400 border border-pink-500/30 px-5 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">
                 <ExternalLink className="w-3.5 h-3.5" /> Ver_Portafolio_Público
               </button>
             </div>
