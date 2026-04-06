@@ -18,6 +18,7 @@ import { useProfileStore } from '@/store/useProfileStore'
 import Footer from '@/components/Footer'
 import { getTeacherDashboardData } from '../actions'
 import { useToast } from '@/components/ToastProvider'
+import RepoSubmit from '@/components/RepoSubmit'
 
 const performanceData = [
   { week: 'Sem 1', avg: 65, participation: 80 },
@@ -202,7 +203,12 @@ export default function ProfesoresDashboard() {
                         <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest leading-none mb-1">Total_Nodes</p>
                         <p className="text-xl font-black text-white italic">{dataLoading ? '...' : students.length}</p>
                      </div>
-                  </div>
+                   </div>
+               </div>
+               
+               <div className="mt-8 pt-8 border-t border-white/10 w-full max-w-lg">
+                 <p className="text-[10px] text-cyan-400 uppercase tracking-widest font-black mb-3 flex items-center gap-2"><Globe className="w-3 h-3" /> ZONA DOCENTE ACTIVA. SUBIR REPOSITORIO DE REFERENCIA:</p>
+                 <RepoSubmit userId={'simulated-docente'} variant="compact" onSubmitSuccess={() => showToast('¡Repositorio de referencia propagado a la cohorte!', 'success')} />
                </div>
             </div>
 

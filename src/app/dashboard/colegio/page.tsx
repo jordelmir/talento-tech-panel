@@ -214,6 +214,10 @@ export default function ColegioDashboard() {
                         Ver Mis Repos
                        </button>
                     </div>
+                    
+                    <div className="mt-8 pt-8 border-t border-white/10">
+                      <RepoSubmit userId={userId || 'simulated'} variant="full" onSubmitSuccess={() => showToast('Repositorio enviado con éxito', 'success')} />
+                    </div>
                   </div>
                </div>
 

@@ -229,6 +229,10 @@ export default function EscuelaDashboard() {
                                Mapa Táctico
                              </button>
                           </div>
+
+                          <div className="mt-8 pt-8 border-t border-white/10 w-full max-w-sm">
+                            <RepoSubmit userId={userId || 'simulated'} variant="compact" onSubmitSuccess={() => showToast('¡Proyecto subido con éxito!', 'success')} />
+                          </div>
                        </div>
                        
                        <div className="w-full md:w-auto p-10 bg-[#020617]/40 backdrop-blur-2xl border border-white/5 rounded-[2.5rem] flex flex-col items-center shadow-2xl text-center min-w-[240px] group-hover:border-orange-500/20 transition-all">

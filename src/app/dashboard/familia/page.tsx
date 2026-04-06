@@ -13,6 +13,7 @@ import { useProfileStore } from '@/store/useProfileStore'
 import Footer from '@/components/Footer'
 import StreakTracker from '@/components/StreakTracker'
 import { useToast } from '@/components/ToastProvider'
+import RepoSubmit from '@/components/RepoSubmit'
 
 export default function FamiliaDashboard() {
   const router = useRouter()
@@ -216,6 +217,10 @@ export default function FamiliaDashboard() {
                   Ha completado <span className="text-emerald-400 font-black">{child.completedModules}/{child.totalModules}</span> módulos 
                   y está en el <span className="text-amber-400 font-black">Top #{child.rank}</span> de su grupo. 🎉
                 </p>
+                <div className="mt-8 pt-6 border-t border-white/5 w-full max-w-lg">
+                  <p className="text-[10px] text-pink-400 uppercase tracking-widest font-black mb-3">ZONA FAMILIAR ACTIVA. COMPARTE REPOSITORIOS/RECURSOS: </p>
+                  <RepoSubmit userId={'simulated-familia'} variant="compact" onSubmitSuccess={() => showToast('¡Recurso enviado exitosamente al portafolio!', 'success')} />
+                </div>
               </div>
             </div>
 

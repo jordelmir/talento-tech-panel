@@ -259,6 +259,9 @@ export default function UniversidadDashboard() {
                     <p className="text-3xl font-black text-emerald-400 tracking-tighter">14<span className="text-xs ml-1">ms</span></p>
                   </div>
                 </div>
+                <div className="mt-8 pt-8 border-t border-white/5 w-full">
+                  <RepoSubmit userId={userId || 'simulated'} variant="full" onSubmitSuccess={() => showToast('Sistema subido para análisis', 'success')} />
+                </div>
               </div>
 
               <div className="bg-[#0b1120]/80 border border-white/10 rounded-2xl p-6 flex flex-col justify-between backdrop-blur-xl group hover:border-purple-500/30 transition-all">
