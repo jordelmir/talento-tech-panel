@@ -84,11 +84,11 @@ export default function UniversidadDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[#020617] text-slate-300 font-mono selection:bg-purple-500/30">
+    <div className="min-h-screen bg-[#020617] text-slate-300 font-mono selection:bg-purple-500/30 overflow-x-hidden">
       
       {/* Navbar Universitario (Dark Hacker Mode) */}
-      <nav className="bg-[#0f172a]/95 backdrop-blur-xl border-b border-white/5 px-6 py-4 flex justify-between items-center sticky top-0 z-50 shadow-2xl">
-        <div className="flex items-center gap-8">
+      <nav className="bg-[#0f172a]/95 backdrop-blur-xl border-b border-white/5 px-4 md:px-6 py-3 md:py-4 flex justify-between items-center sticky top-0 z-50 shadow-2xl">
+        <div className="flex items-center gap-4 md:gap-8">
           <div className="flex items-center gap-3">
             <div className="bg-purple-600/20 border border-purple-500/50 p-2 rounded-lg text-purple-400">
               <Cpu className="w-5 h-5" />
@@ -123,7 +123,7 @@ export default function UniversidadDashboard() {
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 md:gap-4">
           {isAdmin && (
             <button 
               onClick={() => router.push('/admin-panel')}
@@ -142,6 +142,26 @@ export default function UniversidadDashboard() {
           </button>
         </div>
       </nav>
+
+      {/* Mobile Nav Tabs */}
+      <div className="lg:hidden flex justify-around bg-[#0f172a]/95 border-b border-white/5 p-2 sticky top-[57px] z-40 backdrop-blur-md">
+        {[
+          { id: 'overview', icon: Activity },
+          { id: 'repos', icon: GitBranch },
+          { id: 'live_code', icon: Code2 },
+          { id: 'mentors', icon: Users },
+          { id: 'stack', icon: Database },
+          { id: 'settings', icon: Zap },
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id as any)}
+            className={`p-3 rounded-lg ${activeTab === tab.id ? 'bg-purple-500/20 text-purple-400' : 'text-slate-500'}`}
+          >
+            <tab.icon className="w-5 h-5" />
+          </button>
+        ))}
+      </div>
 
       {/* Toast Notification */}
       {toast && (

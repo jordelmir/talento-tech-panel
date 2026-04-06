@@ -348,7 +348,7 @@ export default function ProfesoresDashboard() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   {[
                     { label: 'TOTAL_REPOS', value: students.length > 0 ? (students.length * 3).toString() : '0', color: 'text-cyan-400' },
                     { label: 'ACTIVE_PUSHES_24H', value: '12', color: 'text-emerald-400' },

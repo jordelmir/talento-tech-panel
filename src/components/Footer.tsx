@@ -11,9 +11,9 @@ export default function Footer({ variant = 'landing' }: FooterProps) {
   const isDashboard = variant === 'dashboard'
   
   return (
-    <footer className={`border-t border-white/5 py-8 ${isDashboard ? 'bg-[#0A0A0A]/40 backdrop-blur-xl mt-auto' : 'bg-[#050505] mt-20'}`}>
-      <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-        <div className="flex items-center gap-6">
+    <footer className={`border-t border-white/5 py-6 md:py-8 ${isDashboard ? 'bg-[#0A0A0A]/40 backdrop-blur-xl mt-auto' : 'bg-[#050505] mt-20'}`}>
+      <div className="max-w-7xl mx-auto px-4 md:px-6 flex flex-col md:flex-row justify-between items-center gap-4 md:gap-6">
+        <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 md:gap-6">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <span className="font-bold text-sm tracking-widest uppercase text-gray-300">Talento Tech '26</span>
@@ -32,7 +32,7 @@ export default function Footer({ variant = 'landing' }: FooterProps) {
           </div>
         </div>
 
-        <div className="flex items-center gap-8">
+        <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8">
           <div className="flex items-center gap-2 text-gray-600 text-[10px] font-mono tracking-widest uppercase font-bold opacity-60">
             <Globe className="w-3 h-3" />
             COLOMBIA_REGION_IAD1

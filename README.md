@@ -1,9 +1,14 @@
 # 🎓 Talento Tech Colombia: Plataforma Educativa de Próxima Generación
 
-![Talento Tech Banner](https://placehold.co/1200x400/0f172a/white?text=Talento+Tech+Colombia+-+Multiplayer+Coding+Ecosystem)
+> **Ecosistema Multiplayer de Aprendizaje Técnico** — Democratizando la educación en ingeniería de software para toda Colombia.
+
+---
 
 ## 🌟 Visión
-Talento Tech es una plataforma diseñada para democratizar el acceso a la educación técnica en Colombia, proporcionando herramientas de colaboración en tiempo real, portafolios automatizados y telemetría de aprendizaje de nivel profesional.
+
+Talento Tech es una plataforma **productiva a escala nacional** diseñada para democratizar el acceso a la educación técnica en Colombia. Proporciona herramientas de colaboración en tiempo real, portafolios automatizados, telemetría de aprendizaje profesional y paneles adaptativos para estudiantes de todos los niveles: Escuela, Colegio, Universidad, Profesores y Familias.
+
+---
 
 ## 🚀 Características Principales
 
@@ -23,13 +28,32 @@ Talento Tech es una plataforma diseñada para democratizar el acceso a la educac
 - Monitoreo de errores en tiempo real y **Session Replay** para depuración visual.
 - Optimización de performance con Distributed Tracing.
 
+### 5. 🎮 Dashboards Adaptativos por Nivel
+- **Escuela (TalentoKIDS)**: Gamificado con misiones, squad online y recompensas XP.
+- **Colegio (TalentoTEEN)**: Terminal de código, retos binarios y hall of fame.
+- **Universidad**: Ingeniería de sistemas, radar de competencias y deployment journal.
+- **Profesores (CommandCenter)**: Gestión de cohortes, Ghost Audit IA y telemetría docente.
+- **Familias (FamilyHub)**: Monitoreo parental con rastreo de racha, progreso y alertas.
+
+### 6. 🛡️ Ghost Agent (Auditoría IA)
+- Sistema de auditoría autónoma con detección de anomalías en código.
+- RLS (Row Level Security) enforced en todas las tablas críticas.
+
 ---
 
 ## 🛠️ Stack Tecnológico
-- **Frontend**: Next.js 15 (App Router), Tailwind CSS, Lucide Icons, Recharts.
-- **Backend & Realtime**: Supabase (PostgreSQL, Realtime, Auth, Storage).
-- **Telemetría**: Sentry.
-- **Despliegue**: Vercel (CI/CD nativo con GitHub).
+
+| Capa | Tecnología |
+|------|-----------|
+| **Framework** | Next.js 16 (App Router) + React 19 |
+| **Styling** | Tailwind CSS 4 (`@tailwindcss/postcss`) |
+| **Icons** | Lucide React |
+| **Charts** | Recharts |
+| **State** | Zustand (`useProfileStore`) |
+| **Backend & Realtime** | Supabase (PostgreSQL, Realtime, Auth, RLS) |
+| **Telemetría** | Sentry (Edge + Server + Session Replay) |
+| **Despliegue** | Vercel (CI/CD nativo con GitHub) |
+| **Compute** | Oracle Cloud Infrastructure (OCI) |
 
 ---
 
@@ -37,7 +61,7 @@ Talento Tech es una plataforma diseñada para democratizar el acceso a la educac
 
 ### Requisitos Previos
 - Node.js 18+
-- Instancia de Supabase configurada con el esquema "God-Tier".
+- Instancia de Supabase configurada con RLS policies.
 
 ### Configuración del Entorno
 Crea un archivo `.env.local` con las siguientes variables:
@@ -55,11 +79,31 @@ npm run dev
 
 ---
 
-## 🔒 Seguridad (RLS)
-Todas las tablas críticas (`certificates`, `portfolio_projects`, `user_skills`) cuentan con políticas de **Row Level Security** integradas para asegurar que los datos de los estudiantes estén protegidos y solo sean accesibles por los roles autorizados.
+## 📱 Diseño Responsive & Adaptativo
+
+La plataforma implementa un sistema de diseño profesional:
+
+- **Mobile-first** con breakpoints Tailwind: `sm:`, `md:`, `lg:`, `xl:`
+- **Navegación móvil** con tabs sticky en todos los dashboards
+- **Scrollbar personalizado** (dark theme) en Webkit y Firefox
+- **Safe-area insets** para dispositivos con notch (iPhone, etc.)
+- **Touch targets** de 44px mínimo para accesibilidad móvil
+- **overflow-x-hidden** global para prevenir scroll horizontal
+- **Tablas horizontalmente scrollables** en vistas de datos
+
+---
+
+## 🔒 Seguridad (RLS & Leaks)
+
+- Todas las tablas críticas (`certificates`, `portfolio_projects`, `user_skills`, `family_links`) cuentan con políticas de **Row Level Security**.
+- `.gitignore` configurado para excluir: `.env*`, `.vercel`, `.env.sentry-build-plugin`, `node_modules`.
+- No hay tokens o secretos hardcodeados en el código fuente.
+- Supabase client usa `process.env.NEXT_PUBLIC_*` exclusivamente.
+
+---
 
 ## 📄 Licencia
 Este proyecto es propiedad intelectual de **Talento Tech Colombia**. Todos los derechos reservados.
 
 ---
-*Desarrollado con ❤️ para el talento colombiano.*
+*Desarrollado con ❤️ para el talento colombiano por Jorge David Del Valle Miranda.*

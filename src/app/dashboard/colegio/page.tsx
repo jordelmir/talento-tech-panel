@@ -367,7 +367,7 @@ export default function ColegioDashboard() {
                 </div>
 
                 {/* Stats */}
-                <div className="grid grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   {[
                     { label: 'REPOS_TOTAL', value: submissions.length.toString(), color: 'text-purple-400' },
                     { label: 'COMMITS_WEEK', value: '47', color: 'text-indigo-400' },
