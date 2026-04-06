@@ -18,6 +18,9 @@ import {
 import { useProfileStore } from '@/store/useProfileStore'
 import Footer from '@/components/Footer'
 import { getUserMetrics } from '../actions'
+import StreakTracker from '@/components/StreakTracker'
+import CodePlayground from '@/components/CodePlayground'
+import MentorshipPanel from '@/components/MentorshipPanel'
 
 const mockCommits = [
   { day: 'Lun', commits: 5 },
@@ -36,7 +39,7 @@ export default function ColegioDashboard() {
   const [isMounted, setIsMounted] = useState(false)
   const activeProfile = useProfileStore((state) => state.activeProfile)
   
-  const [activeTab, setActiveTab] = useState<'overview' | 'repos' | 'stack' | 'missions' | 'ranking'>('overview')
+  const [activeTab, setActiveTab] = useState<'overview' | 'repos' | 'live_code' | 'mentors' | 'stack' | 'missions' | 'ranking'>('overview')
   const [userName, setUserName] = useState('Cadete')
 
   // Real Data states
@@ -105,6 +108,8 @@ export default function ColegioDashboard() {
             {[
               { id: 'overview', label: 'Terminal', icon: LayoutDashboard },
               { id: 'repos', label: 'Code_Vault', icon: GitBranch },
+              { id: 'live_code', label: 'Live_Code', icon: Code2 },
+              { id: 'mentors', label: 'Mentors', icon: Users },
               { id: 'stack', label: 'Tech_Stack', icon: Database },
               { id: 'missions', label: 'Retos_Binarios', icon: Zap },
               { id: 'ranking', label: 'Hall_of_Fame', icon: Trophy },
@@ -150,6 +155,8 @@ export default function ColegioDashboard() {
         {[
           { id: 'overview', icon: LayoutDashboard },
           { id: 'repos', icon: GitBranch },
+          { id: 'live_code', icon: Code2 },
+          { id: 'mentors', icon: Users },
           { id: 'stack', icon: Database },
           { id: 'missions', icon: Zap },
           { id: 'ranking', icon: Trophy },
@@ -168,6 +175,7 @@ export default function ColegioDashboard() {
         
         {activeTab === 'overview' && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
+            <StreakTracker variant="full" accentColor="purple" />
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                <div className="lg:col-span-2 bg-[#0b1120]/80 border border-white/10 rounded-[2.5rem] p-6 md:p-10 backdrop-blur-xl relative overflow-hidden group shadow-2xl">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 -translate-y-16 translate-x-16 rotate-45 group-hover:rotate-0 transition-transform duration-1000" />
@@ -298,7 +306,7 @@ export default function ColegioDashboard() {
                       </div>
                    </div>
 
-                   <button className="w-full bg-gradient-to-br from-indigo-900/40 via-purple-900/40 to-[#0b1120]/80 border border-purple-500/20 hover:border-purple-500/40 text-white rounded-[2.5rem] p-10 flex flex-col items-center justify-center gap-6 transition-all group relative overflow-hidden shadow-2xl backdrop-blur-xl group-hover:-translate-y-2">
+                   <button onClick={() => setActiveTab('mentors')} className="w-full bg-gradient-to-br from-indigo-900/40 via-purple-900/40 to-[#0b1120]/80 border border-purple-500/20 hover:border-purple-500/40 text-white rounded-[2.5rem] p-10 flex flex-col items-center justify-center gap-6 transition-all group relative overflow-hidden shadow-2xl backdrop-blur-xl group-hover:-translate-y-2">
                       <div className="absolute top-0 right-0 w-48 h-48 bg-purple-600/10 blur-[60px] rounded-full translate-x-10 -translate-y-10 group-hover:scale-150 transition-transform duration-1000" />
                       
                       <div className="w-20 h-20 bg-purple-600/10 rounded-3xl flex items-center justify-center border border-purple-500/20 group-hover:scale-110 group-hover:border-purple-500/50 transition-all shadow-[0_0_30px_rgba(168,85,247,0.1)] relative">
@@ -316,6 +324,20 @@ export default function ColegioDashboard() {
                    </button>
                 </div>
             </div>
+          </div>
+        )}
+
+        {/* Live Code Addon */}
+        {activeTab === 'live_code' && (
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <CodePlayground accentColor="purple" />
+          </div>
+        )}
+
+        {/* Mentors Addon */}
+        {activeTab === 'mentors' && (
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <MentorshipPanel accentColor="purple" />
           </div>
         )}
 

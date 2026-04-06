@@ -4,13 +4,14 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
 import { useProfileStore } from '@/store/useProfileStore'
-import { Building2, GraduationCap, School, Users, ShieldAlert, Loader2 } from 'lucide-react'
+import { Building2, GraduationCap, School, Users, ShieldAlert, Loader2, Heart } from 'lucide-react'
 
 const PROFILES = [
   { id: 'escuela', label: 'Escuela', icon: School, color: 'text-blue-400', bg: 'bg-blue-400/10' },
   { id: 'colegio', label: 'Colegio', icon: GraduationCap, color: 'text-emerald-400', bg: 'bg-emerald-400/10' },
   { id: 'universidad', label: 'Universidad', icon: Building2, color: 'text-purple-400', bg: 'bg-purple-400/10' },
-  { id: 'profesores', label: 'Profesores', icon: Users, color: 'text-orange-400', bg: 'bg-orange-400/10' }
+  { id: 'profesores', label: 'Profesores', icon: Users, color: 'text-orange-400', bg: 'bg-orange-400/10' },
+  { id: 'familia', label: 'Familia', icon: Heart, color: 'text-pink-400', bg: 'bg-pink-400/10' }
 ]
 
 export default function GatewayPage() {
@@ -68,7 +69,7 @@ export default function GatewayPage() {
         </div>
 
         {/* Profiles Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
           {PROFILES.map((profile) => (
             <button
               key={profile.id}

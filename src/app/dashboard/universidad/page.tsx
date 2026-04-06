@@ -12,9 +12,12 @@ import {
   ResponsiveContainer, Tooltip, AreaChart, Area, XAxis, YAxis, CartesianGrid 
 } from 'recharts'
 import { useProfileStore } from '@/store/useProfileStore'
-import { ShieldCheck, Loader2, Search, BrainCircuit, Fingerprint, Globe, Cpu as CpuIcon } from 'lucide-react'
+import { ShieldCheck, Loader2, Search, BrainCircuit, Fingerprint, Globe, Cpu as CpuIcon, Users, Code2 } from 'lucide-react'
 import Footer from '@/components/Footer'
 import { getUserMetrics } from '../actions'
+import StreakTracker from '@/components/StreakTracker'
+import CodePlayground from '@/components/CodePlayground'
+import MentorshipPanel from '@/components/MentorshipPanel'
 
 const radarData = [
   { subject: 'Algoritmia', A: 120, fullMark: 150 },
@@ -42,7 +45,7 @@ export default function UniversidadDashboard() {
   const [isMounted, setIsMounted] = useState(false)
   const activeProfile = useProfileStore((state) => state.activeProfile)
   
-  const [activeTab, setActiveTab] = useState<'overview' | 'repos' | 'stack' | 'settings'>('overview')
+  const [activeTab, setActiveTab] = useState<'overview' | 'repos' | 'live_code' | 'mentors' | 'stack' | 'settings'>('overview')
   const [toast, setToast] = useState<{message: string, type: 'success' | 'warn'} | null>(null)
   
   const showToast = (message: string, type: 'success' | 'warn' = 'success') => {
@@ -99,6 +102,8 @@ export default function UniversidadDashboard() {
             {[
               { id: 'overview', label: 'Dashboard', icon: Activity },
               { id: 'repos', label: 'Repositorios', icon: GitBranch },
+              { id: 'live_code', label: 'Playground', icon: Code2 },
+              { id: 'mentors', label: 'Mentors', icon: Users },
               { id: 'stack', label: 'Infraestructura', icon: Database },
               { id: 'settings', label: 'Settings', icon: Zap },
             ].map((tab) => (
@@ -154,6 +159,7 @@ export default function UniversidadDashboard() {
         
         {activeTab === 'overview' && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
+            <StreakTracker variant="full" accentColor="blue" />
             {/* Superior Overview */}
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
               <div className="bg-purple-500/10 border border-purple-500/20 rounded-2xl p-4 flex flex-col justify-center">
@@ -330,6 +336,18 @@ export default function UniversidadDashboard() {
                  </div>
                </div>
             </div>
+          </div>
+        )}
+
+        {activeTab === 'live_code' && (
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <CodePlayground accentColor="blue" />
+          </div>
+        )}
+
+        {activeTab === 'mentors' && (
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <MentorshipPanel accentColor="blue" />
           </div>
         )}
 

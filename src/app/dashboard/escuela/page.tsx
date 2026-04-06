@@ -8,7 +8,7 @@ import {
   Map, Sparkles, BookOpen, GraduationCap,
   Search, Cpu, Rocket, ShieldCheck, Loader2,
   Heart, Zap, Crown, User, Users, Medal, ChevronRight, Activity, Terminal,
-  GitBranch, GitCommit, Database, CloudRain, CheckCircle2, Globe, Wrench, MonitorSmartphone, Code2
+  GitBranch, GitCommit, Database, CloudRain, CheckCircle2, Globe, Wrench, MonitorSmartphone, Code2, Flame
 } from 'lucide-react'
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
@@ -17,6 +17,9 @@ import {
 import { useProfileStore } from '@/store/useProfileStore'
 import Footer from '@/components/Footer'
 import { getUserMetrics } from '../actions'
+import StreakTracker from '@/components/StreakTracker'
+import CodePlayground from '@/components/CodePlayground'
+import MentorshipPanel from '@/components/MentorshipPanel'
 
 const rankings = [
   { name: 'Player_Ultra', pts: 25 },
@@ -31,7 +34,7 @@ export default function EscuelaDashboard() {
   const [isMounted, setIsMounted] = useState(false)
   const activeProfile = useProfileStore((state) => state.activeProfile)
   
-  const [activeTab, setActiveTab] = useState<'mission_control' | 'repos' | 'stack' | 'awards' | 'gear'>('mission_control')
+  const [activeTab, setActiveTab] = useState<'mission_control' | 'repos' | 'live_code' | 'mentors' | 'stack' | 'awards' | 'gear'>('mission_control')
   const [playerName, setPlayerName] = useState('Super Creador')
   
   // Real Data states
@@ -98,7 +101,9 @@ export default function EscuelaDashboard() {
             {[
               { id: 'mission_control', label: 'Misiones', icon: Gamepad2, color: 'text-orange-400' },
               { id: 'repos', label: 'Mis Proyectos', icon: GitBranch, color: 'text-emerald-400' },
-              { id: 'stack', label: 'Mi Taller', icon: Wrench, color: 'text-cyan-400' },
+              { id: 'live_code', label: 'Código en Vivo', icon: Code2, color: 'text-cyan-400' },
+              { id: 'mentors', label: 'Mentores', icon: Users, color: 'text-purple-400' },
+              { id: 'stack', label: 'Mi Taller', icon: Wrench, color: 'text-red-400' },
               { id: 'awards', label: 'Premios', icon: Trophy, color: 'text-yellow-400' },
               { id: 'gear', label: 'Equipo', icon: Sparkles, color: 'text-pink-400' },
             ].map((tab) => (
@@ -143,7 +148,9 @@ export default function EscuelaDashboard() {
         {[
           { id: 'mission_control', icon: Gamepad2, color: 'text-orange-400' },
           { id: 'repos', icon: GitBranch, color: 'text-emerald-400' },
-          { id: 'stack', icon: Wrench, color: 'text-cyan-400' },
+          { id: 'live_code', icon: Code2, color: 'text-cyan-400' },
+          { id: 'mentors', icon: Users, color: 'text-purple-400' },
+          { id: 'stack', icon: Wrench, color: 'text-red-400' },
           { id: 'awards', icon: Trophy, color: 'text-yellow-400' },
           { id: 'gear', icon: Sparkles, color: 'text-pink-400' },
         ].map((tab) => (
@@ -161,6 +168,27 @@ export default function EscuelaDashboard() {
         
         {activeTab === 'mission_control' && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8 md:space-y-10">
+            {/* Streak Tracker Section */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <StreakTracker variant="full" accentColor="orange" />
+              {/* Mission Narrativa */}
+              <div className="bg-[#0b1120]/80 border border-orange-500/20 rounded-[2.5rem] p-8 md:p-10 backdrop-blur-xl relative overflow-hidden group shadow-[0_0_40px_rgba(249,115,22,0.1)]">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/10 blur-[50px] rounded-full -translate-y-10 translate-x-10" />
+                <div className="relative z-10 space-y-6">
+                  <div className="w-12 h-12 bg-orange-500/20 border border-orange-500/40 rounded-2xl flex items-center justify-center">
+                    <Flame className="w-6 h-6 text-orange-400 animate-pulse" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-pink-400 uppercase italic tracking-tighter mb-2">¡NUEVA MISIÓN DISPONIBLE!</h3>
+                    <p className="text-slate-300 font-sans leading-relaxed">El Rey Bug ha robado los colores de la web. Necesitamos usar nuestros poderes CSS para recuperarlos. ¿Estás listo para esta aventura épica?</p>
+                  </div>
+                  <button onClick={() => setActiveTab('live_code')} className="bg-orange-600 hover:bg-orange-500 text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all">
+                    Iniciar Aventura CSS
+                  </button>
+                </div>
+              </div>
+            </div>
+
             {/* Hero Section */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                <div className="lg:col-span-2 bg-[#0b1120]/80 border border-white/10 rounded-[2.5rem] p-6 md:p-10 text-white relative overflow-hidden shadow-2xl group backdrop-blur-xl">
@@ -344,6 +372,20 @@ export default function EscuelaDashboard() {
                   </button>
                </div>
             </div>
+          </div>
+        )}
+
+        {/* Live Code Addon */}
+        {activeTab === 'live_code' && (
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <CodePlayground accentColor="orange" />
+          </div>
+        )}
+
+        {/* Mentors Addon */}
+        {activeTab === 'mentors' && (
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <MentorshipPanel accentColor="orange" />
           </div>
         )}
 

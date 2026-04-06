@@ -834,7 +834,8 @@ export default function SuperAdminPanel() {
                   { id: 'escuela', name: 'Escuela (Kids)', role: 'Estudiante Escuela', desc: 'UX Gamificada, colores vibrantes y misiones simplificadas.', color: 'orange', icon: Gamepad2, tag: 'GAMI_V0.5', glow: 'rgba(249,115,22,0.1)' },
                   { id: 'colegio', name: 'Colegio (Teen)', role: 'Estudiante Colegio', desc: 'Enfoque en retos, ranking de puntos y comunidad.', color: 'purple', icon: Trophy, tag: 'RANK_A3.1', glow: 'rgba(168,85,247,0.1)' },
                   { id: 'universidad', name: 'Universidad (Pro)', role: 'Estudiante Universidad', desc: 'Dashboard analítico de alta densidad y perfiles de carrera.', color: 'blue', icon: BrainCircuit, tag: 'PRO_ANALYTICS_V2', glow: 'rgba(59,130,246,0.1)' },
-                  { id: 'profesores', name: 'Cuerpo Docente', role: 'Profesor', desc: 'Panel de gestión de cohorte y telemetría de estudiantes.', color: 'emerald', icon: Users, tag: 'COHORT_CMD_V1', glow: 'rgba(16,185,129,0.1)' }
+                  { id: 'profesores', name: 'Cuerpo Docente', role: 'Profesor', desc: 'Panel de gestión de cohorte y telemetría de estudiantes.', color: 'emerald', icon: Users, tag: 'COHORT_CMD_V1', glow: 'rgba(16,185,129,0.1)' },
+                  { id: 'familia', name: 'Familia (Padres)', role: 'Padre/Tutor', desc: 'Monitorización de progreso, tiempo y logros.', color: 'pink', icon: ShieldCheck, tag: 'PARENTAL_V1', glow: 'rgba(236,72,153,0.1)' }
                 ].map((sim) => (
                   <button 
                     key={sim.id}
