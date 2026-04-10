@@ -894,9 +894,9 @@ export default function SuperAdminPanel() {
           )}
 
 
+          <Footer variant="dashboard" />
         </div>
       </main>
-      <Footer variant="dashboard" />
     </div>
   )
 }
