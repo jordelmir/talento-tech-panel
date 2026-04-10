@@ -463,18 +463,20 @@ export default function CurriculumPage() {
           </div>
 
           {/* Module dots */}
-          <div className="flex gap-2 mt-4">
+          <div className="flex gap-3 mt-6 overflow-x-auto scrollbar-hide pb-2 snap-x">
             {dynamicModules.map((mod) => (
               <button
                 key={mod.id}
                 onClick={() => toggle(mod.id)}
-                className={`flex-1 h-2 rounded-full transition-all cursor-pointer ${
+                className={`shrink-0 w-8 h-8 sm:w-auto sm:h-2 sm:flex-1 rounded-full transition-all cursor-pointer snap-center flex items-center justify-center ${
                   mod.completed
-                    ? 'bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.6)]'
-                    : 'bg-rose-500/40 hover:bg-rose-500/70'
+                    ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.6)]'
+                    : 'bg-rose-500 hover:bg-rose-600'
                 }`}
                 title={`Módulo ${mod.id}: ${mod.title}`}
-              />
+              >
+                  <span className="sm:hidden text-[10px] font-black text-white/90">{mod.id}</span>
+              </button>
             ))}
           </div>
         </div>
