@@ -507,28 +507,28 @@ export default function ProfesoresDashboard() {
         {activeTab === 'students' && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 pb-20">
              <div className="bg-[#0b1120]/80 border border-white/10 rounded-[3rem] overflow-hidden shadow-2xl backdrop-blur-xl relative">
-                <div className="px-8 md:px-12 py-10 border-b border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-8 relative z-10">
+                <div className="p-6 md:px-12 md:py-10 border-b border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative z-10 w-full">
                    <div>
-                      <div className="flex items-center gap-5">
-                        <div className="p-3 bg-cyan-500/10 border border-cyan-500/30 rounded-2xl">
-                          <Users className="text-cyan-500 w-8 h-8"/> 
+                      <div className="flex items-center gap-4 md:gap-5">
+                        <div className="p-3 bg-cyan-500/10 border border-cyan-500/30 rounded-2xl shrink-0">
+                          <Users className="text-cyan-500 w-6 h-6 md:w-8 md:h-8"/> 
                         </div>
                         <div>
-                          <h3 className="font-black text-3xl md:text-4xl text-white uppercase italic tracking-tighter leading-none">Libro_de_Registro_V1</h3>
-                          <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.4em] mt-3 leading-none opacity-60">Cohorte: 2024-Q1 • Sincronización Nodo_Sur</p>
+                          <h3 className="font-black text-2xl md:text-4xl text-white uppercase italic tracking-tighter leading-none line-clamp-1">Libro_de_Registro_V1</h3>
+                          <p className="text-[9px] md:text-[10px] text-slate-500 font-black uppercase tracking-[0.2em] md:tracking-[0.4em] mt-3 leading-tight opacity-60">Cohorte: 2024-Q1 • Sincronización Nodo_Sur</p>
                         </div>
                       </div>
                    </div>
-                   <div className="flex gap-4">
-                      <div className="relative group/search">
+                   <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+                      <div className="relative group/search w-full sm:w-auto">
                          <Search className="w-3.5 h-3.5 text-slate-500 absolute left-4 top-1/2 -translate-y-1/2 group-focus-within/search:text-cyan-500 transition-colors" />
                          <input 
                            type="text" 
                            placeholder="FILTER_NODES..." 
-                           className="bg-[#020617]/50 border border-white/10 outline-none pl-11 pr-6 py-3 rounded-2xl text-[10px] font-black uppercase w-64 focus:border-cyan-500/50 transition-all text-white placeholder:text-slate-800"
+                           className="bg-[#020617]/50 border border-white/10 outline-none pl-11 pr-6 py-3 rounded-2xl text-[10px] font-black uppercase w-full sm:w-64 focus:border-cyan-500/50 transition-all text-white placeholder:text-slate-800"
                          />
                       </div>
-                      <button onClick={() => showToast('Exportación CSV disponible próximamente', 'info')} className="bg-white/5 border border-white/10 text-white px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-white/10 hover:border-cyan-500/50 transition-all shadow-xl">
+                      <button onClick={() => showToast('Exportación CSV disponible próximamente', 'info')} className="w-full sm:w-auto bg-white/5 border border-white/10 text-white px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-white/10 hover:border-cyan-500/50 transition-all shadow-xl whitespace-nowrap">
                         Exp_Nodes (.CSV)
                       </button>
                    </div>
@@ -625,9 +625,9 @@ export default function ProfesoresDashboard() {
           </div>
         )}
 
-        {(activeTab === 'audit' || activeTab === 'config') && (
-           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 py-32 text-center max-w-4xl mx-auto">
-              <div className="bg-[#0b1120]/80 border border-white/10 inline-block p-14 md:p-20 rounded-[4rem] shadow-2xl backdrop-blur-3xl relative overflow-hidden group">
+        {activeTab === 'audit' && (
+           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 py-32 text-center max-w-4xl mx-auto px-4">
+              <div className="bg-[#0b1120]/80 border border-white/10 w-full p-10 md:p-20 rounded-[3rem] md:rounded-[4rem] shadow-2xl backdrop-blur-3xl relative overflow-hidden group">
                  <div className="absolute top-0 right-0 p-16 opacity-5 group-hover:rotate-12 group-hover:opacity-10 transition-all duration-1000 -translate-y-10 translate-x-10"><Fingerprint className="w-64 h-64 text-white" /></div>
                  
                  <div className="w-24 h-24 bg-cyan-500/10 border border-cyan-500/30 rounded-3xl flex items-center justify-center mx-auto mb-10 shadow-[0_0_50px_rgba(6,182,212,0.15)] relative">
@@ -635,14 +635,61 @@ export default function ProfesoresDashboard() {
                    <div className="absolute inset-0 bg-cyan-500/5 blur-2xl rounded-full" />
                  </div>
                  
-                 <h2 className="text-4xl md:text-5xl font-black text-white mb-6 uppercase tracking-tighter italic leading-none">CIFRADO_DE_ALTA_ <br /> DENSIDAD_</h2>
-                 <p className="text-slate-500 text-[11px] font-black uppercase tracking-[0.4em] max-w-md mx-auto mt-8 leading-relaxed opacity-60 italic">
+                 <h2 className="text-3xl md:text-5xl font-black text-white mb-6 uppercase tracking-tighter italic leading-none">CIFRADO_DE_ALTA_ <br /> DENSIDAD_</h2>
+                 <p className="text-slate-500 text-[9px] md:text-[11px] font-black uppercase tracking-[0.2em] md:tracking-[0.4em] max-w-md mx-auto mt-8 leading-relaxed opacity-60 italic">
                    GHOST_PROTOCOL v4.0 está validando el kernel de seguridad y tus credenciales tácticas para acceso OCI_ROOT.
                  </p>
                  
-                 <div className="mt-12 flex items-center justify-center gap-2 text-[8px] font-mono text-slate-800 tracking-[1em] uppercase">
+                 <div className="mt-12 flex items-center justify-center gap-2 text-[8px] font-mono text-slate-800 tracking-[0.5em] md:tracking-[1em] uppercase">
                     Handshaking_Secure_Link_
                  </div>
+              </div>
+           </div>
+        )}
+
+        {activeTab === 'config' && (
+           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 pb-20 w-full">
+              <div className="bg-[#0b1120]/80 border border-white/10 rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl backdrop-blur-xl relative w-full p-6 md:p-12">
+                 
+                 <div className="flex items-center gap-4 mb-10 border-b border-white/5 pb-8 relative z-10 w-full">
+                    <div className="p-4 bg-purple-500/10 border border-purple-500/30 rounded-2xl shrink-0">
+                       <Settings className="w-8 h-8 text-purple-400" />
+                    </div>
+                    <div>
+                       <h2 className="text-2xl md:text-4xl font-black text-white tracking-tighter uppercase italic leading-none">CONFIGURACIÓN_NÚCLEO</h2>
+                       <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] mt-2 opacity-60">System_Override_Properties</p>
+                    </div>
+                 </div>
+
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
+                    <div className="bg-white/5 border border-white/10 rounded-3xl p-8 hover:bg-white/10 transition-colors group flex justify-between items-center cursor-pointer">
+                      <div>
+                        <h4 className="text-sm font-black text-white uppercase tracking-widest mb-1">Modo Fantasma (Ghost)</h4>
+                        <p className="text-xs text-slate-500">Ocultar estado en el directorio NOC</p>
+                      </div>
+                      <div className="w-12 h-6 bg-cyan-500/20 border border-cyan-500/50 rounded-full flex items-center px-1">
+                        <div className="w-4 h-4 bg-cyan-500 rounded-full translate-x-6 transition-transform shadow-[0_0_10px_rgba(6,182,212,0.8)]" />
+                      </div>
+                    </div>
+                    
+                    <div className="bg-white/5 border border-white/10 rounded-3xl p-8 hover:bg-white/10 transition-colors group flex justify-between items-center cursor-pointer">
+                      <div>
+                        <h4 className="text-sm font-black text-white uppercase tracking-widest mb-1">Telemetría Avanzada</h4>
+                        <p className="text-xs text-slate-500">Compartir estado de memoria con el Core</p>
+                      </div>
+                      <div className="w-12 h-6 bg-white/10 border border-white/20 rounded-full flex items-center px-1">
+                        <div className="w-4 h-4 bg-slate-500 rounded-full transition-transform" />
+                      </div>
+                    </div>
+
+                    <div className="bg-rose-500/5 border border-rose-500/20 rounded-3xl p-8 hover:bg-rose-500/10 transition-colors group flex flex-col items-center justify-center cursor-pointer text-center md:col-span-2 mt-4">
+                      <h4 className="text-sm font-black text-rose-500 uppercase tracking-widest mb-2">Restablecer Cache de Kernel</h4>
+                      <p className="text-[10px] text-rose-500/60 font-mono tracking-widest uppercase">Purge_Local_Memory()</p>
+                    </div>
+                 </div>
+
+                 {/* Decorative ambient background */}
+                 <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500/5 blur-[100px] pointer-events-none rounded-full" />
               </div>
            </div>
         )}
