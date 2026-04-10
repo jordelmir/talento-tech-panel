@@ -303,7 +303,7 @@ export default function SuperAdminPanel() {
             </button>
 
             {/* Buscador Omnipresente (Desktop only) */}
-            <div className={`flex items-center bg-[#111] border transition-colors rounded-lg px-3 py-1.5 w-full sm:w-64 xl:w-96 ${searchFocused ? 'border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.15)]' : 'border-white/10'}`}>
+            <div className={`hidden md:flex items-center bg-[#111] border transition-colors rounded-lg px-3 py-1.5 sm:w-64 xl:w-96 ${searchFocused ? 'border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.15)]' : 'border-white/10'}`}>
               <Search className="w-4 h-4 text-gray-500 shrink-0" />
               <input 
                 type="text" 
@@ -586,7 +586,7 @@ export default function SuperAdminPanel() {
                  </div>
                </div>
 
-               <div className="bg-[#0A0A0A]/60 border border-white/10 rounded-2xl backdrop-blur-xl overflow-hidden p-6 max-w-5xl mx-auto w-full">
+               <div className="bg-[#0A0A0A]/60 border border-white/10 rounded-2xl backdrop-blur-xl overflow-hidden p-6 w-full">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                   <h3 className="font-bold text-lg flex items-center gap-2"><Users className="text-blue-500" /> Roster Docente y Telemetría de Sesión</h3>
                   <div className="flex bg-white/5 p-1 rounded-lg border border-white/10">
@@ -713,8 +713,8 @@ export default function SuperAdminPanel() {
           )}
 
           {activeView === 'finops' && (
-            <div className="animate-in fade-in slide-in-from-bottom-4 duration-300 max-w-5xl mx-auto space-y-6">
-               <div className="bg-[#0A0A0A]/60 border border-white/10 rounded-2xl p-6 backdrop-blur-xl flex flex-col w-full">
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-300 space-y-6">
+               <div className="bg-[#0A0A0A]/60 border border-white/10 rounded-2xl p-6 backdrop-blur-xl w-full flex flex-col">
                 <div className="mb-6 flex justify-between items-center">
                   <h3 className="font-bold flex items-center gap-2 text-xl">
                     <BrainCircuit className="w-6 h-6 text-cyan-400 shadow-cyan-500 drop-shadow-lg shrink-0" />
@@ -759,7 +759,7 @@ export default function SuperAdminPanel() {
           )}
 
           {activeView === 'config' && (
-            <div className="animate-in fade-in slide-in-from-bottom-4 duration-300 max-w-3xl mx-auto space-y-6">
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-300 space-y-6 w-full">
                <div className="bg-[#0A0A0A]/60 border border-white/10 rounded-2xl backdrop-blur-xl overflow-hidden p-6 relative">
                 <div className="absolute top-0 right-0 p-8 opacity-5">
                   <Settings className="w-32 h-32 text-white" />
@@ -818,7 +818,7 @@ export default function SuperAdminPanel() {
           )}
 
           {activeView === 'simulators' && (
-            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-5xl mx-auto py-10">
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 w-full py-10">
               <div className="flex flex-col items-center mb-16 text-center">
                 <div className="w-20 h-20 bg-emerald-500/10 border border-emerald-500/30 rounded-[2rem] flex items-center justify-center mb-8 shadow-[0_0_40px_rgba(16,185,129,0.15)] relative group">
                   <PlayCircle className="w-10 h-10 text-emerald-400 animate-pulse" />
