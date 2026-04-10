@@ -158,12 +158,12 @@ export default function DocsPage() {
               <Activity className="w-5 h-5 text-black" strokeWidth={3} />
             </div>
             <span className="font-bold text-xl tracking-tight">Talento Tech</span>
-            <span className="text-xs font-mono text-slate-500 hidden md:block ml-2 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
+            <span className="text-xs font-mono text-slate-500 ml-2 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
               DOCS
             </span>
           </Link>
           <div className="flex items-center gap-4">
-            <Link href="/curriculum" className="text-sm text-slate-400 hover:text-emerald-400 transition-colors hidden md:flex items-center gap-1">
+            <Link href="/curriculum" className="text-sm text-slate-400 hover:text-emerald-400 transition-colors flex items-center gap-1">
               <BookOpen className="w-4 h-4" /> Módulos
             </Link>
             <Link
@@ -242,7 +242,7 @@ export default function DocsPage() {
         )}
 
         {/* Main Content */}
-        <main className="flex-1 min-w-0 px-6 lg:px-12 py-12">
+        <main className="flex-1 min-w-0 px-4 sm:px-6 lg:px-12 py-8 sm:py-12">
 
           {/* Hero */}
           <div className="mb-16">
@@ -250,7 +250,7 @@ export default function DocsPage() {
               <Zap className="w-5 h-5 text-emerald-400" />
               <span className="text-emerald-400 text-xs font-bold uppercase tracking-widest">Documentación Oficial</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-black tracking-tighter mb-4 bg-gradient-to-r from-white via-white to-slate-500 bg-clip-text text-transparent leading-tight">
+            <h1 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tighter mb-4 bg-gradient-to-r from-white via-white to-slate-500 bg-clip-text text-transparent leading-tight">
               Programa Formativo:<br />Ingeniería Full-Stack Autónoma
             </h1>
             <p className="text-lg text-slate-400 max-w-3xl leading-relaxed">

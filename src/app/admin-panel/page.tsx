@@ -303,7 +303,7 @@ export default function SuperAdminPanel() {
             </button>
 
             {/* Buscador Omnipresente (Desktop only) */}
-            <div className={`hidden lg:flex items-center bg-[#111] border transition-colors rounded-lg px-3 py-1.5 w-64 xl:w-96 ${searchFocused ? 'border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.15)]' : 'border-white/10'}`}>
+            <div className={`flex items-center bg-[#111] border transition-colors rounded-lg px-3 py-1.5 w-full sm:w-64 xl:w-96 ${searchFocused ? 'border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.15)]' : 'border-white/10'}`}>
               <Search className="w-4 h-4 text-gray-500 shrink-0" />
               <input 
                 type="text" 
@@ -334,14 +334,14 @@ export default function SuperAdminPanel() {
                 {networkStatus === 'CLEANING' && 'SYNC'}
               </span>
             </div>
-            <div className="hidden lg:flex items-center gap-2 border border-white/5 px-3 py-1.5 rounded-full">
+            <div className="flex items-center gap-2 border border-white/5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full">
               <ActivitySquare className="w-3 h-3 text-cyan-500" />
               <span className="text-[10px] font-mono text-gray-400">EDGE_PING: <span className="text-cyan-400">{latency}ms</span></span>
             </div>
           </div>
           
           <div className="flex items-center gap-4">
-            <button className="relative p-2 hover:bg-white/5 rounded-full transition-colors hidden sm:block">
+            <button className="relative p-2 hover:bg-white/5 rounded-full transition-colors">
               <Bell className="w-5 h-5 text-gray-400" />
               <span className="absolute top-1 right-1 w-2 h-2 bg-rose-500 rounded-full" />
             </button>
@@ -350,6 +350,7 @@ export default function SuperAdminPanel() {
               className="flex items-center gap-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 border border-rose-500/20 px-3 py-1.5 sm:px-4 rounded-lg text-xs sm:text-sm font-bold transition-colors">
               <LogOut className="w-4 h-4 shrink-0" />
               <span className="hidden sm:inline">Cerrar sesión</span>
+              <span className="sm:hidden">Salir</span>
             </button>
           </div>
         </header>
@@ -359,7 +360,7 @@ export default function SuperAdminPanel() {
           {/* Header Title & Topo Map */}
           <div className="flex justify-between items-end mb-8">
             <div>
-              <h1 className="text-3xl font-black tracking-tighter">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-black tracking-tighter">
                 {activeView === 'radar' && 'Panel de Comando Global'}
                 {activeView === 'b2b' && 'Directorio B2B (Instituciones)'}
                 {activeView === 'teachers' && 'Mando del Cuerpo Docente'}
@@ -369,8 +370,8 @@ export default function SuperAdminPanel() {
               </h1>
               <p className="text-gray-400 text-sm mt-1">Supervisión táctica de nodos nacionales "Talento Tech"</p>
             </div>
-            <div className="hidden lg:flex flex-col items-end">
-              <div className="w-48 h-16 bg-black/40 border border-white/10 rounded-xl overflow-hidden relative opacity-70">
+            <div className="flex flex-col items-end">
+              <div className="w-32 sm:w-48 h-12 sm:h-16 bg-black/40 border border-white/10 rounded-xl overflow-hidden relative opacity-70">
                 {/* Mock Topography / Nodes map */}
                 {topographyDots.map((dot) => (
                   <div 
@@ -492,7 +493,7 @@ export default function SuperAdminPanel() {
 
           {activeView === 'b2b' && (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-300 space-y-6">
-               <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-6">
+               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                  <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col justify-center">
                    <p className="text-[10px] text-gray-500 uppercase tracking-widest font-mono">B2B_NODES</p>
                    <p className="text-2xl font-black text-white">{institutions.length}</p>
@@ -823,7 +824,7 @@ export default function SuperAdminPanel() {
                   <PlayCircle className="w-10 h-10 text-emerald-400 animate-pulse" />
                   <div className="absolute inset-0 bg-emerald-500/10 blur-2xl rounded-full" />
                 </div>
-                <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-4 uppercase italic text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-emerald-500/50">Mando de Simulación Global_</h2>
+                <h2 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tighter mb-4 uppercase italic text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-emerald-500/50">Mando de Simulación Global_</h2>
                 <p className="text-slate-500 max-w-2xl font-bold text-sm md:text-base uppercase tracking-[0.2em] leading-relaxed">
                   Ejecuta impersonación de roles en tiempo real para auditar la experiencia de usuario (UX) en todos los niveles del ecosistema.
                 </p>

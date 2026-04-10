@@ -208,7 +208,7 @@ export default function FamiliaDashboard() {
                   </span>
                 </div>
                 
-                <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-white uppercase italic leading-[0.9] mb-4">
+                <h2 className="text-3xl sm:text-4xl md:text-6xl font-black tracking-tighter text-white uppercase italic leading-[0.9] mb-4">
                   EL PROGRESO DE <br />
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-rose-400">{child.name}_</span>
                 </h2>

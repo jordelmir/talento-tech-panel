@@ -251,11 +251,11 @@ function ModuleCard({ mod, index, isOpen, onToggle }: { mod: ModuleData; index: 
       {/* Header — always visible */}
       <button
         onClick={onToggle}
-        className="w-full flex items-center gap-5 p-6 md:p-8 text-left cursor-pointer"
+        className="w-full flex items-center gap-3 sm:gap-5 p-4 sm:p-6 md:p-8 text-left cursor-pointer"
       >
         {/* Module number + icon */}
-        <div className={`shrink-0 w-14 h-14 rounded-2xl flex items-center justify-center ${colors.bg} transition-transform group-hover:scale-110`}>
-          <Icon className={`w-7 h-7 ${colors.text}`} />
+        <div className={`shrink-0 w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center ${colors.bg} transition-transform group-hover:scale-110`}>
+          <Icon className={`w-5 h-5 sm:w-7 sm:h-7 ${colors.text}`} />
         </div>
 
         {/* Text */}
@@ -287,7 +287,7 @@ function ModuleCard({ mod, index, isOpen, onToggle }: { mod: ModuleData; index: 
 
       {/* Body — expanded */}
       <div className={`overflow-hidden transition-all duration-500 ${isOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}`}>
-        <div className="px-6 md:px-8 pb-8 pt-0 space-y-6 border-t border-white/5">
+        <div className="px-4 sm:px-6 md:px-8 pb-6 sm:pb-8 pt-0 space-y-5 sm:space-y-6 border-t border-white/5">
 
           {/* Description */}
           <p className="text-slate-400 leading-relaxed pt-6">
@@ -419,7 +419,7 @@ export default function CurriculumPage() {
             Programa Formativo
           </span>
         </div>
-        <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-4 bg-gradient-to-r from-white via-white to-slate-500 bg-clip-text text-transparent">
+        <h1 className="text-3xl sm:text-4xl md:text-6xl font-black tracking-tighter mb-4 bg-gradient-to-r from-white via-white to-slate-500 bg-clip-text text-transparent">
           Módulos del Programa
         </h1>
         <p className="text-lg text-slate-400 max-w-3xl leading-relaxed">

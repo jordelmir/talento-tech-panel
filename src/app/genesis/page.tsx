@@ -53,7 +53,7 @@ export default function MuroGenesis() {
             <div className="bg-cyan-500 p-1.5 rounded-lg group-hover:rotate-12 transition-transform">
               <Activity className="w-5 h-5 text-black" strokeWidth={3} />
             </div>
-            <span className="font-bold text-xl tracking-tight hidden sm:block">Talento Tech</span>
+            <span className="font-bold text-xl tracking-tight">Talento Tech</span>
           </Link>
           <Link
             href="/"

@@ -212,7 +212,7 @@ export default function EscuelaDashboard() {
 
                     <div className="flex flex-col md:flex-row justify-between items-start gap-8">
                        <div className="flex-1">
-                          <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-4 leading-[0.9] uppercase italic text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-orange-500/50">
+                          <h2 className="text-3xl sm:text-4xl md:text-6xl font-black tracking-tighter mb-4 leading-[0.9] uppercase italic text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-orange-500/50">
                             BIENVENIDO, <br />{playerName}_
                           </h2>
                           <p className="text-slate-400 font-medium max-w-sm mb-8 text-sm md:text-base leading-relaxed">
@@ -412,7 +412,7 @@ export default function EscuelaDashboard() {
                     <div className="flex items-center gap-2 px-4 py-1.5 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-[9px] font-black uppercase tracking-[0.2em] text-emerald-400 mb-4 w-fit">
                       <GitBranch className="w-3 h-3" /> LABORATORIO_CREATIVO
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-white uppercase italic leading-[0.9]">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter text-white uppercase italic leading-[0.9]">
                       MIS <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">PROYECTOS_</span>
                     </h2>
                     <p className="text-slate-500 text-sm mt-3 font-bold uppercase tracking-[0.2em]">
@@ -509,7 +509,7 @@ export default function EscuelaDashboard() {
               <div className="w-20 h-20 bg-cyan-500/10 border border-cyan-500/20 rounded-[2rem] flex items-center justify-center mx-auto mb-6 shadow-[0_0_40px_rgba(6,182,212,0.15)]">
                 <Wrench className="w-10 h-10 text-cyan-400 animate-pulse" />
               </div>
-              <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-white uppercase italic leading-[0.9]">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter text-white uppercase italic leading-[0.9]">
                 MI <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">TALLER_DIGITAL_</span>
               </h2>
               <p className="text-slate-500 text-sm mt-4 font-bold uppercase tracking-[0.2em]">
@@ -581,7 +581,7 @@ export default function EscuelaDashboard() {
                   <Trophy className="w-12 h-12 text-yellow-500 animate-bounce" />
                   <div className="absolute inset-0 bg-yellow-500/10 blur-2xl rounded-full" />
                 </div>
-                <h2 className="text-4xl md:text-7xl font-black text-white tracking-tighter uppercase italic leading-[0.85]">MURO DE <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">CAMPEONES_</span></h2>
+                <h2 className="text-3xl sm:text-4xl md:text-7xl font-black text-white tracking-tighter uppercase italic leading-[0.85]">MURO DE <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">CAMPEONES_</span></h2>
                 <p className="text-slate-500 font-bold text-sm md:text-lg mt-6 uppercase tracking-[0.3em] opacity-80">Legado Digital encriptado en el núcleo.</p>
              </div>
              

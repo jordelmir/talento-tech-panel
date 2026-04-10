@@ -77,7 +77,7 @@ export default function TeacherPulseDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[#050505] text-slate-300 font-sans p-8 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]">
+    <div className="min-h-screen bg-[#050505] text-slate-300 font-sans p-4 sm:p-6 md:p-8 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]">
       
       {/* Top Navigation / Status Header */}
       <header className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 border-b border-white/5 pb-6">
@@ -127,7 +127,7 @@ export default function TeacherPulseDashboard() {
             {telemetry.map((student) => (
               <div 
                 key={student.id} 
-                className={`relative overflow-hidden group bg-[#0A0A0A]/80 border backdrop-blur-sm rounded-xl p-5 flex items-center justify-between transition-all duration-500 hover:shadow-2xl hover:scale-[1.01] ${
+                className={`relative overflow-hidden group bg-[#0A0A0A]/80 border backdrop-blur-sm rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-0 sm:justify-between transition-all duration-500 hover:shadow-2xl hover:scale-[1.01] ${
                   student.status === 'critical' ? 'border-rose-500/50 hover:border-rose-400' :
                   student.status === 'warning' ? 'border-amber-500/50 hover:border-amber-400' :
                   'border-white/5 hover:border-cyan-500/30'
@@ -138,7 +138,7 @@ export default function TeacherPulseDashboard() {
                   student.status === 'critical' ? 'from-rose-500 via-transparent to-transparent' : 'from-cyan-500 via-transparent to-transparent'
                 }`}></div>
 
-                <div className="flex items-center gap-6 relative z-10 w-full">
+                <div className="flex items-center gap-4 sm:gap-6 relative z-10 w-full">
                   {/* Status Indicator */}
                   <div className="flex flex-col items-center gap-2 w-16">
                     <div className={`w-3 h-3 rounded-full ${
@@ -155,7 +155,7 @@ export default function TeacherPulseDashboard() {
                   </div>
 
                   {/* Telemetry Data (Pulse) */}
-                  <div className="flex-1 text-right flex flex-col items-end gap-1">
+                  <div className="flex-1 text-left sm:text-right flex flex-col sm:items-end gap-1">
                     <div className="flex items-center gap-2 text-sm text-slate-400">
                       <GitCommit className="w-4 h-4" />
                       Último despliegue
@@ -170,7 +170,7 @@ export default function TeacherPulseDashboard() {
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="w-48 flex justify-end">
+                  <div className="w-full sm:w-48 flex sm:justify-end">
                     {student.status === 'critical' && !student.paired_with && (
                       <button className="bg-rose-500/10 text-rose-400 border border-rose-500/50 hover:bg-rose-500 hover:text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-all">
                         <ShieldAlert className="w-4 h-4" />

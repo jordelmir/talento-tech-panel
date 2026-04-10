@@ -84,7 +84,7 @@ export default function RepoSubmit({ userId, moduleName = '0', variant = 'full',
         {result === 'error' && (
           <div className="flex items-center gap-1 text-rose-400 text-xs shrink-0">
             <XCircle className="w-4 h-4" />
-            <span className="hidden sm:inline">{errorMsg}</span>
+            <span className="text-[10px] sm:text-xs truncate max-w-[120px] sm:max-w-none">{errorMsg}</span>
           </div>
         )}
       </form>

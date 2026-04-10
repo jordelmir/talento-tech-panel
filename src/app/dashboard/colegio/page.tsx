@@ -196,7 +196,7 @@ export default function ColegioDashboard() {
                        </div>
                     </div>
 
-                    <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-4 text-white uppercase italic leading-[0.9] text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-purple-500/50">
+                    <h2 className="text-3xl sm:text-4xl md:text-6xl font-black tracking-tighter mb-4 text-white uppercase italic leading-[0.9] text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-purple-500/50">
                       HOLA DE NUEVO, <br />{userName}_
                     </h2>
                     <p className="text-slate-400 max-w-md text-sm md:text-base leading-relaxed mb-10">
@@ -412,8 +412,8 @@ export default function ColegioDashboard() {
                   </div>
 
                   <div className="flex items-center gap-6 relative z-10">
-                    <div className="text-right hidden md:block">
-                      <span className="text-[10px] font-black text-emerald-400 bg-emerald-500/10 px-4 py-2 rounded-xl border border-emerald-500/20 uppercase tracking-widest flex items-center gap-2">
+                    <div className="text-right block">
+                       <span className="text-[10px] font-black text-emerald-400 bg-emerald-500/10 px-4 py-2 rounded-xl border border-emerald-500/20 uppercase tracking-widest flex items-center gap-2">
                         <CheckCircle2 className="w-3 h-3" /> VERIFIED
                       </span>
                     </div>
@@ -509,7 +509,7 @@ export default function ColegioDashboard() {
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-10 text-white">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 border-b border-white/5 pb-10">
                <div>
-                 <h2 className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic leading-[0.85] text-transparent bg-clip-text bg-gradient-to-r from-white to-purple-500/50">RETOS_ <br />BINARIOS_</h2>
+                 <h2 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter uppercase italic leading-[0.85] text-transparent bg-clip-text bg-gradient-to-r from-white to-purple-500/50">RETOS_ <br />BINARIOS_</h2>
                  <p className="text-slate-500 text-sm mt-4 font-bold uppercase tracking-[0.3em] opacity-80 flex items-center gap-3">
                    <TerminalSquare className="w-4 h-4 text-purple-500" />
                    Módulo 04: Arquitecturas_Descentralizadas
@@ -568,7 +568,7 @@ export default function ColegioDashboard() {
                 <div className="w-24 h-24 bg-purple-500/5 border border-purple-500/20 rounded-[2.5rem] flex items-center justify-center mx-auto mb-10 shadow-[0_0_50px_rgba(168,85,247,0.1)] group">
                   <Trophy className="w-12 h-12 text-purple-500 animate-pulse group-hover:scale-110 transition-transform" />
                 </div>
-                <h2 className="text-5xl md:text-8xl font-black tracking-tighter uppercase italic leading-[0.85] text-transparent bg-clip-text bg-gradient-to-b from-white to-purple-500/50">HALL_OF_ <br /> FAME_</h2>
+                <h2 className="text-4xl sm:text-5xl md:text-8xl font-black tracking-tighter uppercase italic leading-[0.85] text-transparent bg-clip-text bg-gradient-to-b from-white to-purple-500/50">HALL_OF_ <br /> FAME_</h2>
                 <p className="text-slate-500 font-black uppercase tracking-[0.5em] text-[11px] mt-8 opacity-70">Global_Sync: Nodo_Sur_Core_IAD1</p>
              </div>
              

@@ -153,7 +153,7 @@ export default function StreakTracker({ variant = 'full', accentColor = 'orange'
 
   // ── FULL VARIANT ──
   return (
-    <div className={`bg-[#0b1120]/80 border border-white/10 rounded-[2.5rem] p-8 md:p-10 backdrop-blur-xl ${c.glow} relative overflow-hidden group shadow-2xl`}>
+    <div className={`bg-[#0b1120]/80 border border-white/10 rounded-2xl sm:rounded-[2.5rem] p-5 sm:p-8 md:p-10 backdrop-blur-xl ${c.glow} relative overflow-hidden group shadow-2xl`}>
       <div className={`absolute -top-10 -right-10 w-40 h-40 ${c.bg} blur-[80px] rounded-full opacity-30 group-hover:opacity-50 transition-opacity`} />
       
       <div className="relative z-10">
@@ -181,7 +181,7 @@ export default function StreakTracker({ variant = 'full', accentColor = 'orange'
         </div>
 
         {/* Week Calendar */}
-        <div className="grid grid-cols-7 gap-3 mb-8">
+        <div className="grid grid-cols-7 gap-1.5 sm:gap-3 mb-6 sm:mb-8">
           {streak.weekActivity.map((active, i) => (
             <div key={i} className="flex flex-col items-center gap-2">
               <div className={`w-full aspect-square rounded-2xl flex items-center justify-center transition-all ${

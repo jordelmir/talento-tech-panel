@@ -99,7 +99,7 @@ export default function MentorshipPanel({ accentColor = 'cyan' }: { accentColor?
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
         {[
           { label: 'PARES_ACTIVOS', value: MOCK_PAIRS.filter(p => p.status === 'active').length.toString(), color: 'text-emerald-400' },
           { label: 'REVIEWS_TOTAL', value: PEER_REVIEWS.length.toString(), color: 'text-purple-400' },
@@ -165,7 +165,7 @@ export default function MentorshipPanel({ accentColor = 'cyan' }: { accentColor?
 
                 {/* Meta */}
                 <div className="flex items-center gap-4">
-                  <div className="text-right hidden md:block">
+                  <div className="text-right">
                     <p className="text-[10px] font-black text-white uppercase tracking-tighter mb-1">{pair.topic}</p>
                     <p className="text-[8px] text-slate-600 font-mono">{pair.reviewCount} reviews</p>
                   </div>

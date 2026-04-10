@@ -130,20 +130,20 @@ export default function ProfesoresDashboard() {
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="relative hidden xl:block">
+          <div className="relative">
             <Search className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
             <input 
               type="text" 
               placeholder="SEARCH_NODE..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-[#020617]/50 border border-white/10 outline-none pl-9 pr-4 py-2 rounded-xl text-[9px] font-black uppercase w-48 focus:border-cyan-500/50 transition-all text-white placeholder:text-slate-700"
+              className="bg-[#020617]/50 border border-white/10 outline-none pl-9 pr-4 py-2 rounded-xl text-[9px] font-black uppercase w-32 sm:w-48 focus:border-cyan-500/50 transition-all text-white placeholder:text-slate-700"
             />
           </div>
           {isAdmin && (
             <button 
               onClick={() => router.push('/admin-panel')}
-              className="flex items-center gap-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3 md:px-5 py-2 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+              className="hidden sm:flex items-center gap-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3 md:px-5 py-2 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all shadow-[0_0_15px_rgba(16,185,129,0.1)]">
               <ShieldCheck className="w-4 h-4" />
               <span className="hidden sm:inline">NOC_ACCESS</span>
             </button>
@@ -155,6 +155,7 @@ export default function ProfesoresDashboard() {
             className="flex items-center gap-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 border border-rose-500/20 px-3 md:px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">
             <LogOut className="w-4 h-4" />
             <span className="hidden md:inline">Log_Out</span>
+            <span className="md:hidden">Exit</span>
           </button>
         </div>
       </nav>
@@ -267,7 +268,7 @@ export default function ProfesoresDashboard() {
                         <h3 className="font-black text-2xl text-white tracking-tighter uppercase italic leading-none">Curva_Aprendizaje_A1</h3>
                         <p className="text-[9px] text-slate-500 font-bold uppercase tracking-[0.3em] mt-2">Node_History: Sem 1 - Sem 6</p>
                      </div>
-                     <div className="hidden sm:flex gap-6">
+                     <div className="flex sm:flex-row flex-col gap-4 sm:gap-6">
                         <div className="flex items-center gap-2 text-[9px] font-black text-cyan-400 uppercase tracking-widest transition-all hover:scale-110"><span className="w-2.5 h-2.5 rounded-full bg-cyan-600 shadow-[0_0_10px_rgba(6,182,212,0.6)] border border-white/10" /> Promedio</div>
                         <div className="flex items-center gap-2 text-[9px] font-black text-emerald-500 uppercase tracking-widest transition-all hover:scale-110"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.6)] border border-white/10" /> Participación</div>
                      </div>
@@ -404,7 +405,7 @@ export default function ProfesoresDashboard() {
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
-                      <span className="text-[10px] font-black text-emerald-400 bg-emerald-500/10 px-4 py-2 rounded-xl border border-emerald-500/20 uppercase tracking-widest hidden md:flex items-center gap-2">
+                      <span className="text-[10px] font-black text-emerald-400 bg-emerald-500/10 px-4 py-2 rounded-xl border border-emerald-500/20 uppercase tracking-widest flex items-center gap-2">
                         <CheckCircle2 className="w-3 h-3" /> ALL_SYNCED
                       </span>
                       <button onClick={() => showToast('Detalle del estudiante disponible próximamente', 'info')} className="p-3 bg-white/5 rounded-xl border border-white/10 hover:border-cyan-500/30 transition-all">

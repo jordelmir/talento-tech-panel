@@ -98,7 +98,7 @@ export default function UniversidadDashboard() {
             <div className="bg-purple-600/20 border border-purple-500/50 p-2 rounded-lg text-purple-400">
               <Cpu className="w-5 h-5" />
             </div>
-            <span className="font-extrabold text-xl tracking-tighter text-slate-100 hidden md:inline">
+            <span className="font-extrabold text-xl tracking-tighter text-slate-100">
               Talento<span className="text-purple-500">Tech</span> 
             </span>
           </div>
@@ -227,7 +227,7 @@ export default function UniversidadDashboard() {
                   <div className="flex items-center gap-3 text-[10px] font-black text-purple-400 mb-6 bg-purple-500/10 w-max px-4 py-1.5 rounded-full border border-purple-500/20 tracking-tighter uppercase">
                     <Fingerprint className="w-3 h-3" /> Digital Identity Verified: {userProfile?.full_name || 'MASTER_ARCHITECT'}
                   </div>
-                  <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-4 leading-[0.9]">
+                  <h1 className="text-3xl sm:text-4xl md:text-6xl font-black text-white tracking-tighter mb-4 leading-[0.9]">
                     Ingeniería de <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">Sistemas</span>
                   </h1>
                   <p className="text-slate-400 text-sm md:text-lg max-w-xl leading-relaxed font-sans opacity-80">
@@ -249,7 +249,7 @@ export default function UniversidadDashboard() {
                     <p className="text-[10px] text-slate-500 mb-2 font-mono uppercase tracking-widest flex items-center gap-2">
                        <BrainCircuit className="w-3 h-3" /> System_Rank
                     </p>
-                    <p className="text-3xl font-black text-white uppercase tracking-tighter shadow-sm shadow-blue-500/20">Alpha-Tier</p>
+                    <p className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tighter shadow-sm shadow-blue-500/20">Alpha-Tier</p>
                   </div>
                   <div className="w-px h-10 bg-white/10 hidden sm:block" />
                   <div className="flex flex-col">

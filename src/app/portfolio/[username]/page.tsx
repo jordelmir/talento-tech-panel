@@ -189,7 +189,7 @@ export default async function PortfolioPage({ params }: { params: { username: st
                   </div>
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                    <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest hidden md:inline">VERIFIED</span>
+                    <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">VERIFIED</span>
                   </div>
                 </Link>
               ))}

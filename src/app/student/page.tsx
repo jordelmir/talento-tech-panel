@@ -123,7 +123,7 @@ export default function StudentDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[#070707] text-slate-300 font-sans p-6 md:p-12 relative overflow-hidden">
+    <div className="min-h-screen bg-[#070707] text-slate-300 font-sans p-4 sm:p-6 md:p-12 relative overflow-hidden">
       
       {/* Background Decor */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-emerald-900/10 rounded-full blur-[150px] pointer-events-none"></div>
@@ -132,7 +132,7 @@ export default function StudentDashboard() {
         <div>
           <div className="flex items-center gap-3">
             <Activity className="text-emerald-500 w-8 h-8" />
-            <h1 className="text-3xl font-extrabold text-white tracking-tight">Portal Arquitecto</h1>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Portal Arquitecto</h1>
           </div>
           <p className="text-sm text-slate-500 mt-2">Módulo 1: Fundamentos de Orquestación</p>
         </div>
@@ -163,7 +163,7 @@ export default function StudentDashboard() {
       <div className="max-w-4xl grid gap-8 relative z-10">
         
         {/* Mission / Goal Card */}
-        <div className="bg-gradient-to-r from-slate-900 to-slate-900/50 border border-slate-800 rounded-2xl p-8">
+        <div className="bg-gradient-to-r from-slate-900 to-slate-900/50 border border-slate-800 rounded-2xl p-5 sm:p-8">
           <h2 className="text-xl font-bold text-white mb-4">Directiva Actual</h2>
           <p className="text-slate-400 leading-relaxed max-w-2xl">
             Despliega la infraestructura base con Supabase y conecta tu repositorio público de GitHub.
@@ -172,7 +172,7 @@ export default function StudentDashboard() {
         </div>
 
         {/* Action Panel - Submit Repo */}
-        <div className="bg-black border border-white/5 rounded-2xl p-8 shadow-2xl relative overflow-hidden group hover:border-emerald-500/30 transition-colors">
+        <div className="bg-black border border-white/5 rounded-2xl p-5 sm:p-8 shadow-2xl relative overflow-hidden group hover:border-emerald-500/30 transition-colors">
           <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
             <Github className="text-slate-400 w-5 h-5"/>
             Someter Repositorio (Despliegue)

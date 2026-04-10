@@ -184,7 +184,7 @@ export default function CodePlayground({ accentColor = 'cyan', roomId = 'global_
           <div className={`flex items-center gap-2 px-4 py-1.5 ${accent} rounded-full text-[9px] font-black uppercase tracking-[0.2em] mb-4 w-fit border`}>
             <Code2 className="w-3 h-3" /> LIVE_CODE_ENGINE_V2_MULTIPLAYER
           </div>
-          <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-white uppercase italic leading-[0.85]">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tighter text-white uppercase italic leading-[0.85]">
             CÓDIGO EN <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">VIVO_</span>
           </h2>
           <p className="text-slate-500 text-sm mt-3 font-bold uppercase tracking-[0.2em] max-w-xl">
@@ -237,7 +237,7 @@ export default function CodePlayground({ accentColor = 'cyan', roomId = 'global_
       {/* Editor + Output Split */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Code Editor */}
-        <div className="bg-[#0b1120]/80 border border-white/10 rounded-[2rem] overflow-hidden backdrop-blur-xl shadow-2xl flex flex-col h-[500px]">
+        <div className="bg-[#0b1120]/80 border border-white/10 rounded-xl sm:rounded-[2rem] overflow-hidden backdrop-blur-xl shadow-2xl flex flex-col h-[350px] md:h-[500px]">
           {/* Editor Header */}
           <div className="flex items-center justify-between px-6 py-4 bg-[#020617]/60 border-b border-white/5">
             <div className="flex items-center gap-3">
@@ -304,7 +304,7 @@ export default function CodePlayground({ accentColor = 'cyan', roomId = 'global_
         </div>
 
         {/* Output Panel */}
-        <div className="bg-[#0b1120]/80 border border-white/10 rounded-[2rem] overflow-hidden backdrop-blur-xl shadow-2xl flex flex-col h-[500px]">
+        <div className="bg-[#0b1120]/80 border border-white/10 rounded-xl sm:rounded-[2rem] overflow-hidden backdrop-blur-xl shadow-2xl flex flex-col h-[350px] md:h-[500px]">
           <div className="px-6 py-4 bg-[#020617]/60 border-b border-white/5 flex items-center justify-between">
             <div className="flex items-center gap-3">
                <Terminal className="w-4 h-4 text-cyan-500" />

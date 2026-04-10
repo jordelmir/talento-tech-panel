@@ -19,6 +19,7 @@ import Footer from '@/components/Footer'
 
 export default function LandingPage() {
   const [hoveredRole, setHoveredRole] = useState<string | null>(null)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const roles = [
     {
@@ -91,22 +92,43 @@ export default function LandingPage() {
       <div className="fixed bottom-0 right-1/4 w-[500px] h-[500px] bg-blue-600/10 blur-[130px] -z-10 pointer-events-none" />
 
       {/* Navigation */}
-      <nav className="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-8 flex justify-between items-center relative z-10">
+      <nav className="max-w-7xl mx-auto px-4 md:px-6 py-4 md:py-8 flex justify-between items-center relative z-10">
         <div className="flex items-center gap-2 md:gap-3 group cursor-pointer">
           <div className="bg-gradient-to-tr from-emerald-500 to-cyan-400 p-1.5 md:p-2 rounded-xl group-hover:rotate-12 transition-transform shadow-[0_0_15px_rgba(16,185,129,0.4)]">
             <Activity className="w-4 h-4 md:w-5 md:h-5 text-black" strokeWidth={3} />
           </div>
           <span className="font-bold text-xl md:text-2xl tracking-tighter">Talento<span className="text-emerald-400">Tech</span></span>
         </div>
+        {/* Desktop Nav */}
         <div className="hidden sm:flex items-center gap-4 md:gap-8 text-[10px] md:text-sm font-medium text-gray-400">
           <Link href="/genesis" className="hover:text-emerald-400 transition-colors uppercase tracking-widest">Génesis</Link>
           <Link href="/curriculum" className="hover:text-emerald-400 transition-colors uppercase tracking-widest">Programas</Link>
           <Link href="/docs" className="hover:text-emerald-400 transition-colors uppercase tracking-widest">Docs</Link>
         </div>
+        {/* Mobile Menu Toggle */}
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="sm:hidden flex flex-col gap-1.5 p-2 rounded-lg hover:bg-white/5 transition-colors"
+          aria-label="Menu"
+        >
+          <span className={`block w-5 h-0.5 bg-gray-400 transition-all ${mobileMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
+          <span className={`block w-5 h-0.5 bg-gray-400 transition-all ${mobileMenuOpen ? 'opacity-0' : ''}`} />
+          <span className={`block w-5 h-0.5 bg-gray-400 transition-all ${mobileMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+        </button>
       </nav>
+      {/* Mobile Nav Dropdown */}
+      {mobileMenuOpen && (
+        <div className="sm:hidden max-w-7xl mx-auto px-4 pb-4 relative z-20 animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="bg-white/5 border border-white/10 rounded-2xl backdrop-blur-xl p-4 flex flex-col gap-3">
+            <Link href="/genesis" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium text-gray-400 hover:text-emerald-400 transition-colors uppercase tracking-widest py-2 px-3 rounded-lg hover:bg-white/5">Génesis</Link>
+            <Link href="/curriculum" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium text-gray-400 hover:text-emerald-400 transition-colors uppercase tracking-widest py-2 px-3 rounded-lg hover:bg-white/5">Programas</Link>
+            <Link href="/docs" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium text-gray-400 hover:text-emerald-400 transition-colors uppercase tracking-widest py-2 px-3 rounded-lg hover:bg-white/5">Docs</Link>
+          </div>
+        </div>
+      )}
 
       {/* Hero Section */}
-      <main className="max-w-7xl mx-auto px-6 pt-16 pb-20 relative z-10">
+      <main className="max-w-7xl mx-auto px-4 md:px-6 pt-8 md:pt-16 pb-12 md:pb-20 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2 rounded-full mb-8 backdrop-blur-md">
             <div className="relative flex h-3 w-3">
@@ -116,19 +138,19 @@ export default function LandingPage() {
             <span className="text-gray-300 text-xs font-bold tracking-widest uppercase">Sistema Operacional v1.4 Activo</span>
           </div>
           
-          <h1 className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] mb-6 md:mb-8 bg-gradient-to-br from-white via-gray-200 to-gray-600 bg-clip-text text-transparent px-4">
+          <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.9] mb-5 md:mb-8 bg-gradient-to-br from-white via-gray-200 to-gray-600 bg-clip-text text-transparent px-2 sm:px-4">
             EL FUTURO <br />
             <span className="bg-gradient-to-r from-emerald-400 to-cyan-500 bg-clip-text text-transparent">SE ORQUESTA.</span>
           </h1>
           
-          <p className="text-base md:text-xl text-gray-400 mb-12 md:mb-16 max-w-2xl mx-auto leading-relaxed font-light px-6">
+          <p className="text-sm sm:text-base md:text-xl text-gray-400 mb-8 md:mb-16 max-w-2xl mx-auto leading-relaxed font-light px-2 sm:px-6">
             Selecciona tu identidad dentro del ecosistema nacional. <br />
             Telemetría activa, auditoría impulsada por IA y fricción cero hacia producción.
           </p>
         </div>
 
         {/* Identity Selector Grid (The Core Addition) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-5 max-w-7xl mx-auto mb-32">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 md:gap-5 max-w-7xl mx-auto mb-16 md:mb-32">
 
           {roles.map((role) => {
             const Icon = role.icon
@@ -139,20 +161,20 @@ export default function LandingPage() {
                 key={role.id}
                 onMouseEnter={() => setHoveredRole(role.id)}
                 onMouseLeave={() => setHoveredRole(null)}
-                className={`group relative bg-white/5 border border-white/5 p-8 rounded-3xl backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 flex flex-col justify-between overflow-hidden cursor-pointer ${role.border} ${role.shadow}`}
+                className={`group relative bg-white/5 border border-white/5 p-5 sm:p-8 rounded-2xl sm:rounded-3xl backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 flex flex-col justify-between overflow-hidden cursor-pointer ${role.border} ${role.shadow}`}
               >
                 {/* Glow Background inside card */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${role.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
                 
                 <div className="relative z-10">
-                  <div className={`w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 transition-colors duration-300 ${isHovered ? 'bg-white/10' : ''}`}>
-                    <Icon className={`w-7 h-7 text-gray-400 group-hover:text-white transition-colors duration-300`} />
+                  <div className={`w-11 h-11 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-4 sm:mb-6 transition-colors duration-300 ${isHovered ? 'bg-white/10' : ''}`}>
+                    <Icon className={`w-5 h-5 sm:w-7 sm:h-7 text-gray-400 group-hover:text-white transition-colors duration-300`} />
                   </div>
-                  <h3 className="text-2xl font-bold mb-3 text-white tracking-tight">{role.title}</h3>
+                  <h3 className="text-lg sm:text-2xl font-bold mb-2 sm:mb-3 text-white tracking-tight">{role.title}</h3>
                   <p className="text-sm text-gray-400 leading-relaxed font-light">{role.desc}</p>
                 </div>
 
-                <div className="relative z-10 mt-8 flex items-center text-sm font-bold text-gray-500 group-hover:text-white transition-colors duration-300 tracking-wider uppercase">
+                <div className="relative z-10 mt-5 sm:mt-8 flex items-center text-xs sm:text-sm font-bold text-gray-500 group-hover:text-white transition-colors duration-300 tracking-wider uppercase">
                   Acceder
                   <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform duration-300" />
                 </div>
@@ -163,8 +185,8 @@ export default function LandingPage() {
       </main>
 
       {/* Feature Highlights Minimalist */}
-      <section className="border-t border-white/5 bg-black/50 py-24 relative z-10 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12">
+      <section className="border-t border-white/5 bg-black/50 py-12 md:py-24 relative z-10 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
           <div className="flex gap-4">
             <Github className="w-8 h-8 text-emerald-500 shrink-0" />
             <div>

@@ -60,7 +60,7 @@ export default function GatewayPage() {
 
       <div className="w-full max-w-4xl relative z-10">
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4">
             Selecciona tu Perfil
           </h1>
           <p className="text-gray-400 text-lg max-w-xl mx-auto">
@@ -75,7 +75,7 @@ export default function GatewayPage() {
               key={profile.id}
               onClick={() => handleProfileSelection(profile.id, profile.label)}
               disabled={!!loadingId}
-              className="group relative flex flex-col items-center justify-center p-8 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 hover:border-white/20 transition-all duration-300 overflow-hidden text-center disabled:opacity-50"
+              className="group relative flex flex-col items-center justify-center p-5 sm:p-8 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 hover:border-white/20 transition-all duration-300 overflow-hidden text-center disabled:opacity-50"
             >
               <div className={`p-4 rounded-xl mb-4 transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-1 ${profile.bg}`}>
                 {loadingId === profile.id ? (
